@@ -130,7 +130,6 @@ interface Memory {
 declare namespace NodeJS {
     interface Global {
         log: any,
-        bpg: Function,
         GenedBodypartsList: BodyPartConstant[],
         helpCall: Function
     }

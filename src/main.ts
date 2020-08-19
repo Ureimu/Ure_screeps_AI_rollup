@@ -1,11 +1,12 @@
-import { ErrorMapper } from "utils/ErrorMapper";
-
-import actionCounter from "./actionCounter";
-actionCounter.warpActions();
 import { globalFunctionRegister } from "mount/mountGlobalFunction";
 import { mountPrototypeExtension } from "mount/mountPrototypeExtension";
-import { initNewRoomSetting } from "./updateMemory";
+import { ErrorMapper } from "utils/ErrorMapper";
+import actionCounter from "./actionCounter";
 import { manageTask } from "./manager";
+import { initNewRoomSetting } from "./updateMemory";
+import { run } from './workCode';
+
+actionCounter.warpActions();
 
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
@@ -31,6 +32,11 @@ export const loop = ErrorMapper.wrapLoop(() => {
         }
     }
 
+    for(let creepName in Game.creeps) {
+        run(Game.creeps[creepName]);
+    }
+
     actionCounter.save(1500);
+    console.log(actionCounter.ratio());
     if (!global.detail) global.detail = actionCounter.singleTick; //打印所有任务的详细cpu消耗情况列表
 });

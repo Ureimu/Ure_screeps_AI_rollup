@@ -78,7 +78,7 @@ interface TaskPool {
 
 interface CreepMemory {
     task: Task,
-    taskPool: TaskPool,
+    taskPool?: TaskPool,
 }
 
 interface SourceMemory {

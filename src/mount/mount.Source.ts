@@ -82,7 +82,8 @@ export class SourceExtension extends Source {
             changeStatusData: {},
         }
 
-        if(Game.time % 1500 == 0){
+        if(Game.time % 1500 == 0 || Memory.testvalue == true){
+            Memory.testvalue = false;
             let screeps_x = _.filter(Game.creeps, (creep) => creep.name.indexOf(this.name+'-H-') != -1);
             let bodypartsCount = 0;
             for (let i = 0; i < screeps_x.length; i++) {
@@ -97,6 +98,7 @@ export class SourceExtension extends Source {
                 status.pushTaskData={
                     pushSpawnTask:true,
                 }
+                console.log('[task] 尝试推送任务...');
             }
         }
 
