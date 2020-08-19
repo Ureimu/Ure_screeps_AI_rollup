@@ -1,22 +1,28 @@
 import taskPool from "../taskPool"
-// 将拓展签入 Spawn 原型
-export function mountSpawnEx() {
-    _.assign(StructureSpawn.prototype, spawnExtension);
-}
+
 
 // 自定义的 Spawn 的拓展
-class spawnExtension extends StructureSpawn{
-    spawnTask() {
-        let taskQueue = taskPool.initQueue('taskQueue',this.memory.taskPool);
-        if(taskQueue.isEmpty()){
-            let task = <Task>taskQueue.pop();
-            let inf = task.taskInf;
-            let ifOK:number = this.spawnCreep(inf.bodyparts, inf.creepName);
-            if(ifOK!=OK){
-                taskQueue.push(task);
+export class SpawnExtension extends StructureSpawn{
+    spawnTask(bodyparts?: bpgGene[]) {
+        if(typeof bodyparts != 'undefined'){
+
+        }else{
+            let spawnQueue = taskPool.initQueue('spawnQueue',this.memory.taskPool);
+            if(spawnQueue.isEmpty()){
+                let task = <Task>spawnQueue.pop();
+                let inf = task.taskInf;
+                let ifOK:number = this.spawnCreep(global.bpg(inf.bodyparts), inf.creepName);
+                if(ifOK!=OK){
+                    spawnQueue.push(task);
+                }
+                else{
+                    if(!!Game.getObjectById(<Sponsor>task.sponsor)){
+                        Game.getObjectById(<Sponsor>task.sponsor)!.memory!.taskPool['spawnQueue'].pop()
+                    }
+                }
             };
-        };
-        taskPool.setQueue(taskQueue,this.memory.taskPool,'taskQueue');
+            taskPool.setQueue(spawnQueue,'spawnQueue',this.memory.taskPool);
+        }
     }
     // 其他更多自定义拓展
 }

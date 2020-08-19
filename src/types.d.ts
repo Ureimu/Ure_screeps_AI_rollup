@@ -17,6 +17,8 @@ declare namespace NodeJS {
     }
 }
 
+type Sponsor = Id<StructureSpawn|Creep|Source>;
+
 /**
  * 任务的类，包含优先级属性和任务信息。
  *
@@ -31,6 +33,20 @@ interface Task {
      */
     priority: number,
 
+    /**
+     * 任务的发起者的id
+     *
+     * @type {Sponsor}可以是任何建筑或creep,source
+     * @memberof Task
+     */
+    sponsor: Sponsor,
+    /**
+     * 标识该任务是否在执行状态。
+     *
+     * @type {boolean}
+     * @memberof Task
+     */
+    isRunning: boolean,
     /**
      * 该对象存放了任务信息
      *
@@ -61,13 +77,14 @@ interface TaskPool {
 }
 
 interface CreepMemory {
-    task: Task
+    task: Task,
+    taskPool: TaskPool,
 }
 
 interface SourceMemory {
     id: Id<Source>,
     blankSpace: number,
-    taskPool: TaskPool
+    taskPool: TaskPool,
 }
 
 interface Source {
@@ -84,7 +101,7 @@ interface Source {
      * @type {string}
      * @memberof Source
      */
-    sourceName: string,
+    name: string,
 
     /**
      * 初始化source的memory.
@@ -100,6 +117,50 @@ interface Source {
      * @memberof Source
      */
     memory: SourceMemory,
+
+    /**
+     * 任务管理函数。用来检测是否需要推送任务。
+     *
+     * @param {()=>bpgGene[]} manage_bodyParts 一个函数，返回bpgGene对象。
+     * @memberof Source
+     */
+    check():CheckStatus,
+}
+
+type CheckStatus = {
+    update: boolean,//更新参数
+    updateData: {[name: string]: any},
+    pushTask: boolean,//推送任务
+    pushTaskData: {[name: string]: any},
+    changeStatus: boolean,//改变任务状态
+    changeStatusData: {[name: string]: any},
+}
+
+interface ControllerMemory {
+    id: Id<StructureController>,
+    taskPool: TaskPool
+}
+
+interface StructureController {
+    memory: ControllerMemory,
+}
+
+interface ExtensionMemory {
+    id: Id<StructureExtension>,
+    taskPool: TaskPool
+}
+
+interface StructureExtension {
+    memory: ExtensionMemory,
+}
+
+interface ExtractorMemory {
+    id: Id<StructureExtractor>,
+    taskPool: TaskPool
+}
+
+interface StructureExtractor {
+    memory: ExtractorMemory,
 }
 
 interface RoomPosition {

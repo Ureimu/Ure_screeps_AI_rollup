@@ -12,15 +12,15 @@ function getQueue(wantedTaskQueueName: string,taskPoolMemory: TaskPool, towards:
     for (let taskQueueName in taskPoolMemory) {
         if (taskQueueName == wantedTaskQueueName) {
             let taskQueue = new PriorityQueue(towards);
-            if(Memory.taskPools[taskQueueName] !== undefined && Memory.taskPools[taskQueueName].length>0){
-                for (let task of <Task[]>Memory.taskPools[taskQueueName]) {
+            if(taskPoolMemory[taskQueueName] && taskPoolMemory[taskQueueName].length>0){
+                for (let task of <Task[]>taskPoolMemory[taskQueueName]) {
                     taskQueue.push(task);
                 }
             }
             return taskQueue;
         }
     }
-    console.log('[error] 任务池中没有任务列表：' + wantedTaskQueueName);
+    console.log('[error]'+'任务池中没有任务列表：' + wantedTaskQueueName);
     return undefined;
 }
 
@@ -31,12 +31,12 @@ function getQueue(wantedTaskQueueName: string,taskPoolMemory: TaskPool, towards:
  * @param {TaskQueue} taskPoolMemory 存储路径
  * @param {string} TaskQueueName 队列名称
  */
-function setQueue(queue: PriorityQueue,taskPoolMemory: TaskPool, TaskQueueName: string): void {
-    if (!taskPoolMemory) taskPoolMemory = {};//TODO 有没有更好的写法?
-    taskPoolMemory[TaskQueueName] = <Array<Task>>[];
+function setQueue(queue: PriorityQueue,TaskQueueName: string,taskPoolMemory: TaskPool): TaskQueue {
+    taskPoolMemory[TaskQueueName].splice(0);//清空数组，不能直接赋空数组(=[]),因为这里的函数参数是引用,重新赋值会覆盖引用.
     for (let i = 0, j = queue.size(); i < j; i++) {
         taskPoolMemory[TaskQueueName].push(<Task>queue.pop());
     }
+    return taskPoolMemory[TaskQueueName];
 }
 
 /**
@@ -66,6 +66,22 @@ function initQueue(wantedTaskQueueName: string,taskPoolMemory: TaskPool, towards
     else{
         console.log('[init] 创建新任务队列: '+wantedTaskQueueName);
         return newQueue(towards);
+    }
+}
+
+/**
+ * 从queueFrom取出元素并交给queueTo
+ *
+ * @param {PriorityQueue} queueFrom
+ * @param {PriorityQueue} queueTo
+ * @returns {boolean} 成功返回true,失败返回false.
+ */
+function transTask(queueFrom: PriorityQueue, queueTo: PriorityQueue):boolean{
+    if(queueFrom.isEmpty()){
+        queueTo.push(<Task>queueFrom.pop());
+        return true;
+    }else{
+        return false;
     }
 }
 
@@ -103,4 +119,13 @@ export default {
      * @returns {PriorityQueue}
      */
     initQueue: initQueue,
+
+    /**
+     * 从queueFrom取出元素并交给queueTo
+     *
+     * @param {PriorityQueue} queueFrom
+     * @param {PriorityQueue} queueTo
+     * @returns {boolean} 成功返回true,失败返回false.
+     */
+    transTask: transTask,
 }

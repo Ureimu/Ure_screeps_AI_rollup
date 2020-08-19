@@ -1,10 +1,6 @@
-// 将拓展签入 RoomPosition 原型
-export function mountRoomPositionEx() {
-    _.assign(RoomPosition.prototype, RoomPositionExtension);
-}
 
 // 自定义的 Source 的拓展
-class RoomPositionExtension extends RoomPosition {
+export class RoomPositionExtension extends RoomPosition {
         /**
      * 返回一个在该pos正方形周围的pos数组,顺序为按照时钟12点为起点顺时针旋转.
      *

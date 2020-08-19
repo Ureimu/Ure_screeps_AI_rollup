@@ -1,6 +1,5 @@
 //每次占领新房间时会执行的模块。
 
-import { spawn } from "child_process";
 
 /**
  * 查找属于自己房间的source名称并初始化没有memory记录的source的memory。
@@ -14,7 +13,7 @@ function getNewSource(): void {
             if(controller.my){
                 let sources = Game.rooms[room].find(FIND_SOURCES);
                 for (let source of sources) {
-                    if (source.memory === undefined){
+                    if (Memory.sources[source.name] === undefined){
                         source.initsMemory();
                     }
                 }
@@ -30,7 +29,9 @@ function initRoomMemory(): void {
             if(controller.my){
                 if (Game.rooms[room].memory.taskPool === undefined) {
                     Game.rooms[room].memory = {
-                        taskPool: {},
+                        taskPool: {
+                            spawnQueue: [],
+                        },
                     }
                 }
             }
@@ -46,7 +47,9 @@ function initSpawnMemory(): void {
                 for (let spawn of Game.rooms[room].find(FIND_MY_SPAWNS)) {
                     if (spawn.memory.taskPool === undefined) {
                         spawn.memory = {
-                            taskPool: {},
+                            taskPool: {
+                                spawnQueue: [],
+                            },
                         }
                     }
                 }

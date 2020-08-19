@@ -4,7 +4,7 @@ import clear from 'rollup-plugin-clear';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import typescript from 'rollup-plugin-typescript2';
-import screeps from 'rollup-plugin-screeps';
+//import screeps from 'rollup-plugin-screeps';
 import copy from 'rollup-plugin-cpy';
 
 let cfg;
@@ -27,14 +27,21 @@ export default {
     clear({ targets: ["dist"] }),
     resolve(),
     commonjs(),
-    copy({
+    /*copy({
       files: ['src/priority_queue.wasm'],
       dest: 'dist',
       options: {
         verbose: true,
       }
-    }),
+    }),*/
     typescript({tsconfig: "./tsconfig.json"}),
-    screeps({config: cfg, dryRun: cfg == null}),
+    //screeps({config: cfg, dryRun: cfg == null}),
+    copy({
+      files: ['src/priority_queue.wasm','dist/main.js','dist/main.js.map.js'],
+      dest: 'C:/Users/a1090/AppData/Local/Screeps/scripts/server1_screepspl_us___21025/default',//这里填服务器的文件夹名称
+      options: {
+        verbose: true,
+      }
+    }),
   ]
 }
