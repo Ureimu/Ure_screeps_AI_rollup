@@ -169,7 +169,7 @@ function singleTick() {
         `Avg: ${(totalCPU / totalCalls).toFixed(2)}`,
         `TotalCPU: ${totalCPU.toFixed(2)}`,
         `TotalAction: ${totalCalls}`,
-        `Ratio: ${(totalCPU / cpu).toFixed(2)}%`
+        `Ratio: ${(100 * totalCPU / cpu).toFixed(2)}%`
     ].join('\t');
 
     // const stats =
@@ -229,7 +229,7 @@ function ratio(){
         forced_sum += historyForcedCPU[i];
         length += 1;
     }
-    return `⏲️ 前 ${length}tick 平均cpu:${(total_sum / length).toFixed(3)}, 平均强制cpu:${(forced_sum / length).toFixed(3)}, 比例:${(forced_sum / total_sum).toFixed(3)}`;
+    return `⏲️ 前 ${length}tick 平均cpu:${(total_sum / length).toFixed(3)}, 平均强制cpu:${(forced_sum / length).toFixed(3)}, 比例:${(100 * forced_sum / total_sum).toFixed(3)}%`;
 }
 
 

@@ -1,3 +1,4 @@
+import { getBpNum } from "utils/bodypartsGenerator";
 
 export function run(creep: Creep) {
     let workFunctionList:any={
@@ -38,7 +39,12 @@ function carrySource(creep:Creep):void{
         creep.say('🚧 transfer');
     }
     if (creep.memory.task.taskInf.harvesting) {
-        const target = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES);
+        const target = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES,{
+            filter: (resource) => {
+                return (resource.resourceType == RESOURCE_ENERGY &&
+                    resource.amount > 50*getBpNum(creep.memory.bodyparts,'carry'))
+            }
+        });
         if (target) {
             creep.moveTo(target,{
                 visualizePathStyle: {
@@ -76,7 +82,12 @@ export function upgradeController(creep:Creep) :void{
         creep.say('🚧 upgrade');
     }
     if (creep.memory.task.taskInf.harvesting) {
-        const target = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES);
+        const target = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES,{
+            filter: (resource) => {
+                return (resource.resourceType == RESOURCE_ENERGY &&
+                    resource.amount > 50*getBpNum(creep.memory.bodyparts,'carry'))
+            }
+        });
         if (target) {
             creep.moveTo(target,{
                 visualizePathStyle: {

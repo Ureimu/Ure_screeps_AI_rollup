@@ -1,4 +1,4 @@
-import taskPool from "../taskPool"
+import taskPool from "../task/taskPool"
 
 // 自定义的 Creep 的拓展
 export class RoomExtension extends Room{
@@ -6,4 +6,6 @@ export class RoomExtension extends Room{
         let spawnTaskQueue = taskPool.initQueue('spawnTaskQueue',Memory.rooms[this.name].taskPool);
 
     }
+
+
 }

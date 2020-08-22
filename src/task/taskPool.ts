@@ -65,6 +65,7 @@ function initQueue(wantedTaskQueueName: string,taskPoolMemory: TaskPool, towards
     }
     else{
         console.log('[init] 创建新任务队列: '+wantedTaskQueueName);
+        taskPoolMemory[wantedTaskQueueName]=[];
         return newQueue(towards);
     }
 }

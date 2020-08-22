@@ -1,5 +1,5 @@
-import taskPool from "taskPool";
-import { PriorityQueue } from "PriorityQueue";
+import taskPool from "task/taskPool";
+import { PriorityQueue } from "task/PriorityQueue";
 
 // 自定义的 Source 的拓展
 export class SourceExtension extends Source {
@@ -85,6 +85,7 @@ export class SourceExtension extends Source {
         if(Game.time % 1500 == 0 || Memory.testvalue == true){
             Memory.testvalue = false;
             let screeps_x = _.filter(Game.creeps, (creep) => creep.name.indexOf(this.name+'-H-') != -1);
+            console.log(screeps_x.length);
             let bodypartsCount = 0;
             for (let i = 0; i < screeps_x.length; i++) {
                 for(let body of screeps_x[i].body){

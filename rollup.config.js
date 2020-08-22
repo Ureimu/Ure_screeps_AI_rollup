@@ -37,7 +37,7 @@ export default {
     typescript({tsconfig: "./tsconfig.json"}),
     //screeps({config: cfg, dryRun: cfg == null}),
     copy({
-      files: ['src/priority_queue.wasm','dist/main.js','dist/main.js.map.js'],
+      files: ['src/task/priority_queue.wasm','dist/main.js','dist/main.js.map.js'],//在新增了二进制文件后记得在这里添上
       dest: 'C:/Users/a1090/AppData/Local/Screeps/scripts/server1_screepspl_us___21025/default',//这里填服务器的文件夹名称
       options: {
         verbose: true,

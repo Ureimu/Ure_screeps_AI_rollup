@@ -1,4 +1,4 @@
-import taskPool from "taskPool";
+import taskPool from "task/taskPool";
 import * as makeTask from "./makeTask";
 
 /**
@@ -13,7 +13,7 @@ function allocatingSpawnTask(roomListToAllocate: object): void {
     let roomSpawnQueuelist: any = {};
     let spawnQueuelist: any = {};
     let spawnlist: any = {};
-    for (let roomName in roomListToAllocate) {
+    for (let roomName in roomListToAllocate) {//添加相关room和spawn到表中
         for (let spawnName in Memory.spawns) {
             if (Game.spawns[spawnName].room.name == roomName) {
                 spawnlist[spawnName] = spawnName;
@@ -21,7 +21,7 @@ function allocatingSpawnTask(roomListToAllocate: object): void {
         }
     }
     if (Object.keys(spawnlist).length == 0) return;
-    for (let spawnName in spawnlist) {
+    for (let spawnName in spawnlist) {//初始化队列
         roomlist[Game.spawns[spawnName].room.name] = false;
         roomSpawnQueuelist[Game.spawns[spawnName].room.name] = taskPool.initQueue(
             "spawnQueue",
@@ -29,7 +29,7 @@ function allocatingSpawnTask(roomListToAllocate: object): void {
         );
         spawnQueuelist[spawnName] = taskPool.initQueue("spawnQueue", Memory.spawns[spawnName].taskPool);
     }
-    while (!ifAllOK) {
+    while (!ifAllOK) {//进行队列间的任务交换
         for (let spawnName in spawnlist) {
             if (roomlist[Game.spawns[spawnName].room.name] == true) continue;
             if (!taskPool.transTask(roomSpawnQueuelist[Game.spawns[spawnName].room.name], spawnQueuelist[spawnName])) {
@@ -42,7 +42,7 @@ function allocatingSpawnTask(roomListToAllocate: object): void {
             else ifAllOK = false;
         }
     }
-    for (let spawnName in spawnlist) {
+    for (let spawnName in spawnlist) {//保存队列
         taskPool.setQueue(
             roomSpawnQueuelist[Game.spawns[spawnName].room.name],
             "spawnQueue",
@@ -50,6 +50,10 @@ function allocatingSpawnTask(roomListToAllocate: object): void {
         );
         taskPool.setQueue(spawnQueuelist[spawnName], "spawnQueue", Memory.spawns[spawnName].taskPool);
     }
+}
+
+function setInterval(): void {
+
 }
 
 export function manageTask(): void {
@@ -86,7 +90,7 @@ export function manageTask(): void {
     }
 
     for (let roomName in Memory.rooms) {
-        if (Game.rooms[roomName].controller?.my) {
+        if (Game.rooms[roomName].controller && Game.rooms[roomName].controller?.my) {
             if (Game.time % 1500 == 0 || Memory.testvalue1 == true) {
                 let chooseBodyParts = function (): bpgGene[] {
                     return [{ move: 3, carry: 3 }];

@@ -7,36 +7,38 @@
  * mod.thing == 'a thing'; // true
  */
 
+import { bpg } from "utils/bodypartsGenerator";
+
 let c_k_info_m = { //注意：在更改了以下设置后，需要在游戏中手动删除一次Memory.c_k_info，设置才能生效。
     run: function () {
 
         if (!Memory.c_k_info.bodypartSetting) { //身体部件
             let p=[
-                (global.bpg([{'move':1,'work':2,'carry':1}])),
-                (global.bpg([{'move':3,'work':3,'carry':2}])), //3W2C3M
-                (global.bpg([{'move':4,'work':4,'carry':3}])), //4W3C4M
-                (global.bpg([{'move':5,'work':5,'carry':5}])), //5W5C5M
-                (global.bpg([{'move':7,'work':6,'carry':7}])), //6W7C7M
-                (global.bpg([{'move':10,'work':7,'carry':12}])), //7W12C10M
-                (global.bpg([{'move':10,'work':7,'carry':12}]))
+                (bpg([{'move':1,'work':2,'carry':1}])),
+                (bpg([{'move':3,'work':3,'carry':2}])), //3W2C3M
+                (bpg([{'move':4,'work':4,'carry':3}])), //4W3C4M
+                (bpg([{'move':5,'work':5,'carry':5}])), //5W5C5M
+                (bpg([{'move':7,'work':6,'carry':7}])), //6W7C7M
+                (bpg([{'move':10,'work':7,'carry':12}])), //7W12C10M
+                (bpg([{'move':10,'work':7,'carry':12}]))
             ];
             let m=[
-                (global.bpg([{'move':3,'carry':3}])),
-                (global.bpg([{'move':6,'carry':5}])),
-                (global.bpg([{'move':10,'carry':10}])),
-                (global.bpg([{'move':10,'carry':10}])),
-                (global.bpg([{'move':10,'carry':18}])),
-                (global.bpg([{'move':12,'carry':24}])),
-                (global.bpg([{'move':15,'carry':30}]))
+                (bpg([{'move':3,'carry':3}])),
+                (bpg([{'move':6,'carry':5}])),
+                (bpg([{'move':10,'carry':10}])),
+                (bpg([{'move':10,'carry':10}])),
+                (bpg([{'move':10,'carry':18}])),
+                (bpg([{'move':12,'carry':24}])),
+                (bpg([{'move':15,'carry':30}]))
             ];
             let i=[
-                (global.bpg([{'move':1,'work':2,'carry':1}])),
-                (global.bpg([{'move':4,'work':3,'carry':1}])), //3W2C3M
-                (global.bpg([{'move':4,'work':5,'carry':1}])), //4W3C4M
-                (global.bpg([{'move':5,'work':7,'carry':1}])), //5W5C5M
-                (global.bpg([{'move':9,'work':8,'carry':1}])), //6W7C7M
-                (global.bpg([{'move':13,'work':11,'carry':1}])), //7W12C10M
-                (global.bpg([{'move':13,'work':11,'carry':1}]))
+                (bpg([{'move':1,'work':2,'carry':1}])),
+                (bpg([{'move':4,'work':3,'carry':1}])), //3W2C3M
+                (bpg([{'move':4,'work':5,'carry':1}])), //4W3C4M
+                (bpg([{'move':5,'work':7,'carry':1}])), //5W5C5M
+                (bpg([{'move':9,'work':8,'carry':1}])), //6W7C7M
+                (bpg([{'move':13,'work':11,'carry':1}])), //7W12C10M
+                (bpg([{'move':13,'work':11,'carry':1}]))
             ]
             Memory.c_k_info.bodypartSetting = [
                 {

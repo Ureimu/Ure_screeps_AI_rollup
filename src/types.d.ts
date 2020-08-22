@@ -1,8 +1,8 @@
 /**
-* 生成身体部件列表的简化输入类型，属性名代表部件名，属性值代表生成部件数量。
+* 生成身体部件列表的简化输入类型，属性名代表部件名，属性值代表生成部件数量。repeat属性指定重复次数。
 */
 type bpgGene = {
-    [bodypartsName in BodyPartConstant]?: number;
+    [bodypartsName in BodyPartConstant|'repeat']?: number;
 };
 
 declare namespace NodeJS {
@@ -11,9 +11,14 @@ declare namespace NodeJS {
         detail: ()=>void,
         bpg: (arg0: Array<bpgGene>)=>BodyPartConstant[],
         GenedGetBodyparts: Array<bpgGene>,
+        GenedGetBodypartsNum: Array<bpgGene>,
         GenedBodypartsList: BodyPartConstant[],
+        GenedBodypartsNum: number,
+        GenedgetBpEnergyBodyparts:Array<bpgGene>,
+        GenedgetBpEnergyBodypartsCost:number
         prototypeMounted: boolean,
         getNewSource():void,
+        getNum(arg0: number):number
     }
 }
 
@@ -79,6 +84,7 @@ interface TaskPool {
 interface CreepMemory {
     task: Task,
     taskPool?: TaskPool,
+    bodyparts: bpgGene[],
 }
 
 interface SourceMemory {
@@ -178,6 +184,9 @@ interface Memory {
         newSource: boolean
     }
     taskPools: TaskPool,
+    testvalue1 : boolean,
+    testvalue2 : boolean,
+    testvalue : boolean,
 }
 
 interface RoomMemory{
