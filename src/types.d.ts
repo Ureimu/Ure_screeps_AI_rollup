@@ -198,6 +198,7 @@ interface RoomTaskInte{
         NewSpawnTaskQueue: TaskQueue,
         ifAllocateNewSpawnTaskToSpawn: boolean,
         nextPushTimePoint : number,
+        hasPushed: boolean,
 }
 
 interface RoomMemory{

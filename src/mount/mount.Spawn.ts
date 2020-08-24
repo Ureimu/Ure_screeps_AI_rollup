@@ -51,6 +51,9 @@ export class SpawnExtension extends StructureSpawn {
                 }
                 console.log(`<span style='color:#FFCCCC'>[spawn] ${this.name}执行spawn任务失败,返回错误：${errorText}</span>`);
             }
+            if(taskList.length>18){
+                console.log(`<span style='color:#FF6666'>目前任务冗余过多(${taskList.length}个任务在该spawn"${this.name}"任务队列中)，请及时检测清理任务！</span>`);
+            }
             taskPool.setQueue(spawnQueue, "spawnQueue", this.memory.taskPool);
         }
     }
