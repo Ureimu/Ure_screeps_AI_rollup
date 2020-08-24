@@ -54,7 +54,7 @@ export function makeHarvestSourceTaskObject(
         priority: priority,
         isRunning: isRunning,
         taskInf: {
-            taskType: 'harvestSource'
+            taskType: 'harvestSource',
         }
     }
     return harvestSourceTask;

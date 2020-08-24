@@ -1,3 +1,4 @@
+
 /**
 * 生成身体部件列表的简化输入类型，属性名代表部件名，属性值代表生成部件数量。repeat属性指定重复次数。
 */
@@ -189,8 +190,19 @@ interface Memory {
     testvalue : boolean,
 }
 
+interface RoomTaskInte{
+        isMyRoom: boolean,
+        interval: number,
+        runNow: boolean,
+        ifPushNewSpawnTask: boolean,
+        NewSpawnTaskQueue: TaskQueue,
+        ifAllocateNewSpawnTaskToSpawn: boolean,
+        nextPushTimePoint : number,
+}
+
 interface RoomMemory{
     taskPool: TaskPool,
+    pushTaskSet: {[name:string]: RoomTaskInte};
 }
 
 interface SpawnMemory {

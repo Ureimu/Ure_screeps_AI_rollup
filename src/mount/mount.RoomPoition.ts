@@ -1,5 +1,5 @@
 
-// 自定义的 Source 的拓展
+// 自定义的 RoomPosition 的拓展
 export class RoomPositionExtension extends RoomPosition {
         /**
      * 返回一个在该pos正方形周围的pos数组,顺序为按照时钟12点为起点顺时针旋转.

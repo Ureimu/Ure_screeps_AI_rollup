@@ -5,12 +5,10 @@ import actionCounter from "./utils/actionCounter";
 import { manageTask } from "./task/manager";
 import { initNewRoomSetting } from "./updateMemory";
 import { run } from './task/workCode';
-import { RoomTaskObject } from './task/roomTaskObject'
+import { RoomTask } from './task/RoomTask'
 import './utils/bypass';
 
 actionCounter.warpActions();
-let x = new RoomTaskObject('E3S1');
-x.interval= 10;
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 export const loop = ErrorMapper.wrapLoop(() => {

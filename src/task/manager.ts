@@ -1,5 +1,6 @@
 import taskPool from "task/taskPool";
 import * as makeTask from "./makeTask";
+import { RoomTask } from "./RoomTask";
 
 /**
  * 分配给定的room的spawnTask中的任务到相应房间内的spawn中，平均分配。
@@ -52,12 +53,24 @@ function allocatingSpawnTask(roomListToAllocate: object): void {
     }
 }
 
-function setInterval(): void {
-
+function autoPush(roomName:string,roomTaskName:string,roomListToAllocate:{[roomName:string] :number},spawnTaskObjList:Task[]): {[roomName:string] :number} {
+    let task = new RoomTask(roomName,roomTaskName);
+    if(typeof Memory.rooms[roomName].pushTaskSet[task.roomTaskName] == 'undefined'){
+        task.inits();
+    }
+    if(task.run(true)==-3){
+        for (let i = 0, j = spawnTaskObjList.length; i < j; i++) {
+            task.pushTask(spawnTaskObjList[i]);
+        }
+    }
+    if(task.run()==0){
+        roomListToAllocate[roomName] = 1;
+    }
+    return roomListToAllocate;
 }
 
 export function manageTask(): void {
-    let roomListToAllocate: any = {}; //需要分配生成creep任务的房间名请放入这里。
+    let roomListToAllocate: {[roomName:string] :number} = {}; //需要分配生成creep任务的房间名请放入这里。
 
     for (let sourceName in Memory.sources) {
         let source = <Source>Game.getObjectById(Memory.sources[sourceName].id);
@@ -154,6 +167,33 @@ export function manageTask(): void {
                     roomListToAllocate[roomName] = 1;
                 }
             }
+
+            let Task = new RoomTask(roomName,'upgradeController');
+            if(typeof Memory.rooms[roomName].pushTaskSet[Task.roomTaskName] == 'undefined'){
+                Task.inits();
+            }
+            if(Task.run(true)==-3){
+
+                let chooseBodyParts = function (): bpgGene[] {
+                    return [{ move: 1, work: 2, carry: 1 }];
+                };
+
+                for (let i = 0, j = 5; i < j; i++) {
+                    let obj2 = makeTask.makeUpgradeControllerTaskObject();
+                    let obj: any = makeTask.makeSpawnTaskObject(
+                        chooseBodyParts,
+                        `${roomName}-U-${i + 1}`,
+                        obj2,
+                        undefined,
+                        8
+                    );
+                    Task.pushTask(obj);
+                }
+            }
+            if(Task.run()==0){
+                roomListToAllocate[roomName] = 1;
+            }
+
         }
     }
 

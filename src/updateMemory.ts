@@ -32,6 +32,7 @@ function initRoomMemory(): void {
                         taskPool: {
                             spawnQueue: [],
                         },
+                        pushTaskSet: {},
                     }
                 }
             }
