@@ -1,13 +1,13 @@
-export function mergeTask(...args:object[]){
-    let newObj = {}
-    for(let oldObj of args){
-        newObj=Object.assign(newObj,oldObj);
+export function mergeTask(...args: object[]) {
+    let newObj = {};
+    for (let oldObj of args) {
+        newObj = Object.assign(newObj, oldObj);
     }
     return newObj;
-}//合并任务只能做浅层合并，复杂对象只会被覆盖。
+} //合并任务只能做浅层合并，复杂对象只会被覆盖。
 
-function makeTask(name: string, ...args:object[]):object{
-    if(name == 'spawn'){
+function makeTask(name: string, ...args: object[]): object {
+    if (name == "spawn") {
         let spawnTaskObject = {};
         return spawnTaskObject;
     }
@@ -22,72 +22,70 @@ function makeTask(name: string, ...args:object[]):object{
  * @param {string} creepName
  * @returns
  */
-
 export function makeSpawnTaskObject(
     manage_bodyParts: () => bpgGene[],
     creepName: string,
-    task ?: Task,
-    sponsorObject ?: any,
+    task?: Task,
+    sponsorObject?: any,
     priority: number = 10,
-    isRunning: boolean = false,
+    isRunning: boolean = false
 ) {
     let spawnTaskObject = {
-        sponsor: sponsorObject?sponsorObject.id:undefined,
+        sponsor: sponsorObject ? sponsorObject.id : undefined,
         priority: priority,
         isRunning: isRunning,
         taskInf: {
             bodyparts: manage_bodyParts(),
             creepName: creepName,
-            task: task,
+            task: task
         }
     };
     return spawnTaskObject;
 }
 
-export function makeHarvestSourceTaskObject(
-    sponsorObject: any,
-    priority: number = 10,
-    isRunning: boolean = false
-) {
+export function makeHarvestSourceTaskObject(sponsorObject: any, priority: number = 10, isRunning: boolean = false) {
     let harvestSourceTask = {
         sponsor: sponsorObject.id,
         priority: priority,
         isRunning: isRunning,
         taskInf: {
-            taskType: 'harvestSource',
+            taskType: "harvestSource"
         }
-    }
+    };
     return harvestSourceTask;
 }
 
-export function makeCarrySourceTaskObject(
-    priority: number = 12,
-    isRunning: boolean = false,
-    sponsorObject?: any,
-) {
+export function makeCarrySourceTaskObject(priority: number = 12, isRunning: boolean = false, sponsorObject?: any) {
     let carrySourceTask = {
-        sponsor: sponsorObject?sponsorObject.id:undefined,
+        sponsor: sponsorObject ? sponsorObject.id : undefined,
         priority: priority,
         isRunning: isRunning,
         taskInf: {
-            taskType: 'carrySource'
+            taskType: "carrySource"
         }
-    }
+    };
     return carrySourceTask;
 }
 
-export function makeUpgradeControllerTaskObject(
-    priority: number = 8,
-    isRunning: boolean = false,
-    sponsorObject?: any,
-) {
+export function makeUpgradeControllerTaskObject(priority: number = 8, isRunning: boolean = false, sponsorObject?: any) {
     let upgradeControllerTask = {
-        sponsor: sponsorObject?sponsorObject.id:undefined,
+        sponsor: sponsorObject ? sponsorObject.id : undefined,
         priority: priority,
         isRunning: isRunning,
         taskInf: {
-            taskType: 'upgradeController'
+            taskType: "upgradeController"
         }
-    }
+    };
     return upgradeControllerTask;
+}
+
+export function makeBuildingTaskObject(priority: number = 9, isRunning: boolean = false) {
+    let buildingTask = {
+        priority: priority,
+        isRunning: isRunning,
+        taskInf: {
+            taskType: "buildAndRepair"
+        }
+    };
+    return buildingTask;
 }

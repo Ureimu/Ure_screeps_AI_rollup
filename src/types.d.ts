@@ -45,7 +45,7 @@ interface Task {
      * @type {Sponsor}可以是任何建筑或creep,source
      * @memberof Task
      */
-    sponsor: Sponsor,
+    sponsor?: Sponsor,
     /**
      * 标识该任务是否在执行状态。
      *
@@ -86,11 +86,12 @@ interface CreepMemory {
     task: Task,
     taskPool?: TaskPool,
     bodyparts: bpgGene[],
+    dontPullMe?: boolean,
 }
 
 interface SourceMemory {
     id: Id<Source>,
-    blankSpace: number,
+    blankSpace: RoomPosition[],
     taskPool: TaskPool,
 }
 
@@ -100,7 +101,7 @@ interface Source {
      *
      * @returns {number} 非wall的空格个数
      */
-    checkBlankSpace(): number,
+    checkBlankSpace(): RoomPosition[],
 
     /**
      * source的名称.

@@ -8,15 +8,15 @@ export class SourceExtension extends Source {
      *
      * @returns {number} 非wall的空格个数
      */
-    checkBlankSpace(): number {
+    checkBlankSpace():RoomPosition[] {
         let square:RoomPosition[] = this.pos.getSquare();
-        let BlankSpace: number = 0;
+        let BlankSpace: RoomPosition[] = [];
         for (const squared of square) {
             const look = squared.look();
             look.forEach(function(lookObject) {
                 if(lookObject.type == 'terrain' &&
                 lookObject.terrain != 'wall') {
-                    BlankSpace++;
+                    BlankSpace.push(squared);
                 }
             });
         }
@@ -41,7 +41,7 @@ export class SourceExtension extends Source {
 
     makeHarvestTask(): void{
         let workerTask: PriorityQueue = taskPool.initQueue('taskQueue', Memory.sources[this.name].taskPool);
-        for(let i=0;i<Memory.sources[this.name].blankSpace;i++){
+        for(let i=0;i<Memory.sources[this.name].blankSpace.length;i++){
             workerTask.push({
                 sponsor: this.id,
                 priority: 10,
@@ -56,7 +56,7 @@ export class SourceExtension extends Source {
 
     makeSpawnTask(manage_bodyParts: ()=>bpgGene[]): void{
         let spawnTask: PriorityQueue = taskPool.initQueue('spawnQueue',Memory.sources[this.name].taskPool)
-        for(let i=0;i<Memory.sources[this.name].blankSpace;i++){
+        for(let i=0;i<Memory.sources[this.name].blankSpace.length;i++){
             spawnTask.push(
                 {
                     sponsor: this.id,
@@ -83,7 +83,6 @@ export class SourceExtension extends Source {
         }
 
         let screeps_x = _.filter(Game.creeps, (creep) => creep.name.indexOf(this.name+'-H-') != -1);
-        console.log(screeps_x.length);
         let bodypartsCount = 0;
         for (let i = 0; i < screeps_x.length; i++) {
             for(let body of screeps_x[i].body){
@@ -92,12 +91,19 @@ export class SourceExtension extends Source {
                 }
             }
         }
-        if(bodypartsCount<5||screeps_x.length<Memory.sources[this.name].blankSpace){
+        if(bodypartsCount<5||screeps_x.length<Memory.sources[this.name].blankSpace.length){
             status.pushTask=true;
             status.pushTaskData={
                 pushSpawnTask:true,
+                interval:1500,
             }
             console.log('[task] 尝试推送任务...');
+        }else{
+            status.pushTask=true;
+            status.pushTaskData={
+                pushSpawnTask:false,
+                interval:100,
+            }
         }
 
         return status;

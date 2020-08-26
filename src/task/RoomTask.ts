@@ -83,10 +83,10 @@ export class RoomTask {
         this.runNow=false;
         if(this.ifPushNewSpawnTask&&!dryRun){
             let roomSpawnQueue = taskPool.initQueue("spawnQueue", Memory.rooms[this.roomName].taskPool);
-            for(let task of this.NewSpawnTaskQueue){
-                roomSpawnQueue.push(task);
-            }
+            let NewSpawnTaskQueue = taskPool.initQueueFromTaskQueue(this.NewSpawnTaskQueue);
+            while(taskPool.transTask(NewSpawnTaskQueue,roomSpawnQueue));
             taskPool.setQueue(roomSpawnQueue, "spawnQueue", Memory.rooms[this.roomName].taskPool);
+            taskPool.setQueueFromTaskQueue(NewSpawnTaskQueue,this.NewSpawnTaskQueue);
             this.nextPushTimePoint=this.interval+Game.time;
             this.hasPushed=false;
             return 0;

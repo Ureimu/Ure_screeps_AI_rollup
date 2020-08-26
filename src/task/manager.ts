@@ -2,6 +2,7 @@ import taskPool from "task/taskPool";
 import * as makeTask from "./makeTask";
 import { RoomTask } from "./RoomTask";
 import { getBpNum } from "utils/bodypartsGenerator";
+import { PriorityQueue } from "./PriorityQueue";
 
 /**
  * 分配给定的room的spawnTask中的任务到相应房间内的spawn中，平均分配。
@@ -54,11 +55,11 @@ function allocatingSpawnTask(roomListToAllocate: object): void {
     }
 }
 
-function autoPush(roomTask:RoomTask,spawnTaskObjList:Task[]=[]): {[roomName:string] :number} {
+function autoPush(roomTask:RoomTask,spawnTaskObjList:PriorityQueue): {[roomName:string] :number} {
     let roomListToAllocate:{[roomName:string]:number} = {};
     if(typeof spawnTaskObjList != 'undefined'){
-        for (let i = 0, j = spawnTaskObjList.length; i < j; i++) {
-            roomTask.pushTask(spawnTaskObjList[i]);
+        for (let i = 0, j = spawnTaskObjList.size(); i < j; i++) {
+            roomTask.pushTask(<Task>spawnTaskObjList.pop());
         }
     }
     if(roomTask.run()==0){
@@ -69,14 +70,15 @@ function autoPush(roomTask:RoomTask,spawnTaskObjList:Task[]=[]): {[roomName:stri
 
 export function manageTask(): void {
     let roomListToAllocate: {[roomName:string] :number} = {}; //需要分配生成creep任务的房间名请放入这里。
+    let taskList = new PriorityQueue(false);
 
     for (let roomName in Memory.rooms) {
         if (Game.rooms[roomName].controller && Game.rooms[roomName].controller?.my) {
-            let taskList = [];
 
+            //采集能量任务
             for (let sourceName in Memory.sources) {
                 let harvestSourceRoomTask = new RoomTask(roomName,'harvestSource'+sourceName)
-                taskList = [];
+                taskList.clear();
                 if(!harvestSourceRoomTask.hasPushed){
                     harvestSourceRoomTask.hasPushed=true;
                     let chooseBodyParts = function (): bpgGene[] {
@@ -88,7 +90,7 @@ export function manageTask(): void {
                     }
                     if (checking.pushTask) {
                         if (checking.pushTaskData.pushSpawnTask) {
-                            for (let i = 0, j = Memory.sources[sourceName].blankSpace; i < j; i++) {
+                            for (let i = 0, j = Memory.sources[sourceName].blankSpace.length; i < j; i++) {
                                 let obj2 = makeTask.makeHarvestSourceTaskObject(source);
                                 let obj: any = makeTask.makeSpawnTaskObject(
                                     chooseBodyParts,
@@ -99,8 +101,9 @@ export function manageTask(): void {
                                 taskList.push(obj);
                                 Memory.sources[source.name].taskPool.spawnQueue.push(obj);
                             }
+                            roomListToAllocate[source.room.name] = 1;
                         }
-                        roomListToAllocate[source.room.name] = 1;
+                        harvestSourceRoomTask.interval=checking.pushTaskData.interval;
                     }
                     if (checking.changeStatus) {
                     }
@@ -108,54 +111,86 @@ export function manageTask(): void {
                 roomListToAllocate=Object.assign(roomListToAllocate,autoPush(harvestSourceRoomTask,taskList));
             }
 
-            let carrySourceRoomTask = new RoomTask(roomName,'carrySource');
-            taskList = [];
-            if(!carrySourceRoomTask.hasPushed){
-                carrySourceRoomTask.hasPushed=true;
-                let chooseBodyParts = function (): bpgGene[] {
-                    return [{ move: 3, carry: 3 }];
-                };
-                let screeps_x = _.filter(Game.creeps, creep => creep.name.indexOf(roomName + "-C-") != -1);
-                let carryPartsCount = 0;
-                screeps_x.forEach(x => {
-                    carryPartsCount += getBpNum(x.memory.bodyparts,'carry');
-                });
-                if(carryPartsCount<5){
-                    for (let i = 0, j = 1; i < j; i++) {
-                        let obj2 = makeTask.makeCarrySourceTaskObject();
+            //运输能量任务
+            {
+                let carrySourceRoomTask = new RoomTask(roomName,'carrySource');
+                taskList.clear();
+                if(!carrySourceRoomTask.hasPushed){
+                    carrySourceRoomTask.hasPushed=true;
+                    let chooseBodyParts = function (): bpgGene[] {
+                        return [{ move: 3, carry: 3 }];
+                    };
+                    let screeps_x = _.filter(Game.creeps, creep => creep.name.indexOf(roomName + "-C-") != -1);
+                    let carryPartsCount = 0;
+                    screeps_x.forEach(x => {
+                        carryPartsCount += getBpNum(x.memory.bodyparts,'carry');
+                    });
+                    if(carryPartsCount<5){
+                        for (let i = 0, j = 1; i < j; i++) {
+                            let obj2 = makeTask.makeCarrySourceTaskObject();
+                            let obj: any = makeTask.makeSpawnTaskObject(
+                                chooseBodyParts,
+                                `${roomName}-C-${i + 1}`,
+                                obj2,
+                                undefined,
+                                12
+                            );
+                            taskList.push(obj);
+                        }
+                    }
+                }
+                roomListToAllocate=Object.assign(roomListToAllocate,autoPush(carrySourceRoomTask,taskList));
+            }
+
+            //升级控制器任务
+            {
+                let upgradeControllerRoomTask = new RoomTask(roomName,'upgradeController');
+                taskList.clear();
+                if(!upgradeControllerRoomTask.hasPushed){
+                    upgradeControllerRoomTask.hasPushed=true;
+                    let chooseBodyParts = function (): bpgGene[] {
+                        return [{ move: 1, work: 2, carry: 1 }];
+                    };
+                    for (let i = 0, j = 5; i < j; i++) {
+                        let obj2 = makeTask.makeUpgradeControllerTaskObject();
                         let obj: any = makeTask.makeSpawnTaskObject(
                             chooseBodyParts,
-                            `${roomName}-C-${i + 1}`,
+                            `${roomName}-U-${i + 1}`,
                             obj2,
                             undefined,
-                            12
+                            8
                         );
                         taskList.push(obj);
                     }
                 }
+                roomListToAllocate=Object.assign(roomListToAllocate,autoPush(upgradeControllerRoomTask,taskList));
             }
-            roomListToAllocate=Object.assign(roomListToAllocate,autoPush(carrySourceRoomTask,taskList));
 
-            let upgradeControllerRoomTask = new RoomTask(roomName,'upgradeController');
-            taskList = [];
-            if(!upgradeControllerRoomTask.hasPushed){
-                upgradeControllerRoomTask.hasPushed=true;
-                let chooseBodyParts = function (): bpgGene[] {
-                    return [{ move: 1, work: 2, carry: 1 }];
-                };
-                for (let i = 0, j = 5; i < j; i++) {
-                    let obj2 = makeTask.makeUpgradeControllerTaskObject();
-                    let obj: any = makeTask.makeSpawnTaskObject(
-                        chooseBodyParts,
-                        `${roomName}-U-${i + 1}`,
-                        obj2,
-                        undefined,
-                        8
-                    );
-                    taskList.push(obj);
+            //建造任务
+            {
+                let buildingRoomTask = new RoomTask(roomName,'building');
+                taskList.clear();
+                if(!buildingRoomTask.hasPushed){
+                    buildingRoomTask.hasPushed=true;
+                    let chooseBodyParts = function (): bpgGene[] {
+                        return [{ move: 2, carry: 2, work: 1 }];
+                    };
+                    if(/** 推送任务条件代码 */1){
+                        for (let i = 0, j = 2/** 推送任务数量 */; i < j; i++) {
+                            let obj2 = makeTask.makeBuildingTaskObject();
+                            let obj: any = makeTask.makeSpawnTaskObject(
+                                chooseBodyParts,
+                                `${roomName}-B-${i + 1}`,
+                                obj2,
+                                undefined,
+                                9
+                            );
+                            taskList.push(obj);
+                        }
+                    }
                 }
+                roomListToAllocate=Object.assign(roomListToAllocate,autoPush(buildingRoomTask,taskList));
             }
-            roomListToAllocate=Object.assign(roomListToAllocate,autoPush(upgradeControllerRoomTask,taskList));
         }
     }
 
