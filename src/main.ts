@@ -5,8 +5,8 @@ import actionCounter from "./utils/actionCounter";
 import { manageTask } from "./task/manager";
 import { initNewRoomSetting } from "./updateMemory";
 import { run } from './task/workCode';
-import { RoomTask } from './task/RoomTask'
 import './utils/bypass';
+import { mountCreepEnergyMonitor } from "utils/energyMonitor";
 
 actionCounter.warpActions();
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
@@ -21,9 +21,9 @@ export const loop = ErrorMapper.wrapLoop(() => {
             delete Memory.creeps[name];
         }
     }
-    Game.rooms['E3S1'].controller?.activateSafeMode();//这个代码是因为在私服很容易在初期被攻击。
 
     mountPrototypeExtension();
+    mountCreepEnergyMonitor();
     globalFunctionRegister();
     initNewRoomSetting();
     manageTask();

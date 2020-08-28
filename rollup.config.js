@@ -38,7 +38,7 @@ export default {
     //screeps({config: cfg, dryRun: cfg == null}),
     copy({
       files: ['src/task/priority_queue.wasm','dist/main.js','dist/main.js.map.js'],//在新增了二进制文件后记得在这里添上
-      dest: 'C:/Users/a1090/AppData/Local/Screeps/scripts/server1_screepspl_us___21025/default',//这里填服务器的文件夹名称
+      dest: 'C:/Users/a1090/AppData/Local/Screeps/scripts/127_0_0_1___21025/main',//这里填服务器的文件夹名称
       options: {
         verbose: true,
       }

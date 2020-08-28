@@ -69,12 +69,15 @@ function autoPush(roomTask:RoomTask,spawnTaskObjList:PriorityQueue): {[roomName:
 }
 
 export function manageTask(): void {
+    let startTime = Game.cpu.getUsed();
+    let cpuInf: {[roomName:string] :number} = {};
     let roomListToAllocate: {[roomName:string] :number} = {}; //需要分配生成creep任务的房间名请放入这里。
     let taskList = new PriorityQueue(false);
 
     for (let roomName in Memory.rooms) {
         if (Game.rooms[roomName].controller && Game.rooms[roomName].controller?.my) {
-
+            cpuInf[roomName] = 0;
+            cpuInf[roomName] -= Game.cpu.getUsed();
             //采集能量任务
             for (let sourceName in Memory.sources) {
                 let harvestSourceRoomTask = new RoomTask(roomName,'harvestSource'+sourceName)
@@ -191,8 +194,19 @@ export function manageTask(): void {
                 }
                 roomListToAllocate=Object.assign(roomListToAllocate,autoPush(buildingRoomTask,taskList));
             }
+
+            cpuInf[roomName] += Game.cpu.getUsed();
         }
     }
 
     allocatingSpawnTask(roomListToAllocate);
+    let endTime = Game.cpu.getUsed();
+    console.log(`manager CPU cost:${(endTime-startTime).toFixed(3)}`);
+    let head = `roomName\tCPU\n`;
+    let text = head;
+    for(let roomName in cpuInf){
+        const inf = [roomName,cpuInf[roomName].toFixed(3)].join('\t\t');
+        text = text.concat(inf,'\n');
+    }
+    console.log(text);
 }

@@ -19,7 +19,8 @@ declare namespace NodeJS {
         GenedgetBpEnergyBodypartsCost:number
         prototypeMounted: boolean,
         getNewSource():void,
-        getNum(arg0: number):number
+        getNum(arg0: number):number,
+        CreepEnergyMonitorprototypeMounted:boolean,
     }
 }
 
