@@ -12,7 +12,7 @@ export function stateCut(creep: Creep, on: boolean, off: boolean, say: string = 
     return creep.memory.task.taskInf.harvesting;
 }
 
-export function test(creep: Creep){
+export function test(creep: Creep, target: AnyStructure){
     if (!creep.memory.task.taskInf.lastObj) {
         let targets = creep.room.find(FIND_STRUCTURES, {
             filter: object => object.hits < object.hitsMax - 2200

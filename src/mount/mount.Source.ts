@@ -1,5 +1,5 @@
-import taskPool from "task/taskPool";
-import { PriorityQueue } from "task/PriorityQueue";
+import taskPool from "task/utils/taskPool";
+import { PriorityQueue } from "task/utils/PriorityQueue";
 
 // 自定义的 Source 的拓展
 export class SourceExtension extends Source {

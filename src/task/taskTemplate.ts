@@ -1,10 +1,8 @@
 //@ts-nocheck
 
-import taskPool from "task/taskPool";
 import * as makeTask from "./makeTask";
-import { RoomTask } from "./RoomTask";
-import { getBpNum } from "utils/bodypartsGenerator";
-import { PriorityQueue } from "./PriorityQueue";
+import { RoomTask } from "./utils/RoomTask";
+import { PriorityQueue } from "./utils/PriorityQueue";
 
 function taskTemplate(roomName:string,taskList:PriorityQueue,roomListToAllocate: {[roomName:string] :number} = {}):void{
     {

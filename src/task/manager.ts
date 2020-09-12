@@ -1,8 +1,8 @@
-import taskPool from "task/taskPool";
+import taskPool from "task/utils/taskPool";
 import * as makeTask from "./makeTask";
-import { RoomTask } from "./RoomTask";
+import { RoomTask } from "./utils/RoomTask";
 import { getBpNum } from "utils/bodypartsGenerator";
-import { PriorityQueue } from "./PriorityQueue";
+import { PriorityQueue } from "./utils/PriorityQueue";
 
 /**
  * 分配给定的room的spawnTask中的任务到相应房间内的spawn中，平均分配。

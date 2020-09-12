@@ -1,4 +1,4 @@
-import taskPool from "../task/taskPool";
+import taskPool from "../task/utils/taskPool";
 import { bpg, getBpEnergy } from "utils/bodypartsGenerator";
 
 // 自定义的 Spawn 的拓展
