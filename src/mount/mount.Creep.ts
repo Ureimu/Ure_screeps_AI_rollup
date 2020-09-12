@@ -15,5 +15,10 @@ export class CreepExtension extends Creep {
     harvestEnergy() {
 
     }
+    pushBackTask() {
+        if(!!this.ticksToLive && this.ticksToLive<3){
+            this.memory.task
+        }
+    }
     // 其他更多自定义拓展
 }

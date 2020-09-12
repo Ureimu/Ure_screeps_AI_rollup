@@ -78,6 +78,7 @@ export function manageTask(): void {
         if (Game.rooms[roomName].controller && Game.rooms[roomName].controller?.my) {
             cpuInf[roomName] = 0;
             cpuInf[roomName] -= Game.cpu.getUsed();
+
             //采集能量任务
             for (let sourceName in Memory.sources) {
                 let harvestSourceRoomTask = new RoomTask(roomName,'harvestSource'+sourceName)
@@ -106,7 +107,7 @@ export function manageTask(): void {
                             }
                             roomListToAllocate[source.room.name] = 1;
                         }
-                        harvestSourceRoomTask.interval=checking.pushTaskData.interval;
+                        //harvestSourceRoomTask.interval=checking.pushTaskData.interval;
                     }
                     if (checking.changeStatus) {
                     }

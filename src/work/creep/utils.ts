@@ -12,7 +12,7 @@ export function stateCut(creep: Creep, on: boolean, off: boolean, say: string = 
     return creep.memory.task.taskInf.harvesting;
 }
 
-export function test(creep: Creep, target: AnyStructure){
+export function test(creep: Creep, target: AnyStructure) {
     if (!creep.memory.task.taskInf.lastObj) {
         let targets = creep.room.find(FIND_STRUCTURES, {
             filter: object => object.hits < object.hitsMax - 2200
@@ -31,10 +31,7 @@ export function test(creep: Creep, target: AnyStructure){
         }
     } else if (creep.memory.task.taskInf.lastObj) {
         let target_x = <AnyStructure>Game.getObjectById(creep.memory.task.taskInf.lastObj);
-        if (
-            target_x.hits >= creep.memory.task.taskInf.lastObjHit + 120000 ||
-            target_x.hits == target_x.hitsMax
-        ) {
+        if (target_x.hits >= creep.memory.task.taskInf.lastObjHit + 120000 || target_x.hits == target_x.hitsMax) {
             creep.memory.task.taskInf.lastObj = null;
         } else if (creep.repair(target_x) == ERR_NOT_IN_RANGE) {
             creep.moveTo(target_x, {
@@ -59,7 +56,9 @@ export function getEnergy(creep: Creep) {
     });
     const containersEnergy = creep.pos.findClosestByRange(FIND_STRUCTURES, {
         //标明房间内有装能量的容器
-        filter: i => i.structureType == STRUCTURE_CONTAINER && i.store[RESOURCE_ENERGY] > 0
+        filter: i =>
+            i.structureType == STRUCTURE_CONTAINER &&
+            i.store[RESOURCE_ENERGY] > 50 * getBpNum(creep.memory.bodyparts, "carry")
     });
 
     if (target) {

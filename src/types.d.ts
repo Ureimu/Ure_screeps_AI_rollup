@@ -194,12 +194,12 @@ interface Memory {
 
 interface RoomTaskInte{
         isMyRoom: boolean,
-        interval: number,
+        //interval: number,
         runNow: boolean,
         ifPushNewSpawnTask: boolean,
         NewSpawnTaskQueue: TaskQueue,
         ifAllocateNewSpawnTaskToSpawn: boolean,
-        nextPushTimePoint : number,
+        //nextPushTimePoint : number,
         hasPushed: boolean,
 }
 
