@@ -89,3 +89,4 @@ export function makeBuildingTaskObject(priority: number = 9, isRunning: boolean 
     };
     return buildingTask;
 }
+

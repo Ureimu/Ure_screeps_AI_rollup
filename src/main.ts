@@ -4,7 +4,7 @@ import { ErrorMapper } from "utils/ErrorMapper";
 import actionCounter from "./utils/actionCounter";
 import { manageTask } from "./task/manager";
 import { initNewRoomSetting } from "./updateMemory";
-import { run } from './task/workCode';
+import { run } from './work/creep/index';
 import './utils/bypass';
 import { mountCreepEnergyMonitor } from "utils/energyMonitor";
 
