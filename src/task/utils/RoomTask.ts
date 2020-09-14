@@ -35,12 +35,10 @@ export class RoomTask {
     *
     * 初始化一个房间任务对象。
     * @param {boolean} ismyRoom 是否判断该房间为已经拥有的房间，如果判断为没有拥有的房间，则到时间也不会执行任务
-    * @param {number} interval 执行任务的间隔，以tick为单位
     * @param {boolean} runNow 是否立即执行，nextPushTimePoint的值会因此立即重置。
     * @param {boolean} ifPushNewSpawnTask 传入值被用来判断是否在interval到了的时候进行新的生成creep任务推送。
     * @param {TaskQueue} NewSpawnTaskQueue 新的spawn任务对象。会被用来推送。
     * @param {boolean} ifAllocateNewSpawnTaskToSpawn 是否在到时间后分配任务到spawn,如果现在不分配，会在下一次一起分配。
-    * @param {number} nextPushTimePoint 下一次推送任务的时间。
     * @param {boolean} hasPushed 是否已经完成推送任务到NewSpawnTaskQueue。
     *
     * @memberof RoomTask

@@ -57,12 +57,19 @@ function setQueue(queue: PriorityQueue,TaskQueueName: string,taskPoolMemory: Tas
     return taskPoolMemory[TaskQueueName];
 }
 
-function setQueueFromTaskQueue(queue: PriorityQueue,taskPoolMemory: TaskQueue): TaskQueue {
-    taskPoolMemory.splice(0);//清空数组，不能直接赋空数组(=[]),因为这里的函数参数是引用,重新赋值会覆盖引用.
+/**
+ * 从taskQueue初始化PriorityQueue.
+ *
+ * @param {PriorityQueue} queue 要保存的队列
+ * @param {TaskQueue} taskQueueMemory 队列存储路径
+ * @returns {TaskQueue} 队列存储路径
+ */
+function setQueueFromTaskQueue(queue: PriorityQueue,taskQueueMemory: TaskQueue): TaskQueue {
+    taskQueueMemory.splice(0);//清空数组，不能直接赋空数组(=[]),因为这里的函数参数是引用,重新赋值会覆盖引用.
     for (let i = 0, j = queue.size(); i < j; i++) {
-        taskPoolMemory.push(<Task>queue.pop());
+        taskQueueMemory.push(<Task>queue.pop());
     }
-    return taskPoolMemory;
+    return taskQueueMemory;
 }
 
 /**
@@ -96,9 +103,15 @@ function initQueue(wantedTaskQueueName: string,taskPoolMemory: TaskPool, towards
     }
 }
 
-function initQueueFromTaskQueue(taskPoolMemory: TaskQueue, towards: boolean = false): PriorityQueue {
-    let queue = newQueue(towards);
-    return <PriorityQueue>getQueueFromArray(taskPoolMemory,towards);
+/**
+ * 从给定的memory中的队列初始化该队列
+ *
+ * @param {TaskQueue} taskQueueMemory
+ * @param {boolean} [towards=false]
+ * @returns {PriorityQueue}
+ */
+function initQueueFromTaskQueue(taskQueueMemory: TaskQueue, towards: boolean = false): PriorityQueue {
+    return <PriorityQueue>getQueueFromArray(taskQueueMemory,towards);
 }
 
 /**

@@ -1,8 +1,9 @@
 import taskPool from "task/utils/taskPool";
-import * as makeTask from "./makeTask";
+import * as makeTask from "./utils/makeTask";
 import { RoomTask } from "./utils/RoomTask";
 import { getBpNum } from "utils/bodypartsGenerator";
 import { PriorityQueue } from "./utils/PriorityQueue";
+import { TaskG } from "./utils/makeTaskX";
 
 /**
  * 分配给定的room的spawnTask中的任务到相应房间内的spawn中，平均分配。
@@ -95,15 +96,13 @@ export function manageTask(): void {
                     if (checking.pushTask) {
                         if (checking.pushTaskData.pushSpawnTask) {
                             for (let i = 0, j = Memory.sources[sourceName].blankSpace.length; i < j; i++) {
-                                let obj2 = makeTask.makeHarvestSourceTaskObject(source);
-                                let obj: any = makeTask.makeSpawnTaskObject(
-                                    chooseBodyParts,
-                                    `${source.name}-H-${i + 1}`,
-                                    obj2,
-                                    source
-                                );
-                                taskList.push(obj);
-                                Memory.sources[source.name].taskPool.spawnQueue.push(obj);
+                                let t: TaskG = new TaskG()
+                                t.sponsor(source);
+                                t.taskType("harvestSource")
+                                let s: TaskG = new TaskG()
+                                s.spawnTask(chooseBodyParts(),`${source.name}-H-${i + 1}`,t.task)
+                                taskList.push(s.task);
+                                Memory.sources[source.name].taskPool.spawnQueue.push(s.task);
                             }
                             roomListToAllocate[source.room.name] = 1;
                         }

@@ -1,6 +1,6 @@
 //@ts-nocheck
 
-import * as makeTask from "./makeTask";
+import * as makeTask from "./utils/makeTask";
 import { RoomTask } from "./utils/RoomTask";
 import { PriorityQueue } from "./utils/PriorityQueue";
 

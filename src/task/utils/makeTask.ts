@@ -1,3 +1,5 @@
+import { TaskG } from "./makeTaskX";
+
 export function mergeTask(...args: object[]) {
     let newObj = {};
     for (let oldObj of args) {
@@ -25,22 +27,15 @@ function makeTask(name: string, ...args: object[]): object {
 export function makeSpawnTaskObject(
     manage_bodyParts: () => bpgGene[],
     creepName: string,
-    task?: Task,
+    task: Task,
     sponsorObject?: any,
     priority: number = 10,
     isRunning: boolean = false
 ) {
-    let spawnTaskObject = {
-        sponsor: sponsorObject ? sponsorObject.id : undefined,
-        priority: priority,
-        isRunning: isRunning,
-        taskInf: {
-            bodyparts: manage_bodyParts(),
-            creepName: creepName,
-            task: task
-        }
-    };
-    return spawnTaskObject;
+    let s = new TaskG(priority,isRunning);
+    s.spawnTask(manage_bodyParts(),creepName,task);
+    s.sponsor(sponsorObject)
+    return s.task;
 }
 
 export function makeHarvestSourceTaskObject(sponsorObject: any, priority: number = 10, isRunning: boolean = false) {
