@@ -2,7 +2,7 @@ import { globalFunctionRegister } from "mount/mountGlobalFunction";
 import { mountPrototypeExtension } from "mount/mountPrototypeExtension";
 import { ErrorMapper } from "utils/ErrorMapper";
 import actionCounter from "./utils/actionCounter";
-import { manageTask } from "./task/manager";
+import { manageTask } from "./task";
 import { initNewRoomSetting } from "./updateMemory";
 import { run } from './work/creep/index';
 import './utils/bypass';

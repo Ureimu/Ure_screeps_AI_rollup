@@ -21,7 +21,7 @@ export class RoomTask {
             Memory.rooms[this.roomName].pushTaskSet[this.roomTaskName] = {
                 isMyRoom: false,
                 //interval: 1500,
-                runNow: false,
+                runNow: true,
                 ifPushNewSpawnTask: true,
                 NewSpawnTaskQueue: [],
                 ifAllocateNewSpawnTaskToSpawn: true,
@@ -47,7 +47,7 @@ export class RoomTask {
         Memory.rooms[this.roomName].pushTaskSet[this.roomTaskName] = {
             isMyRoom: false,
             //interval: 1500,
-            runNow: false,
+            runNow: true,
             ifPushNewSpawnTask: true,
             NewSpawnTaskQueue: [],
             ifAllocateNewSpawnTaskToSpawn: true,
@@ -68,7 +68,7 @@ export class RoomTask {
      * @memberof RoomTask
      */
     run(dryRun: boolean=false) {
-        if(/*Game.time!=this.nextPushTimePoint && */this.runNow!=true){
+        if(/*Game.time!=this.nextPushTimePoint &&*/this.runNow!=true){
             return -1;
         }
 
@@ -85,8 +85,7 @@ export class RoomTask {
             while(taskPool.transTask(NewSpawnTaskQueue,roomSpawnQueue));
             taskPool.setQueue(roomSpawnQueue, "spawnQueue", Memory.rooms[this.roomName].taskPool);
             taskPool.setQueueFromTaskQueue(NewSpawnTaskQueue,this.NewSpawnTaskQueue);
-            //this.nextPushTimePoint=this.interval+Game.time;
-            this.hasPushed=false;
+            this.hasPushed=true;
             return 0;
         }
         if(dryRun){

@@ -42,7 +42,7 @@ export function bpg(bodyparts: Array<bpgGene>): BodyPartConstant[] {
     return bodypartsList;
 }
 
-export function getBpNum(bodyparts: Array<bpgGene>, bodypartName: BodyPartConstant): number {
+export function getBpNum(bodyparts: Array<bpgGene>, bodypartName?: BodyPartConstant): number {
     /**
      *一个bodyparts生成器。
     具体使用示例：
@@ -59,9 +59,15 @@ export function getBpNum(bodyparts: Array<bpgGene>, bodypartName: BodyPartConsta
         if (bodyparts[i].repeat !== undefined) {
             repeatNum = <number>bodyparts[i]["repeat"];
         }
-        for (let key in bodyparts[i]) {
-            if (key == bodypartName) {
-                bodypartNumber += <number>bodyparts[i][key] * repeatNum;
+        for (let key in <bpgGene>bodyparts[i]) {
+            if(typeof bodypartName !== "undefined"){
+                if (key == bodypartName) {
+                    bodypartNumber += <number>bodyparts[i][key] * repeatNum;
+                }
+            } else {
+                if (BODYPARTS_ALL.includes(<BodyPartConstant>key)){
+                    bodypartNumber += <number>bodyparts[i][<BodyPartConstant>key] * repeatNum;
+                }
             }
         }
     }
@@ -132,7 +138,18 @@ export function getBpByRole(roleName: string, roomName: string) {
                     getBpEnergy([roleList[key][0]])
             );
             roleList[key][0].repeat = i;
-            return roleList[key];
+            if(getBpNum(roleList[key])<=50){
+                return roleList[key];
+            } else {
+                let i = _.floor(
+                    (50 -
+                        getBpNum(roleList[key]) +
+                        getBpNum([roleList[key][0]])) /
+                        getBpNum([roleList[key][0]])
+                );
+                roleList[key][0].repeat = i;
+                return roleList[key];
+            }
         }
     }
 
