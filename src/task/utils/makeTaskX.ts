@@ -13,10 +13,11 @@ export class TaskG {
         return this.task["sponsor"]
     }
 
-    spawnTask(bodyparts:bpgGene[],creepName:string,task:Task){
-        this.task.taskInf["bodyparts"]=bodyparts;
-        this.task.taskInf["creepName"]=creepName;
-        this.task.taskInf["task"]=task;
+    spawnTask(bodyparts:bpgGene[],creepName:string){
+        this.task.spawnInf = {
+            bodyparts: bodyparts,
+            creepName: creepName,
+        }
     }
 
     taskType(taskType:string){

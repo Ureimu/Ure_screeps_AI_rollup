@@ -1,3 +1,5 @@
+//@ts-nocheck
+//该模块已弃用。
 import { TaskG } from "./makeTaskX";
 
 export function mergeTask(...args: object[]) {

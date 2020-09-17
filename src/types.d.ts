@@ -62,6 +62,10 @@ interface Task {
      *     }}
      * @memberof Task
      */
+    spawnInf?: {
+        bodyparts: bpgGene[],
+        creepName: string,
+    },
     taskInf: {
         [name: string]: any,
     }
