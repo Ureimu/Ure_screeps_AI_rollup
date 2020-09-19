@@ -27,6 +27,7 @@ export class RoomTask {
                 ifAllocateNewSpawnTaskToSpawn: true,
                 //nextPushTimePoint: Game.time + 1500,
                 hasPushed: false,
+                hasPushedToSpawn: false,
             };
         }
     }
@@ -53,6 +54,7 @@ export class RoomTask {
             ifAllocateNewSpawnTaskToSpawn: true,
             //nextPushTimePoint: Game.time + 1500,
             hasPushed: false,
+            hasPushedToSpawn: false,
         };
     }
 
@@ -78,7 +80,7 @@ export class RoomTask {
             }
         }
 
-        this.runNow=false;
+        //this.runNow=false;
         if(this.ifPushNewSpawnTask&&!dryRun){
             let roomSpawnQueue = taskPool.initQueue("spawnQueue", Memory.rooms[this.roomName].taskPool);
             let NewSpawnTaskQueue = taskPool.initQueueFromTaskQueue(this.NewSpawnTaskQueue);
@@ -105,6 +107,13 @@ export class RoomTask {
         Memory.rooms[this.roomName].pushTaskSet[this.roomTaskName].interval = number;
     }
 */
+
+    pushTaskToSpawn(task:Task) {
+        this.pushTask(task);
+        this.hasPushedToSpawn = false;
+        this.run();
+    }
+
 
     get isMyRoom() {
         return Memory.rooms[this.roomName].pushTaskSet[this.roomTaskName].isMyRoom;
@@ -155,5 +164,12 @@ export class RoomTask {
     }
     set hasPushed(bool: boolean) {
         Memory.rooms[this.roomName].pushTaskSet[this.roomTaskName].hasPushed = bool;
+    }
+
+    get hasPushedToSpawn() {
+        return Memory.rooms[this.roomName].pushTaskSet[this.roomTaskName].hasPushedToSpawn;
+    }
+    set hasPushedToSpawn(bool: boolean) {
+        Memory.rooms[this.roomName].pushTaskSet[this.roomTaskName].hasPushedToSpawn = bool;
     }
 }

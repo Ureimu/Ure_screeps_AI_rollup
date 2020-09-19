@@ -11,7 +11,13 @@ import { upgradeController } from "./spawnTask/upgradeController";
  *
  * @param {object} roomListToAllocate 给定的room对象
  */
-function allocatingSpawnTask(roomListToAllocate: object): void {
+export function allocatingSpawnTask(): void {
+    let roomListToAllocate:{[roomName:string] :number} = {}
+    for(let roomName in Memory.rooms){
+        if(Memory.rooms[roomName].taskPool["spawnQueue"].length>0){
+            roomListToAllocate[roomName] = 1;
+        }
+    }
     if (Object.keys(roomListToAllocate).length == 0) return;
     let ifAllOK = false;
     let roomlist: any = {};
@@ -57,23 +63,18 @@ function allocatingSpawnTask(roomListToAllocate: object): void {
     }
 }
 
-function autoPush(roomTask:RoomTask,spawnTaskObjList:PriorityQueue): {[roomName:string] :number} {
-    let roomListToAllocate:{[roomName:string]:number} = {};
+function autoPush(roomTask:RoomTask,spawnTaskObjList:PriorityQueue): void {
     if(typeof spawnTaskObjList != 'undefined'){
         for (let i = 0, j = spawnTaskObjList.size(); i < j; i++) {
             roomTask.pushTask(<Task>spawnTaskObjList.pop());
         }
     }
-    if(roomTask.run()==0){
-        roomListToAllocate[roomTask.roomName] = 1;
-    }
-    return roomListToAllocate;
+    roomTask.run();
 }
 
 export function manageTask(): void {
     let startTime = Game.cpu.getUsed();
     let cpuInf: {[roomName:string] :number} = {};
-    let roomListToAllocate: {[roomName:string] :number} = {}; //需要分配生成creep任务的房间名请放入这里。
     let runTaskList: {[taskName:string] :(roomName: string) => Task[]|undefined}={
         'harvestSource':harvestSource,
         'carrySource':carrySource,
@@ -89,21 +90,26 @@ export function manageTask(): void {
             for(let taskName in runTaskList){
                 let taskList = new PriorityQueue(false);
                 let rTaskList: Task[] = [];
-                let gTask = runTaskList[taskName](roomName);
-                if(typeof gTask !== 'undefined'){
-                    rTaskList.push(...gTask);
+                let AnyRoomTask = new RoomTask(roomName,taskName);
+                if(!AnyRoomTask.hasPushed){
+                    AnyRoomTask.hasPushed=true;
+                    let gTask = runTaskList[taskName](roomName);
+                    if(typeof gTask !== 'undefined'){
+                        rTaskList.push(...gTask);
+                    }
+                    for(let xTask of rTaskList){
+                        taskList.push(xTask);
+                    }
+                    autoPush(AnyRoomTask,taskList);
                 }
-                for(let xTask of rTaskList){
-                    taskList.push(xTask);
-                }
-                roomListToAllocate=Object.assign(roomListToAllocate,autoPush(new RoomTask(roomName,taskName),taskList));
             }
 
             cpuInf[roomName] += Game.cpu.getUsed();
         }
     }
 
-    allocatingSpawnTask(roomListToAllocate);
+    allocatingSpawnTask();
+
     let endTime = Game.cpu.getUsed();
     console.log(`manager CPU cost:${(endTime-startTime).toFixed(3)}`);
     let head = `roomName\tCPU\n`;

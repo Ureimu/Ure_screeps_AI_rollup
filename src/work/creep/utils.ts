@@ -12,6 +12,16 @@ export function stateCut(creep: Creep, on: boolean, off: boolean, say: string = 
     return creep.memory.task.taskInf.harvesting;
 }
 
+export function transportResource(creep: Creep, target: AnyStructure, resourceType: ResourceConstant) {
+    if (creep.transfer(target, resourceType) == ERR_NOT_IN_RANGE) {
+        creep.moveTo(target, {
+            visualizePathStyle: {
+                stroke: "#ffffff"
+            }
+        });
+    }
+}
+
 export function test(creep: Creep, target: AnyStructure) {
     if (!creep.memory.task.taskInf.lastObj) {
         let targets = creep.room.find(FIND_STRUCTURES, {

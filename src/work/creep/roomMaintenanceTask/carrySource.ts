@@ -1,4 +1,5 @@
-import { stateCut,getEnergy } from "work/creep/utils"
+import { stateCut,getEnergy, transportResource } from "work/creep/utils"
+import { findSpawnOrExtensionNotFull, lookForContainer } from "../utils/find";
 
 export function carrySource(creep: Creep): void {
     let ifHarvesting = stateCut(creep, creep.store[RESOURCE_ENERGY] < 50, creep.store.getFreeCapacity() == 0);
@@ -6,21 +7,19 @@ export function carrySource(creep: Creep): void {
     if (ifHarvesting) {
         getEnergy(creep);
     } else {
-        let targets = creep.room.find(FIND_STRUCTURES, {
-            //标明房间内未装满的扩展和出生点
-            filter: structure => {
-                return (
-                    (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN) &&
-                    structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0
-                );
+        let targets = findSpawnOrExtensionNotFull(creep);
+        let controllerSourceContainerPos = new RoomPosition(
+            Game.rooms[creep.room.name].memory.construction["controllerSourceContainer"].pos[0].x,
+            Game.rooms[creep.room.name].memory.construction["controllerSourceContainer"].pos[0].y,
+            Game.rooms[creep.room.name].memory.construction["controllerSourceContainer"].pos[0].roomName
+        );
+        let controllerContainer = lookForContainer(controllerSourceContainerPos);
+        if(targets.length>0){
+            transportResource(creep, <AnyStructure>creep.pos.findClosestByRange(targets), RESOURCE_ENERGY);
+        } else if(!!controllerContainer){
+            if(controllerContainer.store["energy"]<200) {
+                transportResource(creep, controllerContainer, RESOURCE_ENERGY);
             }
-        });
-        if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(targets[0], {
-                visualizePathStyle: {
-                    stroke: "#ffffff"
-                }
-            });
         }
     }
 }

@@ -33,6 +33,7 @@ function initRoomMemory(): void {
                             spawnQueue: [],
                         },
                         pushTaskSet: {},
+                        construction: {},
                     }
                 }
             }

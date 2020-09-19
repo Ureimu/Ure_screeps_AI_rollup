@@ -7,6 +7,7 @@ import { initNewRoomSetting } from "./updateMemory";
 import { run } from './work/creep/index';
 import './utils/bypass';
 import { mountCreepEnergyMonitor } from "utils/energyMonitor";
+import { autoConstruction } from "construction";
 
 actionCounter.warpActions();
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
@@ -27,6 +28,7 @@ export const loop = ErrorMapper.wrapLoop(() => {
     globalFunctionRegister();
     initNewRoomSetting();
     manageTask();
+    autoConstruction();
 
     for (let spawnName in Game.spawns) {
         if (!Game.spawns[spawnName].spawning) {
