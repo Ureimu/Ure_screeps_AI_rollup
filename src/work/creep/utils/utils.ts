@@ -71,14 +71,7 @@ export function getEnergy(creep: Creep) {
             i.store[RESOURCE_ENERGY] > 50 * getBpNum(creep.memory.bodyparts, "carry")
     });
 
-    if (target) {
-        creep.moveTo(target, {
-            visualizePathStyle: {
-                stroke: "#ffffff"
-            }
-        });
-        creep.pickup(target);
-    } else if (containersEnergy) {
+    if (containersEnergy) {
         if (creep.withdraw(containersEnergy, "energy") == ERR_NOT_IN_RANGE) {
             creep.moveTo(containersEnergy, {
                 visualizePathStyle: {
@@ -86,5 +79,12 @@ export function getEnergy(creep: Creep) {
                 }
             });
         }
+    } else if (target) {
+        creep.moveTo(target, {
+            visualizePathStyle: {
+                stroke: "#ffffff"
+            }
+        });
+        creep.pickup(target);
     }
 }

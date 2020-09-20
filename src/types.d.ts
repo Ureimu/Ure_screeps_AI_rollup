@@ -138,13 +138,8 @@ interface StructureExtractor {
 
 interface Memory {
     sources: {[name: string]: SourceMemory},
-    changebool: {
-        newSource: boolean
-    }
     taskPools: TaskPool,
-    testvalue1 : boolean,
-    testvalue2 : boolean,
-    testvalue : boolean,
+
 }
 
 interface RoomTaskInte{
@@ -162,12 +157,6 @@ interface RoomTaskInte{
 interface RoomMemory{
     taskPool: TaskPool,
     pushTaskSet: {[name:string]: RoomTaskInte};
-    construction: {[name:string]: constructionSitesInf};
-}
-
-interface constructionSitesInf{
-    constructionSitesCompleted: boolean,
-    pos: RoomPosition[],
 }
 
 interface SpawnMemory {

@@ -1,4 +1,4 @@
-import { getEnergy, stateCut } from "../utils";
+import { getEnergy, stateCut } from "../utils/utils";
 
 export function buildAndRepair(creep: Creep): void {
     let ifHarvesting = stateCut(creep, creep.store[RESOURCE_ENERGY] == 0, creep.store.getFreeCapacity() == 0);

@@ -34,6 +34,7 @@ function initRoomMemory(): void {
                         },
                         pushTaskSet: {},
                         construction: {},
+                        constructionStartTime: Game.time,
                     }
                 }
             }

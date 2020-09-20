@@ -1,15 +1,7 @@
-import { buildAndRepair } from "./roomMaintenanceTask/buildAndRepair";
-import { carrySource } from "./roomMaintenanceTask/carrySource";
-import { harvestSource } from "./roomMaintenanceTask/harvestSource";
-import { upgradeController } from "./roomMaintenanceTask/upgradeController";
+import { roomMaintenanceTaskReg } from "./roomMaintenanceTask";
 
 export function run(creep: Creep) {
-    let workFunctionList: any = {
-        harvestSource: harvestSource,
-        carrySource: carrySource,
-        upgradeController: upgradeController,
-        buildAndRepair: buildAndRepair
-    };
+    let workFunctionList: any = roomMaintenanceTaskReg();
 
     for (let taskType in workFunctionList) {
         compareTaskType(creep, workFunctionList[taskType], taskType);
