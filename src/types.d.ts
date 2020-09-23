@@ -19,6 +19,7 @@ declare namespace NodeJS {
         GenedgetBpEnergyBodypartsCost:number
         prototypeMounted: boolean,
         getNewSource():void,
+        repushTask():void,
         getNum(arg0: number):number,
         CreepEnergyMonitorprototypeMounted:boolean,
     }
@@ -26,69 +27,9 @@ declare namespace NodeJS {
 
 type Sponsor = Id<StructureSpawn|Creep|Source>;
 
-/**
- * 任务的类，包含优先级属性和任务信息。
- *
- * @interface Task
- */
-interface Task {
-    /**
-     * 任务的优先级，是一个实数
-     *
-     * @type {number}
-     * @memberof Task
-     */
-    priority: number,
-
-    /**
-     * 任务的发起者的id
-     *
-     * @type {Sponsor}可以是任何建筑或creep,source
-     * @memberof Task
-     */
-    sponsor?: Sponsor,
-    /**
-     * 标识该任务是否在执行状态。
-     *
-     * @type {boolean}
-     * @memberof Task
-     */
-    isRunning: boolean,
-    /**
-     * 该对象存放了任务信息
-     *
-     * @type {{
-     *         [name: string]: string,
-     *     }}
-     * @memberof Task
-     */
-    spawnInf?: {
-        bodyparts: bpgGene[],
-        creepName: string,
-    },
-    taskInf: {
-        [name: string]: any,
-    }
-}
-
-/**
- * 任务队列，是任务对象组成的数组。
- *
- * @type TaskQueue
- */
-type TaskQueue = Array<Task>;
-
-/**
- * 任务池，由多个任务队列组成。
- *
- * @interface TaskPool
- */
-interface TaskPool {
-    [name: string]: TaskQueue,
-}
 
 interface CreepMemory {
-    task: Task,
+    task: BaseTask,
     taskPool?: TaskPool,
     bodyparts: bpgGene[],
     dontPullMe?: boolean,
@@ -109,49 +50,10 @@ type CheckStatus = {
     changeStatusData: {[name: string]: any},
 }
 
-interface ControllerMemory {
-    id: Id<StructureController>,
-    taskPool: TaskPool
-}
-
-interface StructureController {
-    memory: ControllerMemory,
-}
-
-interface ExtensionMemory {
-    id: Id<StructureExtension>,
-    taskPool: TaskPool
-}
-
-interface StructureExtension {
-    memory: ExtensionMemory,
-}
-
-interface ExtractorMemory {
-    id: Id<StructureExtractor>,
-    taskPool: TaskPool
-}
-
-interface StructureExtractor {
-    memory: ExtractorMemory,
-}
-
 interface Memory {
     sources: {[name: string]: SourceMemory},
     taskPools: TaskPool,
 
-}
-
-interface RoomTaskInte{
-        isMyRoom: boolean,
-        //interval: number,
-        runNow: boolean,
-        ifPushNewSpawnTask: boolean,
-        NewSpawnTaskQueue: TaskQueue,
-        ifAllocateNewSpawnTaskToSpawn: boolean,
-        //nextPushTimePoint : number,
-        hasPushed: boolean,
-        hasPushedToSpawn: boolean,
 }
 
 interface RoomMemory{

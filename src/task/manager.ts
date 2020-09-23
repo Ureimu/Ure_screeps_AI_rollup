@@ -1,6 +1,6 @@
-import { getBpByRole } from "utils/bodypartsGenerator";
+import { getBpByRole } from "AllUtils/bodypartsGenerator";
 
-export function manageCreep(task: Task, roomName: string) {
+export function manageCreep(task: SpawnTaskInf, roomName: string) {
     if(!!task.spawnInf){
         task.spawnInf.bodyparts = getBpByRole(task.taskInf.taskType,roomName);
     }

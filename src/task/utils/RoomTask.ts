@@ -96,7 +96,7 @@ export class RoomTask {
         return 1;
     }
 
-    pushTask(task:Task) {
+    pushTask(task:SpawnTaskInf) {
         this.NewSpawnTaskQueue.push(task);
     }
 /*
@@ -108,7 +108,7 @@ export class RoomTask {
     }
 */
 
-    pushTaskToSpawn(task:Task) {
+    pushTaskToSpawn(task:SpawnTaskInf) {
         this.pushTask(task);
         this.hasPushedToSpawn = false;
         this.run();
@@ -139,7 +139,7 @@ export class RoomTask {
     get NewSpawnTaskQueue() {
         return Memory.rooms[this.roomName].pushTaskSet[this.roomTaskName].NewSpawnTaskQueue;
     }
-    set NewSpawnTaskQueue(Queue: TaskQueue) {
+    set NewSpawnTaskQueue(Queue: SpawnTaskInf[]) {
         Memory.rooms[this.roomName].pushTaskSet[this.roomTaskName].NewSpawnTaskQueue = Queue;
     }
 

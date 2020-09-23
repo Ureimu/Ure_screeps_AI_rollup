@@ -1,5 +1,6 @@
+import { lookForStructurePos } from "AllUtils/findEx";
 import { stateCut, getEnergy, transportResource } from "work/creep/utils/utils";
-import { findSpawnOrExtensionNotFull, lookForContainer, lookForStructurePos } from "../utils/find";
+import { findSpawnOrExtensionNotFull, lookForContainer } from "../utils/find";
 
 export function carrySource(creep: Creep): void {
     let ifHarvesting = stateCut(creep, creep.store[RESOURCE_ENERGY] < 50, creep.store.getFreeCapacity() == 0);

@@ -34,18 +34,3 @@ export function lookForContainer(pos: RoomPosition|undefined):StructureContainer
     return;
 }
 
-export function lookForStructurePos(creep:Creep,structureName:string):RoomPosition|undefined{
-    if (
-        !!Game.rooms[creep.room.name].memory.construction[structureName] &&
-        !!Game.rooms[creep.room.name].memory.construction[structureName].pos[0]
-    ) {
-        let Pos = new RoomPosition(
-            Game.rooms[creep.room.name].memory.construction[structureName].pos[0].x,
-            Game.rooms[creep.room.name].memory.construction[structureName].pos[0].y,
-            Game.rooms[creep.room.name].memory.construction[structureName].pos[0].roomName
-        );
-        return Pos
-    } else {
-        return;
-    }
-}

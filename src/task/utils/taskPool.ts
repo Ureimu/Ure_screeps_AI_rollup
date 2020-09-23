@@ -8,10 +8,10 @@ import { PriorityQueue } from './PriorityQueue'
  * @param {boolean} [towards=false] pop的方向，默认优先弹出最大
  * @returns {(PriorityQueue | undefined)} c++队列对象
  */
-function getQueueFromArray(taskPoolMemory: TaskQueue, towards: boolean = false): PriorityQueue {
+function getQueueFromArray(taskPoolMemory: BaseTaskInf[], towards: boolean = false): PriorityQueue {
     let taskQueue = newQueue(towards);
     if(taskPoolMemory && taskPoolMemory.length>0){
-        for (let task of <Task[]>taskPoolMemory) {
+        for (let task of <BaseTaskInf[]>taskPoolMemory) {
             taskQueue.push(task);
         }
     }
@@ -31,7 +31,7 @@ function getQueueFromObject(wantedTaskQueueName: string,taskPoolMemory: TaskPool
         if (taskQueueName == wantedTaskQueueName) {
             let taskQueue = new PriorityQueue(towards);
             if(taskPoolMemory[taskQueueName] && taskPoolMemory[taskQueueName].length>0){
-                for (let task of <Task[]>taskPoolMemory[taskQueueName]) {
+                for (let task of <BaseTaskInf[]>taskPoolMemory[taskQueueName]) {
                     taskQueue.push(task);
                 }
             }
@@ -49,10 +49,10 @@ function getQueueFromObject(wantedTaskQueueName: string,taskPoolMemory: TaskPool
  * @param {TaskQueue} taskPoolMemory 存储路径
  * @param {string} TaskQueueName 队列名称
  */
-function setQueue(queue: PriorityQueue,TaskQueueName: string,taskPoolMemory: TaskPool): TaskQueue {
+function setQueue(queue: PriorityQueue,TaskQueueName: string,taskPoolMemory: TaskPool): BaseTaskInf[] {
     taskPoolMemory[TaskQueueName].splice(0);//清空数组，不能直接赋空数组(=[]),因为这里的函数参数是引用,重新赋值会覆盖引用.
     for (let i = 0, j = queue.size(); i < j; i++) {
-        taskPoolMemory[TaskQueueName].push(<Task>queue.pop());
+        taskPoolMemory[TaskQueueName].push(<BaseTaskInf>queue.pop());
     }
     return taskPoolMemory[TaskQueueName];
 }
@@ -64,10 +64,10 @@ function setQueue(queue: PriorityQueue,TaskQueueName: string,taskPoolMemory: Tas
  * @param {TaskQueue} taskQueueMemory 队列存储路径
  * @returns {TaskQueue} 队列存储路径
  */
-function setQueueFromTaskQueue(queue: PriorityQueue,taskQueueMemory: TaskQueue): TaskQueue {
+function setQueueFromTaskQueue(queue: PriorityQueue,taskQueueMemory: BaseTaskInf[]): BaseTaskInf[] {
     taskQueueMemory.splice(0);//清空数组，不能直接赋空数组(=[]),因为这里的函数参数是引用,重新赋值会覆盖引用.
     for (let i = 0, j = queue.size(); i < j; i++) {
-        taskQueueMemory.push(<Task>queue.pop());
+        taskQueueMemory.push(<BaseTaskInf>queue.pop());
     }
     return taskQueueMemory;
 }
@@ -110,7 +110,7 @@ function initQueue(wantedTaskQueueName: string,taskPoolMemory: TaskPool, towards
  * @param {boolean} [towards=false]
  * @returns {PriorityQueue}
  */
-function initQueueFromTaskQueue(taskQueueMemory: TaskQueue, towards: boolean = false): PriorityQueue {
+function initQueueFromTaskQueue(taskQueueMemory: BaseTaskInf[], towards: boolean = false): PriorityQueue {
     return <PriorityQueue>getQueueFromArray(taskQueueMemory,towards);
 }
 
@@ -123,7 +123,7 @@ function initQueueFromTaskQueue(taskQueueMemory: TaskQueue, towards: boolean = f
  */
 function transTask(queueFrom: PriorityQueue, queueTo: PriorityQueue):boolean{
     if(queueFrom.isEmpty()){
-        queueTo.push(<Task>queueFrom.pop());
+        queueTo.push(<BaseTaskInf>queueFrom.pop());
         return true;
     }else{
         return false;

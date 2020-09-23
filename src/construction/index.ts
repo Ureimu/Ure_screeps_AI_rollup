@@ -1,4 +1,5 @@
 import { putContainerConstructionSites } from "./container";
+import { putExtensionConstructionSites } from "./extension";
 import { putRoadConstructionSites } from "./road";
 
 export function autoConstruction() {
@@ -22,9 +23,14 @@ export function autoConstruction() {
                     ) {
                         putContainerConstructionSites(roomName);
                     }
+                    break;
+                case 2:
+                    if(!room.memory.construction["extension"]||room.memory.construction["extension"].constructionSitesCompleted != true){
+                        putExtensionConstructionSites(roomName);
+                    }
                 default:
                     break;
-            }
+            }//TODO 增加建筑阶段性检测。
         }
     }
 }

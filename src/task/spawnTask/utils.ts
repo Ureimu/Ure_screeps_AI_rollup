@@ -1,11 +1,11 @@
-import { TaskG } from "task/utils/makeTaskX";
-import { getBpByRole } from "utils/bodypartsGenerator";
+import { SpawnTask } from "task/utils/TaskClass";
+import { getBpByRole } from "AllUtils/bodypartsGenerator";
 
 export function templateSpawnTask(roomName: string, taskName: string, num: number, priority?: number) {
     let chooseBodyParts = getBpByRole(taskName,roomName);
-    let t: TaskG = new TaskG(priority);
+    let t: SpawnTask = new SpawnTask(priority);
 
-    t.spawnTask(chooseBodyParts,`${roomName}-${taskName[0]+taskName[1]}-${Game.time}-${num}`);
+    t.getSpawnTask(chooseBodyParts,`${roomName}-${taskName[0]+taskName[1]}-${Game.time}-${num}`);
     t.taskType(taskName);
     return t;
 }

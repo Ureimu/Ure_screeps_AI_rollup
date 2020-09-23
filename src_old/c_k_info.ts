@@ -7,7 +7,7 @@
  * mod.thing == 'a thing'; // true
  */
 
-import { bpg } from "utils/bodypartsGenerator";
+import { bpg } from "AllUtils/bodypartsGenerator";
 
 let c_k_info_m = { //注意：在更改了以下设置后，需要在游戏中手动删除一次Memory.c_k_info，设置才能生效。
     run: function () {

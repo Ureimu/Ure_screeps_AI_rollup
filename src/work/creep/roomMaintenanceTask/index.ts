@@ -1,10 +1,10 @@
-import { buildAndRepair } from "task/spawnTask/buildAndRepair";
-import { carrySource } from "task/spawnTask/carrySource";
-import { harvestSource } from "task/spawnTask/harvestSource";
-import { upgradeController } from "task/spawnTask/upgradeController";
+import { buildAndRepair } from "./buildAndRepair";
+import { carrySource } from "./carrySource";
+import { harvestSource } from "./harvestSource";
+import { upgradeController } from "./upgradeController";
 
 export function roomMaintenanceTaskReg() {
-    let workFunctionList: any = {
+    let workFunctionList: {[name: string]:(creep: Creep) => void} = {
         harvestSource: harvestSource,
         carrySource: carrySource,
         upgradeController: upgradeController,

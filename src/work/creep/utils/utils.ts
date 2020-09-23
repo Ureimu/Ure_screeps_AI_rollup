@@ -1,4 +1,4 @@
-import { getBpNum } from "utils/bodypartsGenerator";
+import { getBpNum } from "AllUtils/bodypartsGenerator";
 
 export function stateCut(creep: Creep, on: boolean, off: boolean, say: string = "🚧 working"): boolean {
     if (!creep.memory.task.taskInf.harvesting && on) {
@@ -86,5 +86,17 @@ export function getEnergy(creep: Creep) {
             }
         });
         creep.pickup(target);
+    }
+}
+
+export function getResourceFromStructure(creep: Creep, structure: AnyStoreStructure, resourceType: ResourceConstant) {
+    if (structure) {
+        if (creep.withdraw(structure, resourceType) == ERR_NOT_IN_RANGE) {
+            creep.moveTo(structure, {
+                visualizePathStyle: {
+                    stroke: "#ffffff"
+                }
+            });
+        }
     }
 }

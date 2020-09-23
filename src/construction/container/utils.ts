@@ -1,6 +1,8 @@
+import { initConstructionMemory } from "construction/utils/initConstructionMemory";
+
 export function putContainerConstruction(room: Room,posList: RoomPosition[], name: string) {
     let listC = [];
-    initConstructionMemory(room,name);
+    initConstructionMemory(room,name,STRUCTURE_CONTAINER);
     for(let i = 0;i<posList.length;i++){
         listC[i] = room.createConstructionSite(posList[i],STRUCTURE_CONTAINER);
         if(listC[i]==OK){
@@ -9,14 +11,5 @@ export function putContainerConstruction(room: Room,posList: RoomPosition[], nam
     }
     if(room.memory.construction[name].pos.length == posList.length){
         room.memory.construction[name].constructionSitesCompleted = true;
-    }
-}
-
-export function initConstructionMemory(room: Room,name: string) {
-    if(!room.memory.construction[name]){
-        room.memory.construction[name] = {
-            constructionSitesCompleted: false,
-            pos: [],
-        };
     }
 }

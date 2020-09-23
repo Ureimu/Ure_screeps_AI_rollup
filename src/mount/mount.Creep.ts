@@ -1,4 +1,3 @@
-import { allocatingSpawnTask } from "task";
 import { manageCreep } from "task/manager";
 import { RoomTask } from "task/utils/RoomTask"
 

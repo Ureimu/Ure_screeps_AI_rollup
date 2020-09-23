@@ -1,5 +1,5 @@
 import taskPool from "../task/utils/taskPool";
-import { bpg, getBpEnergy } from "utils/bodypartsGenerator";
+import { bpg, getBpEnergy } from "AllUtils/bodypartsGenerator";
 
 // 自定义的 Spawn 的拓展
 export class SpawnExtension extends StructureSpawn {
@@ -8,12 +8,12 @@ export class SpawnExtension extends StructureSpawn {
             return;
         }
         let spawnQueue = taskPool.initQueue("spawnQueue", this.memory.taskPool);
-        let taskList: TaskQueue = [];
+        let taskList: SpawnTaskInf[] = [];
         let ifOK: number = 1;
         let errorList: number[] = [];
         do {
             if (spawnQueue.isEmpty()) {
-                let task = <Task>spawnQueue.pop();
+                let task = <SpawnTaskInf>spawnQueue.pop();
                 let inf = task.spawnInf;
                 if(typeof inf === 'undefined'){
                     console.log("未定义spawn任务");
@@ -54,7 +54,7 @@ export class SpawnExtension extends StructureSpawn {
                     break;
                 case -6:
                     errorText = `这个母巢 (spawn) 和他的扩展包含的能量不足以孵化具有给定 body 的 creep。预期能量消耗：${getBpEnergy(
-                        task.taskInf.bodyparts
+                        task.spawnInf.bodyparts
                     )}`;
                     break;
                 case -10:

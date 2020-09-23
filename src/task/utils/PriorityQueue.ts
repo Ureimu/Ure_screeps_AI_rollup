@@ -77,7 +77,7 @@ class PriorityQueue extends BaseQueue {
         /**@type {cppQueue} */
         let instance: { init: (arg0: number) => void; push: (arg0: number, arg1: number) => void; size: () => number; memory: { buffer: { byteLength: number; }; }; top: () => any; get_identifier: (arg0: any) => string | number; pop: () => void; };
         /**@type {node[]} */
-        let cache: Task[] = [];
+        let cache: BaseTask[] = [];
 
         const imports = {   // 把wasm类实例化需要的接口函数
             env: {
@@ -143,17 +143,17 @@ class PriorityQueue extends BaseQueue {
      *  把节点插入队列
      * @param {node} node 待插入对象，至少含有priority属性
      */
-    push(node: Task) { }
+    push(node: BaseTask) { }
     /**
      *  查看顶端节点，空队列返回undefined
      *  @returns {node|undefined}
      */
-    top(): Task|undefined { return }
+    top(): BaseTask|undefined { return }
     /**
      *  取出顶端节点，空队列返回undefined
      *  @returns {node|undefined}
      */
-    pop(): Task|undefined { return }
+    pop(): BaseTask|undefined { return }
 }
 
 export {PriorityQueue};

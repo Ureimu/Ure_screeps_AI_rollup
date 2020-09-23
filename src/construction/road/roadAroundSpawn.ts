@@ -5,6 +5,7 @@ export function roadAroundSpawn(room: Room) {
     }
     room.memory.construction["roadAroundSpawn"] = {
         constructionSitesCompleted: true,
-        pos: []
+        pos: [],
+        structureType:STRUCTURE_ROAD
     };
 }

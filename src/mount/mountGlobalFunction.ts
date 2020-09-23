@@ -13,4 +13,14 @@ export function globalFunctionRegister(): void {//在global上写入全局函数
     else {
         return
     }
+
+    if (!global.repushTask) {
+        global.repushTask = function ():void{
+            for(let roomName in Memory.rooms){
+                for(let taskName in Memory.rooms[roomName].pushTaskSet){
+                    Memory.rooms[roomName].pushTaskSet[taskName].hasPushed=false;
+                }
+            }
+        }
+    }
 }
