@@ -9,12 +9,13 @@ import './AllUtils/bypass';
 import { mountCreepEnergyMonitor } from "AllUtils/energyMonitor";
 import { autoConstruction } from "construction";
 import { roomVisualize } from "visual/roomVisual/test";
+import { runStructure } from "work/structure";
 
 actionCounter.warpActions();
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 //export const loop = ErrorMapper.wrapLoop(() => {
-module.exports.loop = function () {
+export const loop = function () {
     actionCounter.init();
 
     // Automatically delete memory of missing creeps
@@ -30,6 +31,8 @@ module.exports.loop = function () {
     initNewRoomSetting();
     manageTask();
     autoConstruction();
+    roomVisualize();
+    runStructure();
 
     for (let spawnName in Game.spawns) {
         if (!Game.spawns[spawnName].spawning) {
@@ -42,6 +45,4 @@ module.exports.loop = function () {
     }
 
     actionCounter.save(1500);
-    roomVisualize();
-    if (!global.detail) global.detail = actionCounter.singleTick; //打印所有任务的详细cpu消耗情况列表
 }//);

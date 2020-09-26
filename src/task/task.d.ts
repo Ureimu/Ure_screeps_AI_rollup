@@ -53,6 +53,10 @@ interface CreepTaskInf extends BaseTaskInf{
     }
 }
 
+interface CarryCreepTaskInf extends CreepTaskInf{
+
+}
+
 /**
  * 任务队列，是任务对象组成的数组。
  *
@@ -71,12 +75,10 @@ interface TaskPool {
 
 interface RoomTaskInte{
     isMyRoom: boolean,
-    //interval: number,
     runNow: boolean,
     ifPushNewSpawnTask: boolean,
     NewSpawnTaskQueue: SpawnTaskInf[],
     ifAllocateNewSpawnTaskToSpawn: boolean,
-    //nextPushTimePoint : number,
     hasPushed: boolean,
     hasPushedToSpawn: boolean,
 }

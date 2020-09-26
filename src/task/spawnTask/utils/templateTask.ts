@@ -1,5 +1,5 @@
 import { SpawnTask } from "task/utils/TaskClass";
-import { getBpByRole } from "AllUtils/bodypartsGenerator";
+import { getBpByRole } from "./bodypartsSetting";
 
 export function templateSpawnTask(roomName: string, taskName: string, num: number, priority?: number) {
     let chooseBodyParts = getBpByRole(taskName,roomName);

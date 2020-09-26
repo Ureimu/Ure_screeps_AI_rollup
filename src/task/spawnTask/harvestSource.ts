@@ -14,7 +14,7 @@ function createHarvestSourceTask(taskName: string, roomName: string, i: number) 
         let t = templateSpawnTask(roomName, taskName, i+k);
         let source = <Source>Game.getObjectById(Memory.sources[sourceName].id);
         t.sponsor(source);
-        taskList.push(t.spawnTask);
+        taskList.push(t.task);
     }
     return taskList;
 }

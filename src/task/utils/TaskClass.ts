@@ -19,10 +19,10 @@ export class BaseTask {
 }
 
 export class SpawnTask extends BaseTask {
-    public spawnTask: SpawnTaskInf;
+    public task: SpawnTaskInf
     constructor(priority: number = 10, isRunning: boolean = false) {
         super(priority, isRunning);
-        this.spawnTask = {
+        this.task = {
             priority: priority,
             isRunning: isRunning,
             taskInf: {},
@@ -31,10 +31,11 @@ export class SpawnTask extends BaseTask {
                 creepName: ""
             }
         };
+
     }
 
     getSpawnTask(bodyparts: bpgGene[], creepName: string) {
-        this.spawnTask.spawnInf = {
+        this.task.spawnInf = {
             bodyparts: bodyparts,
             creepName: creepName
         };
@@ -42,14 +43,36 @@ export class SpawnTask extends BaseTask {
 }
 
 export class CreepTask extends BaseTask{
-    public creepTask: CreepTaskInf;
+    public task: CreepTaskInf;
     constructor(priority: number = 10, isRunning: boolean = false) {
         super(priority, isRunning);
-        this.creepTask = {
+        this.task = {
             priority: priority,
             isRunning: isRunning,
             taskInf: {},
             missionInf: {},
         };
+    }
+}
+
+export class CarryTask extends CreepTask{
+    public task: CarryCreepTaskInf;
+    constructor(priority: number = 10, isRunning: boolean = false) {
+        super(priority, isRunning);
+        this.task = {
+            priority: priority,
+            isRunning: isRunning,
+            taskInf: {},
+            missionInf: {},
+        };
+    }
+
+    getCarryTask(resourceType:ResourceConstant,carryFrom:string,carryFromStructureType:StructureConstant,carryTo:string,carryToStructureType:StructureConstant,amount:number) {
+        this.task.missionInf['resourceType']=resourceType;
+        this.task.missionInf["carryFrom"]=carryFrom;
+        this.task.missionInf["carryFromStructureType"]=carryFromStructureType;
+        this.task.missionInf["carryTo"]=carryTo;
+        this.task.missionInf["carryToStructureType"]=carryToStructureType;
+        this.task.missionInf["amount"]=amount;
     }
 }

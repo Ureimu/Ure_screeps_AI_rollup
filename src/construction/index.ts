@@ -1,13 +1,14 @@
 import { putContainerConstructionSites } from "./container";
 import { putExtensionConstructionSites } from "./extension";
 import { putRoadConstructionSites } from "./road";
+import { putTowerConstructionSites } from "./tower";
 
 export function autoConstruction() {
     for (let roomName in Memory.rooms) {
         if (Game.rooms[roomName].controller && Game.rooms[roomName].controller?.my) {
             let room = Game.rooms[roomName];
             switch ((Game.time - room.memory.constructionStartTime) % 50) {
-                case 0:
+                case 10:
                     if (
                         !room.memory.construction["roadToSource"] ||
                         room.memory.construction["roadToSource"].constructionSitesCompleted != true
@@ -15,7 +16,7 @@ export function autoConstruction() {
                         putRoadConstructionSites(roomName);
                     }
                     break;
-                case 1:
+                case 11:
                     if (
                         !room.memory.construction["innerSourceContainer"] ||
                         (room.memory.construction["controllerSourceContainer"].constructionSitesCompleted != true ||
@@ -24,9 +25,14 @@ export function autoConstruction() {
                         putContainerConstructionSites(roomName);
                     }
                     break;
-                case 2:
+                case 12:
                     if(!room.memory.construction["extension"]||room.memory.construction["extension"].constructionSitesCompleted != true){
                         putExtensionConstructionSites(roomName);
+                    }
+                    break;
+                case 13:
+                    if(!room.memory.construction["tower"]||room.memory.construction["tower"].constructionSitesCompleted != true){
+                        putTowerConstructionSites(roomName);
                     }
                 default:
                     break;

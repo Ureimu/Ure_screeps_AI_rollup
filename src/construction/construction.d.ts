@@ -14,4 +14,7 @@ interface constructionSitesInf{
     constructionSitesCompleted: boolean,
     pos: RoomPosition[],
     structureType: StructureConstant,
+    memory: {
+        [name:string]: any
+    }
 }

@@ -1,3 +1,5 @@
+import actionCounter from "AllUtils/actionCounter";
+
 export function globalFunctionRegister(): void {//在global上写入全局函数对象
     if (!global.getNum) {
         global.getNum = function (num:number):number{
@@ -23,4 +25,6 @@ export function globalFunctionRegister(): void {//在global上写入全局函数
             }
         }
     }
+
+    if (!global.detail) global.detail = actionCounter.singleTick; //打印所有任务的详细cpu消耗情况列表
 }

@@ -1,4 +1,3 @@
-import taskPool from "task/utils/taskPool";
 import { RoomTask } from "./utils/RoomTask";
 import { PriorityQueue } from "./utils/PriorityQueue";
 import { spawnTaskList } from "./spawnTask";
@@ -37,7 +36,6 @@ export function manageTask(): void {
     }
 
     allocatingSpawnTask("spawnQueue");
-
     let endTime = Game.cpu.getUsed();
     //console.log(`manager CPU cost:${(endTime-startTime).toFixed(3)}`);
     let head = `roomName\tCPU\n`;

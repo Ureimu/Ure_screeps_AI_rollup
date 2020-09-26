@@ -31,6 +31,7 @@ function initRoomMemory(): void {
                     Game.rooms[room].memory = {
                         taskPool: {
                             spawnQueue: [],
+                            carryQueue: [],
                         },
                         pushTaskSet: {},
                         construction: {},
