@@ -74,7 +74,14 @@ export function test(creep: Creep, target: AnyStructure) {
         creep.say("error");
     }
 }
-
+/**
+ * 取得能量。
+ *
+ * @export
+ * @param {Creep} creep
+ * @param {string[]} structureList 按照优先级排序。
+ * @param {number} [lowerLimit=500] container的最低能量限制。
+ */
 export function getEnergy(creep: Creep, structureList: string[], lowerLimit: number = 500) {
     const target = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {
         filter: resource => {

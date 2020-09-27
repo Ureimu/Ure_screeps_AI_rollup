@@ -16,6 +16,8 @@ export function putTowerConstructionSites(roomName: string) {
                     let returnCode = room.createConstructionSite(exPos,STRUCTURE_TOWER);
                     if(returnCode == ERR_RCL_NOT_ENOUGH){
                         return;
+                    } else if(returnCode == OK){
+                        room.memory.construction["tower"].pos.push(exPos);
                     }
                 }
             }

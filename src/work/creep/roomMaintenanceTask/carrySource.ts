@@ -10,7 +10,7 @@ export function carrySource(creep: Creep): void {
     );;
 
     if (ifHarvesting) {
-        getEnergy(creep,["spawnSourceContainer","innerSourceContainer"],0);
+        getEnergy(creep,["innerSourceContainer","spawnSourceContainer"],0);
     } else {
         let targets = findSpawnOrExtensionNotFull(creep);
         if (targets.length > 0) {
@@ -18,14 +18,13 @@ export function carrySource(creep: Creep): void {
         } else {
             let controllerContainer = <AnyStoreStructure[]>lookForStructure(creep.room,"controllerSourceContainer",true);
             let spawnContainer = <AnyStoreStructure[]>lookForStructure(creep.room,"spawnSourceContainer",true);
-            if (!!controllerContainer[0]) {
-                if (controllerContainer[0].store["energy"] < 1000) {
-                    transportResource(creep, controllerContainer[0], RESOURCE_ENERGY);
-                }
-            } else if (!!spawnContainer[0]) {
-                if (spawnContainer[0].store["energy"] < 1500) {
-                    transportResource(creep, spawnContainer[0], RESOURCE_ENERGY);
-                }
+            let tower = <AnyStoreStructure[]>lookForStructure(creep.room,"tower");
+            if (!!controllerContainer[0] && controllerContainer[0].store["energy"] < 1000) {
+                transportResource(creep, controllerContainer[0], RESOURCE_ENERGY);
+            } else if (!!spawnContainer[0] && spawnContainer[0].store["energy"] < 1500) {
+                transportResource(creep, spawnContainer[0], RESOURCE_ENERGY);
+            } else if (!!tower&&!!tower[0] && tower[0].store["energy"] < 400) {
+                transportResource(creep, tower[0], RESOURCE_ENERGY);
             }
         }
     }
