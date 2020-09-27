@@ -36,6 +36,7 @@ interface BaseTaskInf {
      * @memberof BaseTask
      */
     taskInf: {
+        state: number[],
         [name: string]: any,
     }
 }

@@ -1,14 +1,9 @@
 import { getBpEnergy, getBpNum } from "AllUtils/bodypartsGenerator";
-
-let roleList: { [name: string]: bpgGene[] } = {
-    'harvestSource': [{ move: 1, work: 2 }, { carry: 1 }],
-    'buildAndRepair': [{ move: 1, work: 1, carry: 1 }],
-    'carrySource': [{ move: 1, carry: 2 }],
-    'upgradeController': [{ move: 1, carry: 1, work: 1 }],
-    'carryResource': [{ move: 1, carry: 2 }],
-};
+import { roleListx } from "../indexBodySetting";
 
 export function getBpByRole(roleName: string, roomName: string) {
+
+    let roleList: { [name: string]: bpgGene[] } = roleListx();
 
     for (let key in roleList) {
         if (key == roleName) {

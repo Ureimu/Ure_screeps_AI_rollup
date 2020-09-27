@@ -1,10 +1,12 @@
 import { initConstructionScheduleMemory } from "construction/utils/initConstructionMemory";
-import { putcontrollerSourceContainerConstructionSites } from "./controllerSourceContainer";
+import { putControllerSourceContainerConstructionSites } from "./controllerSourceContainer";
 import { putInnerContainerConstructionSites } from "./innerSourceContainer";
+import { putSpawnSourceContainerConstructionSites } from "./spawnSourceContainer";
 
 export function putContainerConstructionSites(roomName: string) {
     let room = Game.rooms[roomName];
-    let indexList = [putInnerContainerConstructionSites, putcontrollerSourceContainerConstructionSites];
+    let indexList = [putInnerContainerConstructionSites, putControllerSourceContainerConstructionSites
+    ,putSpawnSourceContainerConstructionSites];
     initConstructionScheduleMemory(room,"baseContainer");
     for (let func of indexList) {
         func(room);

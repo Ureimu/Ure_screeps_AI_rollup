@@ -1,27 +1,31 @@
-import { lookForStructurePos, lookForStructure } from "AllUtils/findEx";
+import { lookForStructure } from "AllUtils/findEx";
 import { stateCut, transportResource, getResourceFromStructure } from "work/creep/utils/utils";
 
 export function carryResource(creep: Creep): void {
-    let resourceType = <ResourceConstant>creep.memory.task.missionInf['resourceType'];
-    let carryFrom = <string>creep.memory.task.missionInf["carryFrom"];
-    let carryFromStructureType = <StructureConstant>creep.memory.task.missionInf["carryFromStructureType"];
-    let carryTo = <string>creep.memory.task.missionInf["carryTo"];
-    let carryToStructureType = <StructureConstant>creep.memory.task.missionInf["carryToStructureType"];
-    let amount = <number>creep.memory.task.missionInf["amount"];
+    let task = <CarryCreepTaskInf>creep.memory.task
+    if(!!task.missionInf){
+        let resourceType = <ResourceConstant>task.missionInf['resourceType'];
+        let carryFrom = <string>task.missionInf["carryFrom"];
+        let carryTo = <string>task.missionInf["carryTo"];
 
-    let ifHarvesting = stateCut(creep, creep.store[resourceType] == 0, creep.store.getFreeCapacity() == 0);
+        let ifHarvesting = stateCut(
+            creep,
+            [() => ~~(creep.store[resourceType] == 0), () => ~~(creep.store.getFreeCapacity() != 0)],
+            0
+        );
 
-    if (ifHarvesting) {
-        let carryFromPos = lookForStructurePos(creep,carryFrom);
-        let structureCarryFrom = <AnyStoreStructure>lookForStructure(carryFromPos,carryFromStructureType);
-        if(!!structureCarryFrom){
-            getResourceFromStructure(creep,structureCarryFrom,resourceType);
+        if (ifHarvesting) {
+            let structureCarryFrom = <AnyStoreStructure[]>lookForStructure(creep.room,carryFrom,true);
+            if(!!structureCarryFrom){
+                getResourceFromStructure(creep,structureCarryFrom[0],resourceType);
+            }
+        } else {
+            let structureCarryTo = <AnyStoreStructure[]>lookForStructure(creep.room,carryTo,true);
+            if(!!structureCarryTo){
+                transportResource(creep, structureCarryTo[0], resourceType);
+            }
         }
     } else {
-        let carryToPos = lookForStructurePos(creep,carryTo);
-        let structureCarryTo = <AnyStoreStructure>lookForStructure(carryToPos,carryToStructureType);
-        if(!!structureCarryTo){
-            transportResource(creep, structureCarryTo, resourceType);
-        }
+//TODO 让creep获取在room的task。
     }
 }

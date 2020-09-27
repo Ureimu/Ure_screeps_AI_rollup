@@ -4,7 +4,9 @@ export class BaseTask {
         this.task = {
             priority: priority,
             isRunning: isRunning,
-            taskInf: {}
+            taskInf: {
+                state: []
+            }
         };
     }
 
@@ -25,13 +27,14 @@ export class SpawnTask extends BaseTask {
         this.task = {
             priority: priority,
             isRunning: isRunning,
-            taskInf: {},
+            taskInf: {
+                state: []
+            },
             spawnInf: {
                 bodyparts: [],
                 creepName: ""
             }
         };
-
     }
 
     getSpawnTask(bodyparts: bpgGene[], creepName: string) {
@@ -49,7 +52,9 @@ export class CreepTask extends BaseTask{
         this.task = {
             priority: priority,
             isRunning: isRunning,
-            taskInf: {},
+            taskInf: {
+                state: []
+            },
             missionInf: {},
         };
     }
@@ -62,7 +67,9 @@ export class CarryTask extends CreepTask{
         this.task = {
             priority: priority,
             isRunning: isRunning,
-            taskInf: {},
+            taskInf: {
+                state: []
+            },
             missionInf: {},
         };
     }

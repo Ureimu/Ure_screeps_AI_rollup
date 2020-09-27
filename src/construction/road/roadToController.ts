@@ -10,6 +10,7 @@ export function roadToController(room: Room) {
     room.memory.construction["roadToController"] = {
         constructionSitesCompleted: true,
         pos: path_s,
-        structureType:STRUCTURE_ROAD
+        structureType:STRUCTURE_ROAD,
+        memory: {}
     };
 }

@@ -1,24 +1,70 @@
-export function lookForStructure(pos: RoomPosition|undefined,structureType: StructureConstant):AnyStructure|undefined{
-    if(typeof pos === 'undefined') return;
-    for(let i of pos.lookFor(LOOK_STRUCTURES)){
-        if(i.structureType == structureType){
-            return <AnyStructure>Game.getObjectById(i.id);
+export function lookForStructure(
+    room: Room,
+    structureName: string,
+    storeable: boolean = false
+): AnyStructure[] | AnyStoreStructure[] | undefined {
+    let pos = lookForStructurePos(room, structureName);
+    if (typeof pos === "undefined") return;
+    let stlist = [];
+    if (storeable) {
+        for(let npos of pos){
+            for (let i of npos.lookFor(LOOK_STRUCTURES)) {
+                if (i.structureType == room.memory.construction[structureName].structureType) {
+                    let x = <AnyStoreStructure>Game.getObjectById(i.id);
+                    if (!!x.store) {
+                        stlist.push(x);
+                    }
+                }
+            }
+        }
+        return stlist;
+    } else {
+        for(let npos of pos){
+            for (let i of npos.lookFor(LOOK_STRUCTURES)) {
+                if (i.structureType == room.memory.construction[structureName].structureType) {
+                    stlist.push(<AnyStructure>Game.getObjectById(i.id));
+                }
+            }
+        }
+        return stlist;
+    }
+}
+
+export function lookForStructureByPos(
+    pos: RoomPosition | undefined,
+    structureType: StructureConstant,
+    storeable: boolean = false
+): AnyStructure |AnyStoreStructure| undefined {
+    if (typeof pos === "undefined") return;
+    if (!storeable) {
+        for (let i of pos.lookFor(LOOK_STRUCTURES)) {
+            if (i.structureType == structureType) {
+                return <AnyStructure>Game.getObjectById(i.id);
+            }
+        }
+    } else {
+        for (let i of pos.lookFor(LOOK_STRUCTURES)) {
+            if (i.structureType == structureType) {
+                let x=<AnyStoreStructure>Game.getObjectById(i.id);
+                if(!!x.store){
+                    return x;
+                } else{
+                    return;
+                }
+            }
         }
     }
     return;
 }
 
-export function lookForStructurePos(creep:Creep,structureName:string):RoomPosition|undefined{
-    if (
-        !!Game.rooms[creep.room.name].memory.construction[structureName] &&
-        !!Game.rooms[creep.room.name].memory.construction[structureName].pos[0]
-    ) {
-        let Pos = new RoomPosition(
-            Game.rooms[creep.room.name].memory.construction[structureName].pos[0].x,
-            Game.rooms[creep.room.name].memory.construction[structureName].pos[0].y,
-            Game.rooms[creep.room.name].memory.construction[structureName].pos[0].roomName
-        );
-        return Pos
+export function lookForStructurePos(room: Room, structureName: string): RoomPosition[] | undefined {
+    if (!!room.memory.construction[structureName] && !!room.memory.construction[structureName].pos[0]) {
+        let posList = []
+        for(let npos of room.memory.construction[structureName].pos){
+            let Pos = new RoomPosition(npos.x,npos.y,npos.roomName);
+            posList.push(Pos);
+        }
+        return posList;
     } else {
         return;
     }

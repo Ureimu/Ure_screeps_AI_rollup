@@ -1,7 +1,11 @@
 import { getEnergy, stateCut } from "../utils/utils";
 
 export function upgradeController(creep: Creep): void {
-    let ifHarvesting = stateCut(creep, creep.store[RESOURCE_ENERGY] == 0, creep.store.getFreeCapacity() == 0);
+    let ifHarvesting = stateCut(
+        creep,
+        [() => ~~(creep.store[RESOURCE_ENERGY] == 0), () => ~~(creep.store.getFreeCapacity() != 0)],
+        0
+    );
 
     //控制器签名
     if (<string>creep.room.controller?.sign?.username != "Ureium") {
@@ -15,7 +19,7 @@ export function upgradeController(creep: Creep): void {
     }
 
     if (ifHarvesting) {
-        getEnergy(creep);
+        getEnergy(creep,["controllerSourceContainer","innerSourceContainer"]);
     } else {
         if (creep.upgradeController(<StructureController>creep.room.controller) == ERR_NOT_IN_RANGE) {
             creep.moveTo(<StructureController>creep.room.controller, {

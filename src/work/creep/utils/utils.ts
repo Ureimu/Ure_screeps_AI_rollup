@@ -1,15 +1,35 @@
 import { getBpNum } from "AllUtils/bodypartsGenerator";
+import { lookForStructure } from "AllUtils/findEx";
 
-export function stateCut(creep: Creep, on: boolean, off: boolean, say: string = "🚧 working"): boolean {
-    if (!creep.memory.task.taskInf.harvesting && on) {
-        creep.memory.task.taskInf.harvesting = true;
-        creep.say("🔄 harvest");
+/**
+ * 一个多态状态机。
+ *
+ * @export
+ * @param {Creep} creep
+ * @param {Array<()=>number>} condiction
+ * @param {number} stateIndex
+ * @param {string[]} [say=["🔄 harvest", "🚧 working"]]
+ * @returns {number}
+ */
+export function stateCut(
+    creep: Creep,
+    condiction: Array<() => number>,
+    stateIndex: number,
+    say: string[] = ["🔄 harvest", "🚧 working"]
+): number {
+    if (typeof creep.memory.task.taskInf.state[stateIndex] === "undefined") {
+        let numList = [];
+        for (let i = 0, j = stateIndex + 1; i < j; i++) {
+            numList.push(0);
+        }
+        creep.memory.task.taskInf.state.push(...numList);
     }
-    if (creep.memory.task.taskInf.harvesting && off) {
-        creep.memory.task.taskInf.harvesting = false;
-        creep.say(say);
+    let stateNum = condiction[creep.memory.task.taskInf.state[stateIndex]]();
+    if (creep.memory.task.taskInf.state[stateIndex] != stateNum) {
+        creep.memory.task.taskInf.state[stateIndex] = stateNum;
+        creep.say(say[stateNum]);
     }
-    return creep.memory.task.taskInf.harvesting;
+    return creep.memory.task.taskInf.state[stateIndex];
 }
 
 export function transportResource(creep: Creep, target: AnyStructure, resourceType: ResourceConstant) {
@@ -55,7 +75,7 @@ export function test(creep: Creep, target: AnyStructure) {
     }
 }
 
-export function getEnergy(creep: Creep) {
+export function getEnergy(creep: Creep, structureList: string[], lowerLimit: number = 500) {
     const target = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {
         filter: resource => {
             return (
@@ -64,16 +84,20 @@ export function getEnergy(creep: Creep) {
             );
         }
     });
-    const containersEnergy = creep.pos.findClosestByRange(FIND_STRUCTURES, {
-        //标明房间内有装能量的容器
-        filter: i =>
-            i.structureType == STRUCTURE_CONTAINER &&
-            i.store[RESOURCE_ENERGY] > 50 * getBpNum(creep.memory.bodyparts, "carry")
-    });
-
-    if (containersEnergy) {
-        if (creep.withdraw(containersEnergy, "energy") == ERR_NOT_IN_RANGE) {
-            creep.moveTo(containersEnergy, {
+    let containerStructures = [];
+    for (let structureName of structureList) {
+        let m = <AnyStoreStructure[]>lookForStructure(creep.room, structureName);
+        let x = typeof m !== "undefined" ? m : [];
+        containerStructures.push(...x);
+    }
+    const containersEnergy = _.filter(
+        containerStructures,
+        (i: { store: { [x: string]: number } }) =>
+            i.store[RESOURCE_ENERGY] > 50 * getBpNum(creep.memory.bodyparts, "carry") + lowerLimit
+    );
+    if (containersEnergy[0]) {
+        if (creep.withdraw(containersEnergy[0], "energy") == ERR_NOT_IN_RANGE) {
+            creep.moveTo(containersEnergy[0], {
                 visualizePathStyle: {
                     stroke: "#ffffff"
                 }

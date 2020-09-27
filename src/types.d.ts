@@ -29,7 +29,7 @@ type Sponsor = Id<StructureSpawn|Creep|Source>;
 
 
 interface CreepMemory {
-    task: BaseTask,
+    task: BaseTaskInf,
     taskPool?: TaskPool,
     bodyparts: bpgGene[],
     dontPullMe?: boolean,

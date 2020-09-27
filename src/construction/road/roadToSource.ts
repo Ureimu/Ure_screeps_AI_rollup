@@ -11,6 +11,7 @@ export function roadToSource(room: Room) {
     room.memory.construction["roadToSource"] = {
         constructionSitesCompleted: true,
         pos: path_s,
-        structureType:STRUCTURE_ROAD
+        structureType:STRUCTURE_ROAD,
+        memory: {}
     };
 }
