@@ -8,41 +8,50 @@ import { run } from './work/creep/index';
 import './AllUtils/bypass';
 import { mountCreepEnergyMonitor } from "AllUtils/energyMonitor";
 import { autoConstruction } from "construction";
-import { roomVisualize } from "visual/roomVisual/test";
+import { roomVisualize } from "visual/roomVisual/GUIsetting";
 import { runStructure } from "work/structure";
+import { RoomTask } from "task/utils/RoomTask";
+import { manageCreep } from "task/manager";
+import { globalConstantRegister } from "mount/mountGlobalConstant";
 
 actionCounter.warpActions();
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 //export const loop = ErrorMapper.wrapLoop(() => {
 export const loop = () => {
-    actionCounter.init();
+    try{
+        actionCounter.init();
 
-    // Automatically delete memory of missing creeps
-    for (const name in Memory.creeps) {
-        if (!(name in Game.creeps)) {
-            delete Memory.creeps[name];
+        if(Game.cpu.bucket > 9000) {
+            if(!!Game.cpu.generatePixel){
+                Game.cpu.generatePixel();
+            }
         }
-    }
 
-    mountPrototypeExtension();
-    mountCreepEnergyMonitor();
-    globalFunctionRegister();
-    initNewRoomSetting();
-    manageTask();
-    autoConstruction();
-    roomVisualize();
-    runStructure();
+        mountPrototypeExtension();
+        mountCreepEnergyMonitor();
+        globalConstantRegister()
+        globalFunctionRegister();
+        initNewRoomSetting();
+        manageTask();
+        manageCreep();
+        autoConstruction();
+        roomVisualize();
+        runStructure();
 
-    for (let spawnName in Game.spawns) {
-        if (!Game.spawns[spawnName].spawning) {
-            Game.spawns[spawnName].spawnTask();
+        for (let spawnName in Game.spawns) {
+            if (!Game.spawns[spawnName].spawning) {
+                Game.spawns[spawnName].spawnTask();
+            }
         }
-    }
 
-    for(let creepName in Game.creeps) {
-        run(Game.creeps[creepName]);
-    }
+        for(let creepName in Game.creeps) {
+            run(Game.creeps[creepName]);
+        }
 
-    actionCounter.save(1500);
+        actionCounter.save(1500);
+    } catch(err) {
+        console.log(err);
+        console.log(err.message);
+    }
 }//);

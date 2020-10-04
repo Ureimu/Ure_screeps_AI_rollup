@@ -26,5 +26,11 @@ export function globalFunctionRegister(): void {//在global上写入全局函数
         }
     }
 
+    if(!global.memoryReset) {
+        global.memoryReset = function ():void{
+            RawMemory.set("");
+        }
+    }
+
     if (!global.detail) global.detail = actionCounter.singleTick; //打印所有任务的详细cpu消耗情况列表
 }

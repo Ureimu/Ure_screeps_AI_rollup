@@ -19,9 +19,9 @@ export function carrySource(creep: Creep): void {
             let controllerContainer = <AnyStoreStructure[]>lookForStructure(creep.room,"controllerSourceContainer",true);
             let spawnContainer = <AnyStoreStructure[]>lookForStructure(creep.room,"spawnSourceContainer",true);
             let tower = <AnyStoreStructure[]>lookForStructure(creep.room,"tower");
-            if (!!controllerContainer[0] && controllerContainer[0].store["energy"] < 1000) {
+            if (!!controllerContainer && !!controllerContainer[0] && controllerContainer[0].store["energy"] < 1000) {
                 transportResource(creep, controllerContainer[0], RESOURCE_ENERGY);
-            } else if (!!spawnContainer[0] && spawnContainer[0].store["energy"] < 1500) {
+            } else if (!!spawnContainer && !!spawnContainer[0] && spawnContainer[0].store["energy"] < 1500) {
                 transportResource(creep, spawnContainer[0], RESOURCE_ENERGY);
             } else if (!!tower&&!!tower[0] && tower[0].store["energy"] < 400) {
                 transportResource(creep, tower[0], RESOURCE_ENERGY);

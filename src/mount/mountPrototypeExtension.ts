@@ -18,7 +18,7 @@ const assignPrototype = function (obj1: { [key: string]: any }, obj2: { [key: st
 
 export function mountPrototypeExtension(): void {
     if (!global.prototypeMounted) {
-        console.log("[mount] 重新挂载拓展");
+        console.log("[mount] 重新挂载PrototypeExtension拓展");
         global.prototypeMounted = true;
 
         const plugins = [RoomPositionExtension, CreepExtension, SourceExtension, SpawnExtension];

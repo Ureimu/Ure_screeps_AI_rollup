@@ -19,11 +19,6 @@ export class CreepExtension extends Creep {
 
     }
     pushBackTask() {
-        if(!!this.ticksToLive && this.ticksToLive<3){
-            let roomTask = new RoomTask(this.room.name,this.memory.task.taskInf.taskType);
-            roomTask.pushTaskToSpawn(manageCreep(<SpawnTaskInf>this.memory.task,this.room.name));
-            this.suicide();
-        }
     }
     // 其他更多自定义拓展
 }

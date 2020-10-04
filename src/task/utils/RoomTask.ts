@@ -75,7 +75,7 @@ export class RoomTask {
         }
 
         if(this.isMyRoom){
-            if (Game.rooms[this.roomName].controller && Game.rooms[this.roomName].controller?.my) {
+            if (!!Game.rooms[this.roomName] && Game.rooms[this.roomName].controller && Game.rooms[this.roomName].controller?.my) {
                 return -2;
             }
         }

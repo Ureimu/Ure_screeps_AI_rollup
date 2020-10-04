@@ -91,6 +91,13 @@ export function getEnergy(creep: Creep, structureList: string[], lowerLimit: num
             );
         }
     });
+    const target2 = creep.pos.findClosestByRange(FIND_RUINS, {
+        filter: resource => {
+            return (
+                resource.store["energy"] > 50 * getBpNum(creep.memory.bodyparts, "carry")
+            );
+        }
+    });
     let containerStructures = [];
     for (let structureName of structureList) {
         let m = <AnyStoreStructure[]>lookForStructure(creep.room, structureName);
@@ -110,6 +117,13 @@ export function getEnergy(creep: Creep, structureList: string[], lowerLimit: num
                 }
             });
         }
+    } else if (target2) {
+        creep.moveTo(target2, {
+            visualizePathStyle: {
+                stroke: "#ffffff"
+            }
+        });
+        creep.withdraw(target2,"energy");
     } else if (target) {
         creep.moveTo(target, {
             visualizePathStyle: {

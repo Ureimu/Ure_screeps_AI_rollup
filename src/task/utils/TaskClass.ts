@@ -32,15 +32,17 @@ export class SpawnTask extends BaseTask {
             },
             spawnInf: {
                 bodyparts: [],
-                creepName: ""
+                creepName: "",
+                roomName: "",
             }
         };
     }
 
-    getSpawnTask(bodyparts: bpgGene[], creepName: string) {
+    getSpawnTask(bodyparts: bpgGene[], creepName: string, roomName: string) {
         this.task.spawnInf = {
             bodyparts: bodyparts,
-            creepName: creepName
+            creepName: creepName,
+            roomName: roomName,
         };
     }
 }

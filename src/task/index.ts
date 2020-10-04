@@ -7,20 +7,19 @@ import { allocatingSpawnTask, autoPush } from "./utils/allocateAndPushTask";
 export function manageTask(): void {
     let startTime = Game.cpu.getUsed();
     let cpuInf: {[roomName:string] :number} = {};
-    let runTaskList: {[taskName:string] :(roomName: string) => BaseTaskInf[]|undefined}=spawnTaskList();
 
     for (let roomName in Memory.rooms) {
-        if (Game.rooms[roomName].controller && Game.rooms[roomName].controller?.my) {
+        if (!!Game.rooms[roomName] && Game.rooms[roomName].controller && Game.rooms[roomName].controller?.my) {
             cpuInf[roomName] = 0;
             cpuInf[roomName] -= Game.cpu.getUsed();
 
-            for(let taskName in runTaskList){
+            for(let taskName in global.spawnTaskList){
                 let taskList = new PriorityQueue(false);
                 let rTaskList: BaseTaskInf[] = [];
                 let AnyRoomTask = new RoomTask(roomName,taskName);
                 if(!AnyRoomTask.hasPushed){
                     AnyRoomTask.hasPushed=true;
-                    let gTask = runTaskList[taskName](roomName);
+                    let gTask = global.spawnTaskList[taskName](roomName);
                     if(typeof gTask !== 'undefined'){
                         rTaskList.push(...gTask);
                     }

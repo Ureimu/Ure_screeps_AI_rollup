@@ -29,7 +29,7 @@ const assignPrototype = function (obj1: { [key: string]: any }, obj2: { [key: st
 
 export function mountCreepEnergyMonitor(): void {
     if (!global.CreepEnergyMonitorprototypeMounted) {
-        console.log("[mount] 重新挂载拓展");
+        console.log("[mount] 重新挂载EnergyMonitor拓展");
         global.CreepEnergyMonitorprototypeMounted = true;
 
         if (!Creep.prototype.e_build) Creep.prototype.e_build = Creep.prototype.build;

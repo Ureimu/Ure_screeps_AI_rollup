@@ -8,7 +8,7 @@ export function upgradeController(creep: Creep): void {
     );
 
     //控制器签名
-    if (<string>creep.room.controller?.sign?.username != "Ureium") {
+    if (<string>creep.room.controller?.sign?.username != creep.room.controller?.owner?.username) {
         if (creep.signController(<StructureController>creep.room.controller, "testing")) {
             creep.moveTo(<StructureController>creep.room.controller, {
                 visualizePathStyle: {

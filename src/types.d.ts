@@ -6,25 +6,6 @@ type bpgGene = {
     [bodypartsName in BodyPartConstant|'repeat']?: number;
 };
 
-declare namespace NodeJS {
-    interface Global {
-        log: any,
-        detail: ()=>void,
-        bpg: (arg0: Array<bpgGene>)=>BodyPartConstant[],
-        GenedGetBodyparts: Array<bpgGene>,
-        GenedGetBodypartsNum: Array<bpgGene>,
-        GenedBodypartsList: BodyPartConstant[],
-        GenedBodypartsNum: number,
-        GenedgetBpEnergyBodyparts:Array<bpgGene>,
-        GenedgetBpEnergyBodypartsCost:number
-        prototypeMounted: boolean,
-        getNewSource():void,
-        repushTask():void,
-        getNum(arg0: number):number,
-        CreepEnergyMonitorprototypeMounted:boolean,
-    }
-}
-
 type Sponsor = Id<StructureSpawn|Creep|Source>;
 
 
