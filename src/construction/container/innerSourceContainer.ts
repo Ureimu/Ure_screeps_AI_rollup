@@ -1,4 +1,4 @@
-import { putContainerConstruction } from "./utils";
+import { putConstructionSites } from "construction/utils/putConstructionSites";
 
 export function putInnerContainerConstructionSites(room: Room) {
     let sourceTargets = room.find(FIND_SOURCES);
@@ -10,5 +10,5 @@ export function putInnerContainerConstructionSites(room: Room) {
             posList.push(lastpoint);
         }
     }
-    putContainerConstruction(room,posList,"innerSourceContainer");
+    putConstructionSites(room,posList,"innerSourceContainer",STRUCTURE_CONTAINER);
 }

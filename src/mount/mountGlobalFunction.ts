@@ -32,5 +32,26 @@ export function globalFunctionRegister(): void {//在global上写入全局函数
         }
     }
 
+    if(!global.newTask) {
+        global.newTask = function (roomName:string,taskName:string):void{
+            Memory.rooms[roomName].pushTaskSet[taskName].hasPushed=false;
+        }
+    }
+
+    if(!global.deleteTask) {
+        global.deleteTask = function (creepName:string):void{
+            delete Memory.creeps[creepName];
+            Game.creeps[creepName].suicide();
+        }
+    }
+
+    if(!global.war) {
+        global.war = {
+            stop:(name:string)=>{
+                Memory.creeps[name].task.taskInf.taskType in global.spawnTaskList
+            }
+        }
+    }
+
     if (!global.detail) global.detail = actionCounter.singleTick; //打印所有任务的详细cpu消耗情况列表
 }

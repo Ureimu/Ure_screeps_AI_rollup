@@ -7,8 +7,12 @@ export function runStructure() {
             let myStructures= Game.rooms[roomName].find(FIND_MY_STRUCTURES);
             let structures= Game.rooms[roomName].find(FIND_STRUCTURES);
             for(let myStructure of myStructures){
-                if(myStructure.structureType == 'tower'){
-                    tower(myStructure);
+                switch (myStructure.structureType) {
+                    case 'tower':
+                        tower(myStructure);
+                        break;
+                    default:
+                        break;
                 }
             }
             towerR(roomName);

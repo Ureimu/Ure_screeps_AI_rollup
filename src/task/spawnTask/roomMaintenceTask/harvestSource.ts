@@ -1,4 +1,4 @@
-import { templateSpawnTask } from "./utils/templateTask";
+import { templateSpawnTask } from "../utils/templateTask";
 
 export function harvestSource(roomName: string) {
     let taskName = "harvestSource";

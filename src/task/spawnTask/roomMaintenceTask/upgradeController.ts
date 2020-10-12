@@ -1,4 +1,4 @@
-import { templateSpawnTask } from "./utils/templateTask";
+import { templateSpawnTask } from "../utils/templateTask";
 
 export function upgradeController(roomName:string) {
     let taskName = "upgradeController";

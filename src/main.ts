@@ -10,7 +10,6 @@ import { mountCreepEnergyMonitor } from "AllUtils/energyMonitor";
 import { autoConstruction } from "construction";
 import { roomVisualize } from "visual/roomVisual/GUIsetting";
 import { runStructure } from "work/structure";
-import { RoomTask } from "task/utils/RoomTask";
 import { manageCreep } from "task/manager";
 import { globalConstantRegister } from "mount/mountGlobalConstant";
 
@@ -19,7 +18,7 @@ actionCounter.warpActions();
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 //export const loop = ErrorMapper.wrapLoop(() => {
 export const loop = () => {
-    try{
+    //try{
         actionCounter.init();
 
         if(Game.cpu.bucket > 9000) {
@@ -27,6 +26,18 @@ export const loop = () => {
                 Game.cpu.generatePixel();
             }
         }
+
+        _.forEach(Game.rooms, room => {
+            let eventLog = room.getEventLog();
+            let attackEvents = _.filter(eventLog, {event: EVENT_ATTACK});
+            attackEvents.forEach(event => {
+                if(event.event==EVENT_ATTACK||EVENT_ATTACK_CONTROLLER){
+                    if(!!room && !!room.controller && room.controller.my){
+                        room.controller.activateSafeMode();
+                    }
+                }
+            });
+        });
 
         mountPrototypeExtension();
         mountCreepEnergyMonitor();
@@ -50,8 +61,8 @@ export const loop = () => {
         }
 
         actionCounter.save(1500);
-    } catch(err) {
-        console.log(err);
-        console.log(err.message);
-    }
+    //} catch(err) {
+    //    console.log(err);
+    //    console.log(err.message);
+    //}
 }//);

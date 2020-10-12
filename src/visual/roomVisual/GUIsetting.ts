@@ -30,6 +30,22 @@ export function roomVisualize() {
                             y: 1,
                             align:"left",
                         }
+                    },
+                    {
+                        type: "Text",
+                        layout: {
+                            content: actionCounter.ratio(),
+                            x: 0,
+                            y: 1,
+                            align:"left",
+                        }
+                    },
+                    {
+                        type: "Progress",
+                        layout:{
+                            x: 4,
+                            y: 2,
+                        }
                     }
                 ]
             }

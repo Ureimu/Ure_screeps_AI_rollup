@@ -69,3 +69,10 @@ export function lookForStructurePos(room: Room, structureName: string): RoomPosi
         return;
     }
 }
+
+export function isPosEqual(pos1:RoomPosition,pos2:RoomPosition){
+    if(pos1.x==pos2.x&&pos1.y==pos2.y&&pos1.roomName==pos2.roomName){
+        return true;
+    }
+    return false;
+}

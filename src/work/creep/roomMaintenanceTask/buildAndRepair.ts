@@ -8,7 +8,7 @@ export function buildAndRepair(creep: Creep): void {
     );
 
     if (ifHarvesting) {
-        getEnergy(creep,["innerSourceContainer"]);
+        getEnergy(creep,{"innerSourceContainer":900});
     } else {
         let targets = creep.room.find(FIND_CONSTRUCTION_SITES);
         let cloestTarget = creep.pos.findClosestByRange(targets);

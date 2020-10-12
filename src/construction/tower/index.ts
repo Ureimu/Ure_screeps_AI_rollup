@@ -1,12 +1,16 @@
 import { lookForStructureByPos } from "AllUtils/findEx";
 import { initConstructionMemory, initConstructionScheduleMemory } from "construction/utils/initConstructionMemory";
 
-export function putTowerConstructionSites(roomName: string) {
+export function putTowerConstructionSites(roomName: string) {//TODO 改进放置位置
     let room = Game.rooms[roomName];
     initConstructionScheduleMemory(room,"tower");
     initConstructionMemory(room,"tower",STRUCTURE_TOWER);
     if(room.memory.construction["roadToSource"].constructionSitesCompleted == true){
         let road = room.memory.construction["roadToSource"].pos;
+        road.pop();
+        road.pop();
+        road.shift();
+        road.shift();
         for(let roadPos of road){
             let pos = new RoomPosition(roadPos.x,roadPos.y,roadPos.roomName);
             let square = pos.getSquare();

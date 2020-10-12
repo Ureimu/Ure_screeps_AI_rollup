@@ -1,25 +1,25 @@
 import { isPosEqual } from "AllUtils/findEx";
 import { initConstructionMemory } from "construction/utils/initConstructionMemory";
 
-export function putContainerConstruction(room: Room, posList: RoomPosition[], name: string) {
+export function putConstructionSites(room: Room, posList: RoomPosition[], name: string, structureType:StructureConstant) {
     let listC = [];
-    initConstructionMemory(room, name, STRUCTURE_CONTAINER);
+    initConstructionMemory(room, name, structureType);
     for (let i = 0; i < posList.length; i++) {
         let countx = [0];
-        let containers = room.find(FIND_STRUCTURES, {
+        let structures = room.find(FIND_STRUCTURES, {
             filter: structure => {
-                return structure.structureType == STRUCTURE_CONTAINER;
+                return structure.structureType == structureType;
             }
         })
-        for(let container of containers){
-            if(isPosEqual(container.pos,posList[i])){
+        for(let structure of structures){
+            if(isPosEqual(structure.pos,posList[i])){
                 room.memory.construction[name].pos.push(posList[i]);
                 countx[0]=1;
                 break;
             }
         }
         if(countx[0]==0){
-            listC[i] = room.createConstructionSite(posList[i], STRUCTURE_CONTAINER);
+            listC[i] = room.createConstructionSite(posList[i], structureType);
             if (listC[i] == OK) {
                 room.memory.construction[name].pos.push(posList[i]);
             }

@@ -1,5 +1,5 @@
 import { CarryTask } from "task/utils/TaskClass";
-import { templateSpawnTask } from "./utils/templateTask";
+import { templateSpawnTask } from "../utils/templateTask";
 
 export function carryResource(roomName:string){
     let taskName = "carryResource";

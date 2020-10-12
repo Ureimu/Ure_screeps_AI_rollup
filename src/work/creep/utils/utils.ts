@@ -15,7 +15,7 @@ export function stateCut(
     creep: Creep,
     condiction: Array<() => number>,
     stateIndex: number,
-    say: string[] = ["🔄 harvest", "🚧 working"]
+    say: string[] = ["🚧 working", "🔄 harvest"]
 ): number {
     if (typeof creep.memory.task.taskInf.state[stateIndex] === "undefined") {
         let numList = [];
@@ -74,6 +74,7 @@ export function test(creep: Creep, target: AnyStructure) {
         creep.say("error");
     }
 }
+
 /**
  * 取得能量。
  *
@@ -82,7 +83,37 @@ export function test(creep: Creep, target: AnyStructure) {
  * @param {string[]} structureList 按照优先级排序。
  * @param {number} [lowerLimit=500] container的最低能量限制。
  */
-export function getEnergy(creep: Creep, structureList: string[], lowerLimit: number = 500) {
+export function getEnergy(creep: Creep, lowerLimit: Array<{[name:string]: number}> = [{}]) {
+    let structureList: string[]=[];
+    for(let i of lowerLimit){
+        for(let j of Object.keys(i))
+        structureList.push(j);
+    }
+    let containerStructures = [];
+    for (let structureName of structureList) {
+        let m = <AnyStoreStructure[]>lookForStructure(creep.room, structureName);
+        let x = (typeof m !== "undefined") ? m : [];
+        containerStructures.push(x);
+    }
+    if(containerStructures.length!=0){
+        for (let i = containerStructures.length;i>0;--i){
+            if(!!containerStructures[i]&&containerStructures[i].length==0){
+                structureList.splice(i,1);
+                containerStructures.splice(i,1);
+            }
+        }
+    }
+    let containersL = []
+    for(let i = containerStructures.length;i>0;--i){
+        const containers = _.filter(
+            !!containerStructures[i]?containerStructures[i]:[],
+            (j: { store: { [x: string]: number } }) =>
+                j.store[RESOURCE_ENERGY] > 50 * getBpNum(creep.memory.bodyparts, "carry")
+        );
+        containersL.push(...containers)
+    }
+    let containersEnergy = creep.pos.findClosestByRange(containersL);
+
     const target = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {
         filter: resource => {
             return (
@@ -98,20 +129,10 @@ export function getEnergy(creep: Creep, structureList: string[], lowerLimit: num
             );
         }
     });
-    let containerStructures = [];
-    for (let structureName of structureList) {
-        let m = <AnyStoreStructure[]>lookForStructure(creep.room, structureName);
-        let x = typeof m !== "undefined" ? m : [];
-        containerStructures.push(...x);
-    }
-    const containersEnergy = _.filter(
-        containerStructures,
-        (i: { store: { [x: string]: number } }) =>
-            i.store[RESOURCE_ENERGY] > 50 * getBpNum(creep.memory.bodyparts, "carry") + lowerLimit
-    );
-    if (containersEnergy[0]) {
-        if (creep.withdraw(containersEnergy[0], "energy") == ERR_NOT_IN_RANGE) {
-            creep.moveTo(containersEnergy[0], {
+
+    if (containersEnergy) {
+        if (creep.withdraw(containersEnergy, "energy") == ERR_NOT_IN_RANGE) {
+            creep.moveTo(containersEnergy, {
                 visualizePathStyle: {
                     stroke: "#ffffff"
                 }
