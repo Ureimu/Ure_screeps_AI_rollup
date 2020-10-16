@@ -1,4 +1,4 @@
-import actionCounter from "AllUtils/actionCounter";
+import actionCounter from "utils/actionCounter";
 
 export function globalFunctionRegister(): void {//在global上写入全局函数对象
     if (!global.getNum) {

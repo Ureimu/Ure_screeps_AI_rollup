@@ -1,26 +1,34 @@
 import { globalFunctionRegister } from "mount/mountGlobalFunction";
 import { mountPrototypeExtension } from "mount/mountPrototypeExtension";
-import { ErrorMapper } from "AllUtils/ErrorMapper";
-import actionCounter from "./AllUtils/actionCounter";
+import { ErrorMapper } from "utils/ErrorMapper";
+//import actionCounter from "./utils/actionCounter";
 import { manageTask } from "./task";
 import { initNewRoomSetting } from "./updateMemory";
 import { run } from './work/creep/index';
-import './AllUtils/bypass';
-import { mountCreepEnergyMonitor } from "AllUtils/energyMonitor";
+//import './utils/bypass';
+//import { mountCreepEnergyMonitor } from "utils/energyMonitor";
 import { autoConstruction } from "construction";
-import { roomVisualize } from "visual/roomVisual/GUIsetting";
+import { errorStackVisualize, roomVisualize } from "visual/roomVisual/GUIsetting";
 import { runStructure } from "work/structure";
 import { manageCreep } from "task/manager";
 import { globalConstantRegister } from "mount/mountGlobalConstant";
-
-actionCounter.warpActions();
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 //export const loop = ErrorMapper.wrapLoop(() => {
 export const loop = () => {
-    //try{
-        actionCounter.init();
-
+    try{
+        if(!Memory.errors){
+            Memory.errors={
+                errorCount:[],
+                errorList:[],
+                errorIntervals:[]
+            }
+        }
+        mountPrototypeExtension();
+        //mountCreepEnergyMonitor();
+        globalConstantRegister()
+        globalFunctionRegister();
+        //actionCounter.init();
         if(Game.cpu.bucket > 9000) {
             if(!!Game.cpu.generatePixel){
                 Game.cpu.generatePixel();
@@ -39,10 +47,6 @@ export const loop = () => {
             });
         });
 
-        mountPrototypeExtension();
-        mountCreepEnergyMonitor();
-        globalConstantRegister()
-        globalFunctionRegister();
         initNewRoomSetting();
         manageTask();
         manageCreep();
@@ -60,9 +64,8 @@ export const loop = () => {
             run(Game.creeps[creepName]);
         }
 
-        actionCounter.save(1500);
-    //} catch(err) {
-    //    console.log(err);
-    //    console.log(err.message);
-    //}
+        //actionCounter.save(1500);
+    } catch(err) {
+        errorStackVisualize(err.stack);
+    }
 }//);

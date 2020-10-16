@@ -1,4 +1,4 @@
-import { getBpEnergy, getBpNum } from "AllUtils/bodypartsGenerator";
+import { getBpEnergy, getBpNum } from "utils/bodypartsGenerator";
 import { roleListx } from "../indexBodySetting";
 
 export function getBpByRole(roleName: string, roomName: string) {

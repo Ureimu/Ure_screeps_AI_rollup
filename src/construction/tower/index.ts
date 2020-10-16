@@ -1,4 +1,4 @@
-import { lookForStructureByPos } from "AllUtils/findEx";
+import { lookForStructureByPos } from "utils/findEx";
 import { initConstructionMemory, initConstructionScheduleMemory } from "construction/utils/initConstructionMemory";
 
 export function putTowerConstructionSites(roomName: string) {//TODO 改进放置位置

@@ -36,14 +36,15 @@ export class ErrorMapper {
     let outStack = error.toString();
 
     while ((match = re.exec(stack))) {
+      console.log(match.toString());
       if (match[2] === "main") {
         const pos = this.consumer.originalPositionFor({
           column: parseInt(match[4], 10),
           line: parseInt(match[3], 10)
         });
-
         if (pos.line != null) {
           if (pos.name) {
+            console.log(pos.name);
             outStack += `\n    at ${pos.name} (${pos.source}:${pos.line}:${pos.column})`;
           } else {
             if (match[1]) {

@@ -1,4 +1,4 @@
-import { lookForStructure } from "AllUtils/findEx";
+import { lookForStructure } from "utils/findEx";
 import { stateCut, transportResource, getResourceFromStructure } from "work/creep/utils/utils";
 
 export function carryResource(creep: Creep): void {

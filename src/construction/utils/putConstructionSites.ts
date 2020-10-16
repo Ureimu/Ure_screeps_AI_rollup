@@ -1,4 +1,4 @@
-import { isPosEqual } from "AllUtils/findEx";
+import { isPosEqual } from "utils/findEx";
 import { initConstructionMemory } from "construction/utils/initConstructionMemory";
 
 export function putConstructionSites(room: Room, posList: RoomPosition[], name: string, structureType:StructureConstant) {

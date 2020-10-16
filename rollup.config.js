@@ -48,7 +48,7 @@ export default {
       dest: 'C:/Users/a1090/AppData/Local/Screeps/scripts/127_0_0_1___21025/main',//这里填服务器的文件夹名称
       options: {
         verbose: true,
-        rename: basename => `${basename}.js`,
+        rename: basename => `${basename}`,
       }
     }),
   ]

@@ -1,5 +1,5 @@
-import { getBpNum } from "AllUtils/bodypartsGenerator";
-import { lookForStructure } from "AllUtils/findEx";
+import { getBpNum } from "utils/bodypartsGenerator";
+import { getStructureFromArray, lookForStructure, lookForStructureName } from "utils/findEx";
 
 /**
  * 一个多态状态机。
@@ -33,6 +33,7 @@ export function stateCut(
 }
 
 export function transportResource(creep: Creep, target: AnyStructure, resourceType: ResourceConstant) {
+    if(creep.memory.task.taskInf.lastSource == lookForStructureName(target)) return;
     if (creep.transfer(target, resourceType) == ERR_NOT_IN_RANGE) {
         creep.moveTo(target, {
             visualizePathStyle: {
@@ -83,36 +84,30 @@ export function test(creep: Creep, target: AnyStructure) {
  * @param {string[]} structureList 按照优先级排序。
  * @param {number} [lowerLimit=500] container的最低能量限制。
  */
-export function getEnergy(creep: Creep, lowerLimit: Array<{[name:string]: number}> = [{}]) {
-    let structureList: string[]=[];
-    for(let i of lowerLimit){
-        for(let j of Object.keys(i))
-        structureList.push(j);
-    }
-    let containerStructures = [];
-    for (let structureName of structureList) {
-        let m = <AnyStoreStructure[]>lookForStructure(creep.room, structureName);
-        let x = (typeof m !== "undefined") ? m : [];
-        containerStructures.push(x);
-    }
-    if(containerStructures.length!=0){
-        for (let i = containerStructures.length;i>0;--i){
-            if(!!containerStructures[i]&&containerStructures[i].length==0){
-                structureList.splice(i,1);
-                containerStructures.splice(i,1);
+export function getEnergy(creep: Creep, lowerLimit: Array<{[name:string]: number}> = [{}]): string {
+
+    let structureList: Array<{ [name: string]: AnyStoreStructure[]; }> = getStructureFromArray(creep.room, lowerLimit);
+    let containersL = [];
+    for(let i = 0, j=structureList.length;i<j;i++){
+        let st1 = structureList[i];
+        for(let st2 in st1){
+            const containers = _.filter(
+                st1[st2],
+                (j: { store: { [x: string]: number } }) =>
+                    j.store[RESOURCE_ENERGY] > 50 * getBpNum(creep.memory.bodyparts, "carry") + lowerLimit[i][st2]
+            );
+            if(containers.length>0){
+                containersL.push(...containers);
+                //console.log(""+lowerLimit[i][st2]);
             }
         }
-    }
-    let containersL = []
-    for(let i = containerStructures.length;i>0;--i){
-        const containers = _.filter(
-            !!containerStructures[i]?containerStructures[i]:[],
-            (j: { store: { [x: string]: number } }) =>
-                j.store[RESOURCE_ENERGY] > 50 * getBpNum(creep.memory.bodyparts, "carry")
-        );
-        containersL.push(...containers)
+        if(containersL.length!=0){
+            break;
+        }
     }
     let containersEnergy = creep.pos.findClosestByRange(containersL);
+    let containersName = lookForStructureName(containersEnergy);
+
 
     const target = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {
         filter: resource => {
@@ -138,6 +133,8 @@ export function getEnergy(creep: Creep, lowerLimit: Array<{[name:string]: number
                 }
             });
         }
+        creep.memory.task.taskInf.lastSource = containersName;
+        return containersName;
     } else if (target2) {
         creep.moveTo(target2, {
             visualizePathStyle: {
@@ -145,6 +142,8 @@ export function getEnergy(creep: Creep, lowerLimit: Array<{[name:string]: number
             }
         });
         creep.withdraw(target2,"energy");
+        creep.memory.task.taskInf.lastSource = "ruins";
+        return "ruins";
     } else if (target) {
         creep.moveTo(target, {
             visualizePathStyle: {
@@ -152,7 +151,13 @@ export function getEnergy(creep: Creep, lowerLimit: Array<{[name:string]: number
             }
         });
         creep.pickup(target);
+        creep.memory.task.taskInf.lastSource = "droppedEnergy"
+        return "droppedEnergy";
+    } else {
+        return "null";
     }
+
+
 }
 
 export function getResourceFromStructure(creep: Creep, structure: AnyStoreStructure, resourceType: ResourceConstant) {

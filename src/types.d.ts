@@ -34,7 +34,11 @@ type CheckStatus = {
 interface Memory {
     sources: {[name: string]: SourceMemory},
     taskPools: TaskPool,
-
+    errors:{
+        errorList: string[],
+        errorCount: number[],
+        errorIntervals: number[][],
+    }
 }
 
 interface RoomMemory{

@@ -8,7 +8,7 @@ export function buildAndRepair(creep: Creep): void {
     );
 
     if (ifHarvesting) {
-        getEnergy(creep,{"innerSourceContainer":900});
+        getEnergy(creep,[{"innerSourceContainer":900}]);
     } else {
         let targets = creep.room.find(FIND_CONSTRUCTION_SITES);
         let cloestTarget = creep.pos.findClosestByRange(targets);
@@ -36,6 +36,12 @@ export function buildAndRepair(creep: Creep): void {
                             }
                         });
                     }
+                } else if (creep.upgradeController(<StructureController>creep.room.controller) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(<StructureController>creep.room.controller, {
+                        visualizePathStyle: {
+                            stroke: "#ffffff"
+                        }
+                    });
                 }
             } else if (creep.memory.task.taskInf.lastRenovate) {
                 let target_x = <AnyStructure>Game.getObjectById(creep.memory.task.taskInf.lastRenovate);
