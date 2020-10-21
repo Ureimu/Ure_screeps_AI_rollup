@@ -146,7 +146,6 @@ export function getEnergy(creep: Creep, lowerLimit: Array<{[name:string]: number
         creep.withdraw(target2,"energy");
         creep.memory.task.taskInf.lastSource = "ruins";
         return "ruins";
-        /*
     } else if (target) {
         creep.moveTo(target, {
             visualizePathStyle: {
@@ -156,7 +155,6 @@ export function getEnergy(creep: Creep, lowerLimit: Array<{[name:string]: number
         creep.pickup(target);
         creep.memory.task.taskInf.lastSource = "droppedEnergy"
         return "droppedEnergy";
-        */
     } else {
         return "null";
     }

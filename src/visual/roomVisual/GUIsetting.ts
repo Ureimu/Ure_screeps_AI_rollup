@@ -1,4 +1,4 @@
-import actionCounter from "utils/actionCounter";
+import { getBpSum } from "./roominf/creeps";
 import { printMulText } from "./utils";
 
 export function roomVisualize() {
@@ -26,7 +26,7 @@ export function roomVisualize() {
                 {
                     type: "Text",
                     layout: {
-                        content: actionCounter.ratio(),
+                        content: `该房间spawn在维持的creep的部件总数为${getBpSum("W8N3")}`,
                         x: 0,
                         y: 1,
                         align: "left"
