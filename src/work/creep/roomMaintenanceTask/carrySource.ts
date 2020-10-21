@@ -25,7 +25,7 @@ export function carrySource(creep: Creep): void {
                 transportResource(creep, controllerContainer[0], RESOURCE_ENERGY);
             } else if (spawnContainer && spawnContainer[0] && spawnContainer[0].store["energy"] < 1500) {
                 transportResource(creep, spawnContainer[0], RESOURCE_ENERGY);
-            } else if ((tower ?? tower[0]) && tower[0].store["energy"] < 400) {
+            } else if (tower && tower[0] && tower[0].store["energy"] < 400) {
                 transportResource(creep, tower[0], RESOURCE_ENERGY);
             }
         }

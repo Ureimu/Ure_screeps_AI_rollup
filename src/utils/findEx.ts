@@ -108,5 +108,6 @@ export function getStructureFromArray(room:Room,StructureArray: structureInfoLis
             structureList[0][st2] = x;
         }
     }
+    structureList.reverse();
     return structureList;
 }

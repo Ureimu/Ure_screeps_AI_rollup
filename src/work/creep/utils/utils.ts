@@ -93,9 +93,10 @@ export function getEnergy(creep: Creep, lowerLimit: Array<{[name:string]: number
         for(let st2 in st1){
             const containers = _.filter(
                 st1[st2],
-                (j: { store: { [x: string]: number } }) =>
-                    j.store[RESOURCE_ENERGY] > 50 * getBpNum(creep.memory.bodyparts, "carry") + lowerLimit[i][st2]
+                (k: { store: { [x: string]: number } }) =>
+                    k.store[RESOURCE_ENERGY] > 50 * getBpNum(creep.memory.bodyparts, "carry") + lowerLimit[i][st2]
             );
+            //console.log(creep.name+" "+st2+" "+containers.length+" "+lowerLimit[i][st2]+" "+String(50 * getBpNum(creep.memory.bodyparts, "carry") + lowerLimit[i][st2]));
             if(containers.length>0){
                 containersL.push(...containers);
                 //console.log(""+lowerLimit[i][st2]);
@@ -105,9 +106,10 @@ export function getEnergy(creep: Creep, lowerLimit: Array<{[name:string]: number
             break;
         }
     }
+
     let containersEnergy = creep.pos.findClosestByRange(containersL);
     let containersName = lookForStructureName(containersEnergy);
-
+    //console.log(creep.name+" "+containersEnergy?.structureType+containersName);
 
     const target = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {
         filter: resource => {
@@ -144,6 +146,7 @@ export function getEnergy(creep: Creep, lowerLimit: Array<{[name:string]: number
         creep.withdraw(target2,"energy");
         creep.memory.task.taskInf.lastSource = "ruins";
         return "ruins";
+        /*
     } else if (target) {
         creep.moveTo(target, {
             visualizePathStyle: {
@@ -153,6 +156,7 @@ export function getEnergy(creep: Creep, lowerLimit: Array<{[name:string]: number
         creep.pickup(target);
         creep.memory.task.taskInf.lastSource = "droppedEnergy"
         return "droppedEnergy";
+        */
     } else {
         return "null";
     }

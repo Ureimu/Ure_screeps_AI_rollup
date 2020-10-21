@@ -9,11 +9,12 @@ export function getBpByRole(roleName: string, roomName: string) {
         if (key == roleName) {
             //只对第一个部件对象进行repeat操作。
             let i = _.floor(
-                (Game.rooms[roomName].energyCapacityAvailable -
+                (Game.rooms[roomName].energyAvailable -
                     getBpEnergy(roleList[key]) +
                     getBpEnergy([roleList[key][0]])) /
                     getBpEnergy([roleList[key][0]])
             );
+            i=i>0?i:1;
             roleList[key][0].repeat = i;
             if(getBpNum(roleList[key])<=50){
                 return roleList[key];
