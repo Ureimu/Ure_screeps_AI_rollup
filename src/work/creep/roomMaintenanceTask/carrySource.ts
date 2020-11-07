@@ -53,7 +53,7 @@ function doStuff(
         let structuresL=sList[i];
         for (let structuresName in structuresL) {
             let structures = structuresL[structuresName];
-            if (structures && structures[0] && structures[0].store["energy"] < <number>gList[i][structuresName]?.upperLimit) {
+            if (structures?.[0]?.store["energy"] < <number>gList[i][structuresName]?.upperLimit) {
                 console.log(structuresName);
                 if (transportResource(creep, structures[0], RESOURCE_ENERGY)) {
                     return;
