@@ -25,7 +25,7 @@ export function putContainerConstruction(room: Room, posList: RoomPosition[], na
             }
         }
     }
-    if (room.memory.construction[name].pos.length == posList.length) {
+    if (room.memory.construction[name].pos.length >= posList.length) {
         room.memory.construction[name].constructionSitesCompleted = true;
     }
 }

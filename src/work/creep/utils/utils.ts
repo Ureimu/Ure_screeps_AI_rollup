@@ -33,7 +33,7 @@ export function stateCut(
 }
 
 export function transportResource(creep: Creep, target: AnyStructure, resourceType: ResourceConstant) {
-    if(creep.memory.task.taskInf.lastSource == lookForStructureName(target)) return;
+    if(creep.memory.task.taskInf.lastSource == lookForStructureName(target)) return false;
     if (creep.transfer(target, resourceType) == ERR_NOT_IN_RANGE) {
         creep.moveTo(target, {
             visualizePathStyle: {
@@ -41,6 +41,7 @@ export function transportResource(creep: Creep, target: AnyStructure, resourceTy
             }
         });
     }
+    return true;
 }
 
 export function test(creep: Creep, target: AnyStructure) {
@@ -87,6 +88,7 @@ export function test(creep: Creep, target: AnyStructure) {
 export function getEnergy(creep: Creep, lowerLimit: Array<{[name:string]: number}> = [{}]): string {
 
     let structureList: Array<{ [name: string]: AnyStoreStructure[]; }> = getStructureFromArray(creep.room, lowerLimit);
+    structureList.reverse();
     let containersL = [];
     for(let i = 0, j=structureList.length;i<j;i++){
         let st1 = structureList[i];

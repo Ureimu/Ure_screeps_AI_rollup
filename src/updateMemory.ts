@@ -33,7 +33,7 @@ function initRoomMemory(): void {
                             spawnQueue: [],
                             carryQueue: [],
                         },
-                        pushTaskSet: {},
+                        innerRoomTaskSet: {},
                         construction: {},
                         constructionSchedule: {},
                         constructionStartTime: Game.time,

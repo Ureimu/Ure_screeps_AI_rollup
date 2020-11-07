@@ -19,8 +19,8 @@ export function globalFunctionRegister(): void {//在global上写入全局函数
     if (!global.repushTask) {
         global.repushTask = function ():void{
             for(let roomName in Memory.rooms){
-                for(let taskName in Memory.rooms[roomName].pushTaskSet){
-                    Memory.rooms[roomName].pushTaskSet[taskName].hasPushed=false;
+                for(let taskName in Memory.rooms[roomName].innerRoomTaskSet){
+                    Memory.rooms[roomName].innerRoomTaskSet[taskName].hasPushed=false;
                 }
             }
         }
@@ -34,7 +34,7 @@ export function globalFunctionRegister(): void {//在global上写入全局函数
 
     if(!global.newTask) {
         global.newTask = function (roomName:string,taskName:string):void{
-            Memory.rooms[roomName].pushTaskSet[taskName].hasPushed=false;
+            Memory.rooms[roomName].innerRoomTaskSet[taskName].hasPushed=false;
         }
     }
 
@@ -47,9 +47,6 @@ export function globalFunctionRegister(): void {//在global上写入全局函数
 
     if(!global.war) {
         global.war = {
-            stop:(name:string)=>{
-                Memory.creeps[name].task.taskInf.taskType in global.spawnTaskList
-            }
         }
     }
 

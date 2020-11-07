@@ -14,11 +14,11 @@ export class RoomTask {
     public roomName: string;
     public roomTaskName: string;
 
-    constructor(roomName: string, roomTaskName: string) {
+    constructor(roomName: string, roomTaskName: string, pushAtBeginning:boolean = false) {
         this.roomName = roomName;
         this.roomTaskName = roomTaskName;
-        if(typeof Memory.rooms[this.roomName].pushTaskSet[this.roomTaskName] == 'undefined'){
-            Memory.rooms[this.roomName].pushTaskSet[this.roomTaskName] = {
+        if(typeof Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName] == 'undefined'){
+            Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName] = {
                 isMyRoom: false,
                 //interval: 1500,
                 runNow: true,
@@ -26,7 +26,7 @@ export class RoomTask {
                 NewSpawnTaskQueue: [],
                 ifAllocateNewSpawnTaskToSpawn: true,
                 //nextPushTimePoint: Game.time + 1500,
-                hasPushed: false,
+                hasPushed: pushAtBeginning,
                 hasPushedToSpawn: false,
             };
         }
@@ -45,7 +45,7 @@ export class RoomTask {
     * @memberof RoomTask
     */
     inits() {
-        Memory.rooms[this.roomName].pushTaskSet[this.roomTaskName] = {
+        Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName] = {
             isMyRoom: false,
             //interval: 1500,
             runNow: true,
@@ -101,10 +101,10 @@ export class RoomTask {
     }
 /*
     get interval() {
-        return Memory.rooms[this.roomName].pushTaskSet[this.roomTaskName].interval;
+        return Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].interval;
     }
     set interval(number: number) {
-        Memory.rooms[this.roomName].pushTaskSet[this.roomTaskName].interval = number;
+        Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].interval = number;
     }
 */
 
@@ -116,60 +116,60 @@ export class RoomTask {
 
 
     get isMyRoom() {
-        return Memory.rooms[this.roomName].pushTaskSet[this.roomTaskName].isMyRoom;
+        return Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].isMyRoom;
     }
     set isMyRoom(bool: boolean) {
-        Memory.rooms[this.roomName].pushTaskSet[this.roomTaskName].isMyRoom = bool;
+        Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].isMyRoom = bool;
     }
 
     get runNow() {
-        return Memory.rooms[this.roomName].pushTaskSet[this.roomTaskName].runNow;
+        return Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].runNow;
     }
     set runNow(bool: boolean) {
-        Memory.rooms[this.roomName].pushTaskSet[this.roomTaskName].runNow = bool;
+        Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].runNow = bool;
     }
 
     get ifPushNewSpawnTask() {
-        return Memory.rooms[this.roomName].pushTaskSet[this.roomTaskName].ifPushNewSpawnTask;
+        return Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].ifPushNewSpawnTask;
     }
     set ifPushNewSpawnTask(bool: boolean) {
-        Memory.rooms[this.roomName].pushTaskSet[this.roomTaskName].ifPushNewSpawnTask = bool;
+        Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].ifPushNewSpawnTask = bool;
     }
 
     get NewSpawnTaskQueue() {
-        return Memory.rooms[this.roomName].pushTaskSet[this.roomTaskName].NewSpawnTaskQueue;
+        return Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].NewSpawnTaskQueue;
     }
     set NewSpawnTaskQueue(Queue: SpawnTaskInf[]) {
-        Memory.rooms[this.roomName].pushTaskSet[this.roomTaskName].NewSpawnTaskQueue = Queue;
+        Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].NewSpawnTaskQueue = Queue;
     }
 
     get ifAllocateNewSpawnTaskToSpawn() {
-        return Memory.rooms[this.roomName].pushTaskSet[this.roomTaskName].ifAllocateNewSpawnTaskToSpawn;
+        return Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].ifAllocateNewSpawnTaskToSpawn;
     }
     set ifAllocateNewSpawnTaskToSpawn(bool: boolean) {
-        Memory.rooms[this.roomName].pushTaskSet[this.roomTaskName].ifAllocateNewSpawnTaskToSpawn = bool;
+        Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].ifAllocateNewSpawnTaskToSpawn = bool;
     }
 
 /*
     get nextPushTimePoint() {
-        return Memory.rooms[this.roomName].pushTaskSet[this.roomTaskName].nextPushTimePoint;
+        return Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].nextPushTimePoint;
     }
     set nextPushTimePoint(number: number) {
-        Memory.rooms[this.roomName].pushTaskSet[this.roomTaskName].nextPushTimePoint = number;
+        Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].nextPushTimePoint = number;
     }
 */
 
     get hasPushed() {
-        return Memory.rooms[this.roomName].pushTaskSet[this.roomTaskName].hasPushed;
+        return Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].hasPushed;
     }
     set hasPushed(bool: boolean) {
-        Memory.rooms[this.roomName].pushTaskSet[this.roomTaskName].hasPushed = bool;
+        Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].hasPushed = bool;
     }
 
     get hasPushedToSpawn() {
-        return Memory.rooms[this.roomName].pushTaskSet[this.roomTaskName].hasPushedToSpawn;
+        return Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].hasPushedToSpawn;
     }
     set hasPushedToSpawn(bool: boolean) {
-        Memory.rooms[this.roomName].pushTaskSet[this.roomTaskName].hasPushedToSpawn = bool;
+        Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].hasPushedToSpawn = bool;
     }
 }

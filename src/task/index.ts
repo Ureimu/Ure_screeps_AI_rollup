@@ -13,20 +13,24 @@ export function manageTask(): void {
             cpuInf[roomName] = 0;
             cpuInf[roomName] -= Game.cpu.getUsed();
 
-            for(let taskName in global.spawnTaskList){
-                let taskList = new PriorityQueue(false);
-                let rTaskList: BaseTaskInf[] = [];
-                let AnyRoomTask = new RoomTask(roomName,taskName);
-                if(!AnyRoomTask.hasPushed){
-                    AnyRoomTask.hasPushed=true;
-                    let gTask = global.spawnTaskList[taskName](roomName);
-                    if(typeof gTask !== 'undefined'){
-                        rTaskList.push(...gTask);
+            for(let taskKindName in global.spawnTaskList){
+                let ifPush = false;
+                if(taskKindName != "roomMaintance") ifPush= true;
+                for(let taskName in global.spawnTaskList[taskKindName]){
+                    let taskList = new PriorityQueue(false);
+                    let rTaskList: BaseTaskInf[] = [];
+                    let AnyRoomTask = new RoomTask(roomName,taskName,ifPush);
+                    if(!AnyRoomTask.hasPushed){
+                        AnyRoomTask.hasPushed=true;
+                        let gTask = global.spawnTaskList[taskKindName][taskName](roomName);
+                        if(typeof gTask !== 'undefined'){
+                            rTaskList.push(...gTask);
+                        }
+                        for(let xTask of rTaskList){
+                            taskList.push(xTask);
+                        }
+                        autoPush(AnyRoomTask,taskList);
                     }
-                    for(let xTask of rTaskList){
-                        taskList.push(xTask);
-                    }
-                    autoPush(AnyRoomTask,taskList);
                 }
             }
 

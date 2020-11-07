@@ -23,7 +23,7 @@ export function sledge(creep:Creep) {
             }
             break;
         case 1:
-            if(!!creep.room.controller&&!!creep.room.controller?.safeMode){
+            if(creep.room.controller?.safeMode){
                 let wall = creep.pos.findClosestByRange(FIND_STRUCTURES,{
                     filter: i => {
                         return (

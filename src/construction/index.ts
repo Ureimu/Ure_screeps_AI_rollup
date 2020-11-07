@@ -19,7 +19,7 @@ export function autoConstruction() {
                         !room.memory.construction["roadToSource"] ||
                         room.memory.construction["roadToSource"].constructionSitesCompleted != true
                     ) {
-                        putRoadConstructionSites(roomName);
+                        putRoadConstructionSites(roomName,[]);
                     }
                     break;
                 case 11:

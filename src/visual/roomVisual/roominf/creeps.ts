@@ -1,6 +1,6 @@
 import { getBpNum } from "utils/bodypartsGenerator";
 /**
- * 取得某一个房间正在维持的creep的部件总数。
+ * 取得某一个房间的spawn正在维持的creep的部件总数。
  *
  * @export
  * @param {string} roomName
