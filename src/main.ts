@@ -16,6 +16,10 @@ import { globalConstantRegister } from "mount/mountGlobalConstant";
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 //export const loop = ErrorMapper.wrapLoop(() => {
+mountPrototypeExtension();
+//mountCreepEnergyMonitor();
+globalConstantRegister();
+globalFunctionRegister();
 profiler.enable();
 export const loop = () => {
     profiler.wrap(function () {
@@ -27,10 +31,6 @@ export const loop = () => {
                     errorIntervals: []
                 };
             }
-            mountPrototypeExtension();
-            //mountCreepEnergyMonitor();
-            globalConstantRegister();
-            globalFunctionRegister();
             //actionCounter.init();
             if (Game.cpu.bucket > 9000) {
                 if (!!Game.cpu.generatePixel) {

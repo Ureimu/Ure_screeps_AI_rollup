@@ -1,4 +1,5 @@
 //@ts-nocheck
+//https://github.com/samogot/screeps-profiler
 'use strict';
 
 let usedOnStart = 0;
