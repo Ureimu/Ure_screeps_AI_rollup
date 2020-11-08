@@ -1,3 +1,4 @@
+import { lookForStructurePos } from "utils/findEx";
 import { putContainerConstructionSites } from "./container";
 import { putExtensionConstructionSites } from "./extension";
 import { putRoadConstructionSites } from "./road";
@@ -5,12 +6,15 @@ import { putTowerConstructionSites } from "./tower";
 
 export function autoConstruction() {
     for (let roomName in Memory.rooms) {
-        if (!!Game.rooms[roomName] && Game.rooms[roomName].controller && Game.rooms[roomName].controller?.my) {
+        if (Game.rooms[roomName]?.controller?.my) {
             let room = Game.rooms[roomName];
             if(room.memory.roomControlLevel != room.controller?.level){
                 for(let m in room.memory.construction){
                     room.memory.construction[m].constructionSitesCompleted=false;
                 }
+                console.log("w")
+                //TODO FIX 不停推pos导致内存溢出
+                /** 原因大概是RoomPosition在转化为memory字符串后丢失了原来的对象属性，需要在使用memory时重新转换为RoomPosition对象 */
             }
             room.memory.roomControlLevel = <number>room.controller?.level;
             switch ((Game.time - room.memory.constructionStartTime) % 100) {

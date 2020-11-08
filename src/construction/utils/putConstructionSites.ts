@@ -5,7 +5,7 @@ export function putConstructionSites(room: Room, posList: RoomPosition[], name: 
     let listC = [];
     initConstructionMemory(room, name, structureType);
     for (let i = 0; i < posList.length; i++) {
-        let countx = [0];
+        let countx = [0,0];
         let structures = room.find(FIND_STRUCTURES, {
             filter: structure => {
                 return structure.structureType == structureType;
@@ -13,6 +13,16 @@ export function putConstructionSites(room: Room, posList: RoomPosition[], name: 
         })
         for(let structure of structures){
             if(isPosEqual(structure.pos,posList[i])){
+                for(let x of room.memory.construction[name].pos){
+                    let y = new RoomPosition(x.x,x.y,x.roomName);
+                    if(y.isEqualTo(posList[i])){
+                        countx[1]=1;
+                        break;
+                    }
+                }
+                if(countx[1]==1){
+                    break;
+                }
                 room.memory.construction[name].pos.push(posList[i]);
                 countx[0]=1;
                 break;

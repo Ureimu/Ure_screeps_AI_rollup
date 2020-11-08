@@ -11,10 +11,20 @@ interface RoomMemory{
 
     }
 }
+/**
+ * 这个是为了和RoomPosition区分开的接口。
+ *
+ * @interface RoomPositionStr
+ */
+interface RoomPositionStr {
+    x: number,
+    y: number,
+    roomName: string
+}
 
 interface constructionSitesInf{
     constructionSitesCompleted: boolean,
-    pos: RoomPosition[],
+    pos: RoomPositionStr[],
     structureType: StructureConstant,
     memory: {
         [name:string]: any
