@@ -1,4 +1,4 @@
-import { getEnergy, stateCut } from "../utils/utils";
+import {stateCut } from "../utils/utils";
 
 export function upgradeController(creep: Creep): void {
     let ifHarvesting = stateCut(
@@ -19,7 +19,7 @@ export function upgradeController(creep: Creep): void {
     }
 
     if (ifHarvesting) {
-        let x = getEnergy(creep,[{"controllerSourceContainer":0},{"innerSourceContainer":900}]);
+        let x = creep.getEnergy([{"controllerSourceContainer":0},{"innerSourceContainer":900}]);
     } else {
         if (creep.upgradeController(<StructureController>creep.room.controller) == ERR_NOT_IN_RANGE) {
             creep.moveTo(<StructureController>creep.room.controller, {

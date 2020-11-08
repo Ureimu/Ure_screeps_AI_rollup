@@ -1,10 +1,10 @@
 import { lookForStructure } from "utils/findEx";
-import { stateCut, transportResource, getResourceFromStructure } from "work/creep/utils/utils";
+import { stateCut } from "work/creep/utils/utils";
 
 export function carryResource(creep: Creep): void {
-    let task = <CarryCreepTaskInf>creep.memory.task
-    if(!!task.missionInf){
-        let resourceType = <ResourceConstant>task.missionInf['resourceType'];
+    let task = <CarryCreepTaskInf>creep.memory.task;
+    if (!!task.missionInf) {
+        let resourceType = <ResourceConstant>task.missionInf["resourceType"];
         let carryFrom = <string>task.missionInf["carryFrom"];
         let carryTo = <string>task.missionInf["carryTo"];
 
@@ -15,17 +15,17 @@ export function carryResource(creep: Creep): void {
         );
 
         if (ifHarvesting) {
-            let structureCarryFrom = <AnyStoreStructure[]>lookForStructure(creep.room,carryFrom,true);
-            if(!!structureCarryFrom){
-                getResourceFromStructure(creep,structureCarryFrom[0],resourceType);
+            let structureCarryFrom = <AnyStoreStructure[]>lookForStructure(creep.room, carryFrom, true);
+            if (!!structureCarryFrom) {
+                creep.getResourceFromStructure(structureCarryFrom[0], resourceType);
             }
         } else {
-            let structureCarryTo = <AnyStoreStructure[]>lookForStructure(creep.room,carryTo,true);
-            if(!!structureCarryTo){
-                transportResource(creep, structureCarryTo[0], resourceType);
+            let structureCarryTo = <AnyStoreStructure[]>lookForStructure(creep.room, carryTo, true);
+            if (!!structureCarryTo) {
+                creep.transportResource(structureCarryTo[0], resourceType);
             }
         }
     } else {
-//TODO 让creep获取在room的task。
+        //TODO 让creep获取在room的task。
     }
 }

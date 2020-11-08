@@ -48,7 +48,10 @@ interface Source {
 }
 
 interface Creep {
-    pushBackTask():void
+    pushBackTask():void,
+    getEnergy(lowerLimit: Array<{[name:string]: number}>): string,
+    transportResource(target: AnyStructure, resourceType: ResourceConstant):boolean,
+    getResourceFromStructure(structure: AnyStoreStructure, resourceType: ResourceConstant):void,
 }
 
 declare namespace NodeJS {

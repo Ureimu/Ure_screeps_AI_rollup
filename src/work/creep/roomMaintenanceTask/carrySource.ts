@@ -1,5 +1,5 @@
-import { getStructureFromArray, lookForStructure } from "utils/findEx";
-import { getEnergy, stateCut, transportResource } from "work/creep/utils/utils";
+import { getStructureFromArray } from "utils/findEx";
+import { stateCut } from "work/creep/utils/utils";
 import { findSpawnOrExtensionNotFull } from "../utils/find";
 
 export function carrySource(creep: Creep): void {
@@ -10,11 +10,11 @@ export function carrySource(creep: Creep): void {
     );
 
     if (ifHarvesting) {
-        getEnergy(creep, [{ innerSourceContainer: 0 }, { spawnSourceContainer: 0 }]);
+        creep.getEnergy([{ innerSourceContainer: 0 }, { spawnSourceContainer: 0 }]);
     } else {
         let targets = findSpawnOrExtensionNotFull(creep);
         if (targets.length > 0) {
-            transportResource(creep, <AnyStructure>creep.pos.findClosestByRange(targets), RESOURCE_ENERGY);
+            creep.transportResource(<AnyStructure>creep.pos.findClosestByRange(targets), RESOURCE_ENERGY);
         } else {
             let gList = [
                 { controllerSourceContainer: { isStorable: true, upperLimit: 1500 } },
@@ -42,23 +42,25 @@ export function carrySource(creep: Creep): void {
 function doStuff(
     creep: Creep,
     gList: {
-        [name: string]: {
-            isStorable: boolean;
-            upperLimit: number;
-        }|undefined;
+        [name: string]:
+            | {
+                  isStorable: boolean;
+                  upperLimit: number;
+              }
+            | undefined;
     }[]
 ) {
     let sList = getStructureFromArray(creep.room, gList);
-    for(let i = 0, j=sList.length;i<j;i++){
-        let structuresL=sList[i];
+    for (let i = 0, j = sList.length; i < j; i++) {
+        let structuresL = sList[i];
         for (let structuresName in structuresL) {
             let structures = structuresL[structuresName];
             if (structures?.[0]?.store["energy"] < <number>gList[i][structuresName]?.upperLimit) {
                 console.log(structuresName);
-                if (transportResource(creep, structures[0], RESOURCE_ENERGY)) {
+                if (creep.transportResource(structures[0], RESOURCE_ENERGY)) {
                     return;
                 }
             }
         }
-    };
+    }
 }

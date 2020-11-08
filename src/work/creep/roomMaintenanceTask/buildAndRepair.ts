@@ -1,4 +1,4 @@
-import { getEnergy, stateCut } from "../utils/utils";
+import { stateCut } from "../utils/utils";
 
 export function buildAndRepair(creep: Creep): void {
     let ifHarvesting = stateCut(
@@ -8,7 +8,7 @@ export function buildAndRepair(creep: Creep): void {
     );
 
     if (ifHarvesting) {
-        getEnergy(creep,[{"innerSourceContainer":900}]);
+        creep.getEnergy([{"innerSourceContainer":900}]);
     } else {
         let targets = creep.room.find(FIND_CONSTRUCTION_SITES);
         let cloestTarget = creep.pos.findClosestByRange(targets);

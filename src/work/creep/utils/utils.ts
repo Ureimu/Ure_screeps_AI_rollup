@@ -1,6 +1,3 @@
-import { getBpNum } from "utils/bodypartsGenerator";
-import { getStructureFromArray, lookForStructure, lookForStructureName } from "utils/findEx";
-
 /**
  * 一个多态状态机。
  *
@@ -30,18 +27,6 @@ export function stateCut(
         creep.say(say[stateNum]);
     }
     return creep.memory.task.taskInf.state[stateIndex];
-}
-
-export function transportResource(creep: Creep, target: AnyStructure, resourceType: ResourceConstant) {
-    if(creep.memory.task.taskInf.lastSource == lookForStructureName(target)) return false;
-    if (creep.transfer(target, resourceType) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(target, {
-            visualizePathStyle: {
-                stroke: "#ffffff"
-            }
-        });
-    }
-    return true;
 }
 
 export function test(creep: Creep, target: AnyStructure) {
@@ -74,104 +59,5 @@ export function test(creep: Creep, target: AnyStructure) {
         }
     } else {
         creep.say("error");
-    }
-}
-
-/**
- * 取得能量。
- *
- * @export
- * @param {Creep} creep
- * @param {string[]} structureList 按照优先级排序。
- * @param {number} [lowerLimit=500] container的最低能量限制。
- */
-export function getEnergy(creep: Creep, lowerLimit: Array<{[name:string]: number}> = [{}]): string {
-
-    let structureList: Array<{ [name: string]: AnyStoreStructure[]; }> = getStructureFromArray(creep.room, lowerLimit);
-    structureList.reverse();
-    let containersL = [];
-    for(let i = 0, j=structureList.length;i<j;i++){
-        let st1 = structureList[i];
-        for(let st2 in st1){
-            const containers = _.filter(
-                st1[st2],
-                (k: { store: { [x: string]: number } }) =>
-                    k.store[RESOURCE_ENERGY] > 50 * getBpNum(creep.memory.bodyparts, "carry") + lowerLimit[i][st2]
-            );
-            //console.log(creep.name+" "+st2+" "+containers.length+" "+lowerLimit[i][st2]+" "+String(50 * getBpNum(creep.memory.bodyparts, "carry") + lowerLimit[i][st2]));
-            if(containers.length>0){
-                containersL.push(...containers);
-                //console.log(""+lowerLimit[i][st2]);
-            }
-        }
-        if(containersL.length!=0){
-            break;
-        }
-    }
-
-    let containersEnergy = creep.pos.findClosestByRange(containersL);
-    let containersName = lookForStructureName(containersEnergy);
-    //console.log(creep.name+" "+containersEnergy?.structureType+containersName);
-
-    const target = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {
-        filter: resource => {
-            return (
-                resource.resourceType == RESOURCE_ENERGY &&
-                resource.amount > 50 * getBpNum(creep.memory.bodyparts, "carry")
-            );
-        }
-    });
-    const target2 = creep.pos.findClosestByRange(FIND_RUINS, {
-        filter: resource => {
-            return (
-                resource.store["energy"] > 50 * getBpNum(creep.memory.bodyparts, "carry")
-            );
-        }
-    });
-
-    if (containersEnergy) {
-        if (creep.withdraw(containersEnergy, "energy") == ERR_NOT_IN_RANGE) {
-            creep.moveTo(containersEnergy, {
-                visualizePathStyle: {
-                    stroke: "#ffffff"
-                }
-            });
-        }
-        creep.memory.task.taskInf.lastSource = containersName;
-        return containersName;
-    } else if (target2) {
-        creep.moveTo(target2, {
-            visualizePathStyle: {
-                stroke: "#ffffff"
-            }
-        });
-        creep.withdraw(target2,"energy");
-        creep.memory.task.taskInf.lastSource = "ruins";
-        return "ruins";
-    } else if (target) {
-        creep.moveTo(target, {
-            visualizePathStyle: {
-                stroke: "#ffffff"
-            }
-        });
-        creep.pickup(target);
-        creep.memory.task.taskInf.lastSource = "droppedEnergy"
-        return "droppedEnergy";
-    } else {
-        return "null";
-    }
-
-
-}
-
-export function getResourceFromStructure(creep: Creep, structure: AnyStoreStructure, resourceType: ResourceConstant) {
-    if (structure) {
-        if (creep.withdraw(structure, resourceType) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(structure, {
-                visualizePathStyle: {
-                    stroke: "#ffffff"
-                }
-            });
-        }
     }
 }
