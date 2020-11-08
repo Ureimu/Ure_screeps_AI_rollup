@@ -5,67 +5,58 @@
  * 查找属于自己房间的source名称并初始化没有memory记录的source的memory。
  *
  */
-function getNewSource(): void {
-    Memory.sources = {};
-    for (let room in Game.rooms) {
-        if (!!Game.rooms[room] && Game.rooms[room].controller !== undefined) {
-            let controller = <StructureController>Game.rooms[room].controller
-            if(controller.my){
-                let sources = Game.rooms[room].find(FIND_SOURCES);
-                for (let source of sources) {
-                    if (Memory.sources[source.name] === undefined){
-                        source.initsMemory();
-                    }
+function getNewSource(room:Room): void {
+    if(!Memory.sources){
+        Memory.sources = {};
+    }
+    let controller = <StructureController>room.controller
+    if(controller.my){
+        let sources = room.find(FIND_SOURCES);
+        for (let source of sources) {
+            let name = source.room.name+'Source'+'['+source.pos.x+','+source.pos.y+']'
+            if (Memory.sources[name] == undefined){
+                source.initsMemory();
+            }
+        }
+    }
+}
+
+function initRoomMemory(room:Room): void {
+    let controller = <StructureController>room.controller
+    if(controller.my){
+        if (room.memory.taskPool === undefined) {
+            room.memory = {
+                taskPool: {
+                    spawnQueue: [],
+                    carryQueue: [],
+                },
+                innerRoomTaskSet: {},
+                construction: {},
+                constructionSchedule: {},
+                constructionStartTime: Game.time,
+                roomControlLevel: 1,
+            }
+        }
+    }
+}
+
+function initSpawnMemory(room:Room): void {
+    let controller = <StructureController>room.controller;
+    if(controller.my){
+        for (let spawn of room.find(FIND_MY_SPAWNS)) {
+            if (spawn.memory.taskPool === undefined) {
+                spawn.memory = {
+                    taskPool: {
+                        spawnQueue: [],
+                    },
                 }
             }
         }
     }
 }
 
-function initRoomMemory(): void {
-    for (let room in Game.rooms) {
-        if (!!Game.rooms[room] && Game.rooms[room].controller !== undefined) {
-            let controller = <StructureController>Game.rooms[room].controller
-            if(controller.my){
-                if (Game.rooms[room].memory.taskPool === undefined) {
-                    Game.rooms[room].memory = {
-                        taskPool: {
-                            spawnQueue: [],
-                            carryQueue: [],
-                        },
-                        innerRoomTaskSet: {},
-                        construction: {},
-                        constructionSchedule: {},
-                        constructionStartTime: Game.time,
-                        roomControlLevel: 1,
-                    }
-                }
-            }
-        }
-    }
-}
-
-function initSpawnMemory(): void {
-    for (let room in Game.rooms) {
-        if (!!Game.rooms[room] && Game.rooms[room].controller !== undefined) {
-            let controller = <StructureController>Game.rooms[room].controller;
-            if(controller.my){
-                for (let spawn of Game.rooms[room].find(FIND_MY_SPAWNS)) {
-                    if (spawn.memory.taskPool === undefined) {
-                        spawn.memory = {
-                            taskPool: {
-                                spawnQueue: [],
-                            },
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-export function initNewRoomSetting(): void {
-    getNewSource();
-    initRoomMemory();
-    initSpawnMemory();
+export function initNewRoomSetting(room:Room): void {
+    getNewSource(room);
+    initRoomMemory(room);
+    initSpawnMemory(room);
 }

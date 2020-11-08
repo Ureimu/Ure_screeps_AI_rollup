@@ -1,8 +1,8 @@
 import { getBpSum } from "./roominf/creeps";
 import { printMulText } from "./utils";
 
-export function roomVisualize() {
-    global.GUI.draw(new RoomVisual(), [
+export function roomVisualize(room:Room) {
+    global.GUI.draw(new RoomVisual(room.name), [
         {
             type: "Div",
             layout: {
@@ -26,7 +26,7 @@ export function roomVisualize() {
                 {
                     type: "Text",
                     layout: {
-                        content: `该房间spawn在维持的creep的部件总数为${getBpSum("W8N3")}`,
+                        content: `该房间spawn在维持的creep的部件总数为${getBpSum(room.name)}`,
                         x: 0,
                         y: 1,
                         align: "left"

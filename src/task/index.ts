@@ -4,48 +4,43 @@ import { spawnTaskList } from "./spawnTask";
 import { allocatingSpawnTask, autoPush } from "./utils/allocateAndPushTask";
 
 
-export function manageTask(): void {
-    let startTime = Game.cpu.getUsed();
-    let cpuInf: {[roomName:string] :number} = {};
+export function manageTask(room:Room): void {
+    // let startTime = Game.cpu.getUsed();
+    // let cpuInf: {[roomName:string] :number} = {};
 
-    for (let roomName in Memory.rooms) {
-        if (!!Game.rooms[roomName] && Game.rooms[roomName].controller && Game.rooms[roomName].controller?.my) {
-            cpuInf[roomName] = 0;
-            cpuInf[roomName] -= Game.cpu.getUsed();
-
-            for(let taskKindName in global.spawnTaskList){
-                let ifPush = false;
-                if(taskKindName != "roomMaintance") ifPush= true;
-                for(let taskName in global.spawnTaskList[taskKindName]){
-                    let taskList = new PriorityQueue(false);
-                    let rTaskList: BaseTaskInf[] = [];
-                    let AnyRoomTask = new RoomTask(roomName,taskName,ifPush);
-                    if(!AnyRoomTask.hasPushed){
-                        AnyRoomTask.hasPushed=true;
-                        let gTask = global.spawnTaskList[taskKindName][taskName](roomName);
-                        if(typeof gTask !== 'undefined'){
-                            rTaskList.push(...gTask);
-                        }
-                        for(let xTask of rTaskList){
-                            taskList.push(xTask);
-                        }
-                        autoPush(AnyRoomTask,taskList);
-                    }
+    // cpuInf[roomName] = 0;
+    // cpuInf[roomName] -= Game.cpu.getUsed();
+    if(Game.time%25 != 0) return;
+    let roomName = room.name;
+    for(let taskKindName in global.spawnTaskList){
+        let ifPush = false;
+        if(taskKindName != "roomMaintance") ifPush= true;
+        for(let taskName in global.spawnTaskList[taskKindName]){
+            let taskList = new PriorityQueue(false);
+            let rTaskList: BaseTaskInf[] = [];
+            let AnyRoomTask = new RoomTask(roomName,taskName,ifPush);
+            if(!AnyRoomTask.hasPushed){
+                AnyRoomTask.hasPushed=true;
+                let gTask = global.spawnTaskList[taskKindName][taskName](roomName);
+                if(typeof gTask !== 'undefined'){
+                    rTaskList.push(...gTask);
                 }
+                for(let xTask of rTaskList){
+                    taskList.push(xTask);
+                }
+                autoPush(AnyRoomTask,taskList);
             }
-
-            cpuInf[roomName] += Game.cpu.getUsed();
         }
     }
 
-    allocatingSpawnTask("spawnQueue");
-    let endTime = Game.cpu.getUsed();
-    //console.log(`manager CPU cost:${(endTime-startTime).toFixed(3)}`);
-    let head = `roomName\tCPU\n`;
-    let text = head;
-    for(let roomName in cpuInf){
-        const inf = [roomName,cpuInf[roomName].toFixed(3)].join('\t\t');
-        text = text.concat(inf,'\n');
-    }
+    // cpuInf[roomName] += Game.cpu.getUsed();
+    // let endTime = Game.cpu.getUsed();
+    // //console.log(`manager CPU cost:${(endTime-startTime).toFixed(3)}`);
+    // let head = `roomName\tCPU\n`;
+    // let text = head;
+    // for(let roomName in cpuInf){
+    //     const inf = [roomName,cpuInf[roomName].toFixed(3)].join('\t\t');
+    //     text = text.concat(inf,'\n');
+    // }
     //console.log(text);
 }

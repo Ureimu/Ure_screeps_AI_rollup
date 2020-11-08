@@ -3,6 +3,15 @@ interface RoomPosition {
 
 }
 
+interface Room {
+    autoSafeMode(): void,
+    initMemory():void,
+    autoPlanConstruction():void,
+    roomVisualize():void,
+    runStructure():void,
+    manageTask():void,
+}
+
 interface StructureSpawn {
     spawnTask():void,
 }
@@ -29,14 +38,6 @@ interface Source {
      * @memberof Source
      */
     initsMemory(): void,
-
-    /**
-     * source的一个访问对应memory的捷径。
-     *
-     * @type {{[name: string]: SourceMemory}}
-     * @memberof Source
-     */
-    memory: SourceMemory,
 
     /**
      * 任务管理函数。用来检测是否需要推送任务。

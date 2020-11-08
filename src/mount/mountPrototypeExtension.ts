@@ -2,6 +2,7 @@ import { RoomPositionExtension } from "./mount.RoomPoition";
 import { CreepExtension } from "./mount.Creep";
 import { SourceExtension } from "./mount.Source";
 import { SpawnExtension } from "./mount.Spawn";
+import { RoomExtension } from "./mount.Room";
 
 // 挂载所有的额外属性和方法
 const assignPrototype = function (obj1: { [key: string]: any }, obj2: { [key: string]: any }) {
@@ -21,8 +22,8 @@ export function mountPrototypeExtension(): void {
         console.log("[mount] 重新挂载PrototypeExtension拓展");
         global.prototypeMounted = true;
 
-        const plugins = [RoomPositionExtension, CreepExtension, SourceExtension, SpawnExtension];
-        const prototypes = [RoomPosition, Creep, Source, StructureSpawn];
+        const plugins = [RoomPositionExtension, CreepExtension, SourceExtension, SpawnExtension, RoomExtension];
+        const prototypes = [RoomPosition, Creep, Source, StructureSpawn, Room];
 
         for (let i = 0, j = plugins.length; i < j; i++) {
             assignPrototype(prototypes[i], plugins[i]);
