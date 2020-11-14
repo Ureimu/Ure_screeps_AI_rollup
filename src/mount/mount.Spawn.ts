@@ -4,7 +4,7 @@ import { bpg, getBpEnergy } from "utils/bodypartsGenerator";
 // 自定义的 Spawn 的拓展
 export class SpawnExtension extends StructureSpawn {
     spawnTask() {
-        if (Game.time % 5 != 0 || this.room.energyAvailable < 300) {
+        if (Game.time % 15 != 0 || this.room.energyAvailable < 300) {
             return;
         }
         let spawnQueue = taskPool.initQueue("spawnQueue", this.memory.taskPool);
@@ -24,7 +24,8 @@ export class SpawnExtension extends StructureSpawn {
                     if (ifOK != OK) {
                         taskList.push(task);
                         errorList.push(ifOK);
-                    } else {
+                    } else {//确认已经在生成creep时执行的任务
+                        //global.creepMemory[inf.creepName]={};
                         if (!!Game.getObjectById(<Sponsor>task.sponsor)) {
                             //Game.getObjectById(<Sponsor>task.sponsor)!.memory!.taskPool['spawnQueue'].pop()
                         }

@@ -27,6 +27,7 @@ interface constructionSitesInf{
     pos: RoomPositionStr[],
     structureType: StructureConstant,
     memory: {
-        [name:string]: any
+        [name:string]: any,
+        bundledPos:RoomPositionStr[]
     }
 }

@@ -2,11 +2,11 @@ import { globalFunctionRegister } from "mount/mountGlobalFunction";
 import { mountPrototypeExtension } from "mount/mountPrototypeExtension";
 import profiler from "utils/profiler";
 //import actionCounter from "./utils/actionCounter";
-import { run } from "./work/creep/index";
+import creepWork from "./work/creep/index";
 //import './utils/bypass';
 //import { mountCreepEnergyMonitor } from "utils/energyMonitor";
 import { errorStackVisualize } from "visual/roomVisual/GUIsetting";
-import { manageCreep } from "task/manager";
+import manageCreep from "task/manager";
 import { globalConstantRegister } from "mount/mountGlobalConstant";
 import { allocatingSpawnTask } from "task/utils/allocateAndPushTask";
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
@@ -55,7 +55,7 @@ export const loop = () => {
             }
 
             for (let creepName in Game.creeps) {
-                run(Game.creeps[creepName]);
+                creepWork.run(Game.creeps[creepName]);
             }
 
             //actionCounter.save(1500);

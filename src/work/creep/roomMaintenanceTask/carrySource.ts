@@ -14,11 +14,18 @@ export function carrySource(creep: Creep): void {
     } else {
         let targets = findSpawnOrExtensionNotFull(creep);
         if (targets.length > 0) {
-            creep.transportResource(<AnyStructure>creep.pos.findClosestByRange(targets), RESOURCE_ENERGY);
+            let go = true;
+            while(go){
+                if(!creep.transportResource(<AnyStructure>creep.pos.findClosestByRange(targets), RESOURCE_ENERGY)){
+                    targets.pop()
+                }else{
+                    go = false;
+                }
+            }
         } else {
             let gList = [
                 { controllerSourceContainer: { isStorable: true, upperLimit: 1500 } },
-                { spawnSourceContainer: { isStorable: true, upperLimit: 1500 } },
+                {spawnSourceContainer: { isStorable: true, upperLimit: 1500 }},
                 { tower: { isStorable: true, upperLimit: 400 } }
             ];
             doStuff(creep, gList);
@@ -55,10 +62,19 @@ function doStuff(
         let structuresL = sList[i];
         for (let structuresName in structuresL) {
             let structures = structuresL[structuresName];
-            if (structures?.[0]?.store["energy"] < <number>gList[i][structuresName]?.upperLimit) {
-                console.log(structuresName);
-                if (creep.transportResource(structures[0], RESOURCE_ENERGY)) {
-                    return;
+            let go = true;
+            while(go){
+                if (structures?.[0]?.store["energy"] < <number>gList[i][structuresName]?.upperLimit) {
+                    if(!creep.transportResource(structures[0], RESOURCE_ENERGY)){
+                        structures.shift()
+                    }else{
+                        go = false;
+                    }
+                }else{
+                    structures.shift();
+                }
+                if(structures.length==0){
+                    go=false;
                 }
             }
         }

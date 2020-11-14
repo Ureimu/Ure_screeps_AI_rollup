@@ -1,5 +1,3 @@
-import { manageCreep } from "task/manager";
-import { RoomTask } from "task/utils/RoomTask"
 import { getBpNum } from "utils/bodypartsGenerator";
 import { getStructureFromArray, lookForStructureName } from "utils/findEx";
 

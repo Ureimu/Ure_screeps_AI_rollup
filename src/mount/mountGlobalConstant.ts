@@ -11,5 +11,9 @@ export function globalConstantRegister(): void {//在global上写入全局常量
         global.GUI = GUIfun();
     }
 
+    if(!global.creepMemory){
+        global.creepMemory={}
+    }
+
     actionCounter.warpActions();
 }

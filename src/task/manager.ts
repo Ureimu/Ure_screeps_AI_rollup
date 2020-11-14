@@ -1,7 +1,8 @@
+import profiler from "utils/profiler";
 import { getBpByRole } from "./spawnTask/utils/bodypartsSetting";
 import { RoomTask } from "./utils/RoomTask";
 
-export function manageCreep() {
+let manageCreep = function () {
 
     // Automatically delete memory of missing creeps
     for (const name in Memory.creeps) {
@@ -17,6 +18,7 @@ export function manageCreep() {
                             }
                             Memory.creeps[name].task.taskInf.state = [];
                             delete Memory.creeps[name];
+                            delete global.creepMemory[name];
                             roomTask.pushTaskToSpawn(task);
                         }else{
                         } //TODO 还没改完)
@@ -34,3 +36,6 @@ export function manageCreep() {
         }
     }
 }
+
+manageCreep = profiler.registerFN(manageCreep, 'manageCreep');
+export default manageCreep
