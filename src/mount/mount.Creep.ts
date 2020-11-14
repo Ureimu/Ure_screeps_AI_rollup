@@ -24,7 +24,6 @@ export class CreepExtension extends Creep {
     getEnergy(lowerLimit: Array<{[name:string]: number}> = [{}]): string {
 
         let structureList: Array<{ [name: string]: AnyStoreStructure[]; }> = getStructureFromArray(this.room, lowerLimit);
-        structureList.reverse();
         let containersL = [];
         for(let i = 0, j=structureList.length;i<j;i++){
             let st1 = structureList[i];
@@ -100,6 +99,7 @@ export class CreepExtension extends Creep {
 
     transportResource(target: AnyStructure, resourceType: ResourceConstant) {
         if(this.memory.task.taskInf.lastSource == lookForStructureName(target)) return false;
+        if(!target) return false;
         if (this.transfer(target, resourceType) == ERR_NOT_IN_RANGE) {
             this.moveTo(target, {
                 visualizePathStyle: {

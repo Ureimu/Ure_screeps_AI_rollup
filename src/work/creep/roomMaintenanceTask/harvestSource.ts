@@ -9,7 +9,7 @@ export function harvestSource(creep: Creep): void {
         let conPosList = creep.room.memory.construction?.["innerSourceContainer"].pos;
         let countx = undefined;
         for(let i =0,j=posList.length;i<j;i++){
-            console.log(JSON.stringify(posList[i])+JSON.stringify(source.pos));
+            //console.log(JSON.stringify(posList[i])+JSON.stringify(source.pos));
             if(isPosEqual(posList[i],source.pos)){
                 countx = i;
             }
