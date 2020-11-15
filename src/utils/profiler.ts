@@ -248,7 +248,7 @@ const Profiler = {
     Profiler.checkMapItem('(tick)', Memory.profiler.map['(root)'].subs);
     Memory.profiler.map['(root)'].subs['(tick)'].calls = elapsedTicks;
     Memory.profiler.map['(root)'].subs['(tick)'].time = Memory.profiler.totalTime;
-    let body = `events: ns\nsummary: ${Math.round(Memory.profiler.totalTime * 1000000)}\n`;
+    let body = `events: ns avg\nsummary: ${Math.round(Memory.profiler.totalTime * 1000000)}\n`;
     for (const fnName of Object.keys(Memory.profiler.map)) {
       const fn = Memory.profiler.map[fnName];
       let callsBody = '';
@@ -256,10 +256,10 @@ const Profiler = {
       for (const callName of Object.keys(fn.subs)) {
         const call = fn.subs[callName];
         const ns = Math.round(call.time * 1000000);
-        callsBody += `cfn=${callName}\ncalls=${call.calls} 1\n1 ${ns}\n`;
+        callsBody += `cfn=${callName}\ncalls=${call.calls} 1\n1 ${ns} ${Math.round(ns/call.calls)}\n`;
         callsTime += call.time;
       }
-      body += `\nfn=${fnName}\n1 ${Math.round((fn.time - callsTime) * 1000000)}\n${callsBody}`;
+      body += `\nfn=${fnName}\n1 ${Math.round((fn.time - callsTime) * 1000000)} ${Math.round((fn.time - callsTime) * 1000000)/Math.round(callsTime)}\n${callsBody}`;
     }
     return body;
   },
