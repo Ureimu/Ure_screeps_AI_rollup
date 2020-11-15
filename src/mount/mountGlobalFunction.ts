@@ -51,4 +51,23 @@ export function globalFunctionRegister(): void {//在global上写入全局函数
     }
 
     if (!global.detail) global.detail = actionCounter.singleTick; //打印所有任务的详细cpu消耗情况列表
+
+    if(!global.help) {
+        global.help = function ():string {
+            return `profilerHelp
+            Game.profiler.profile(ticks, [functionFilter]);
+            Game.profiler.stream(ticks, [functionFilter]);
+            Game.profiler.email(ticks, [functionFilter]);
+            Game.profiler.background([functionFilter]);
+
+            // Output current profile data.
+            Game.profiler.output([lineCount]);
+            Game.profiler.callgrind();
+
+            // Reset the profiler, disabling any profiling in the process.
+            Game.profiler.reset();
+
+            Game.profiler.restart();`
+        }
+    }
 }
