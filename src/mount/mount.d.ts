@@ -5,7 +5,7 @@ interface RoomPosition {
 
 interface Room {
     autoSafeMode(): void,
-    initMemory():void,
+    initMemory(ifFarming:boolean):void,
     autoPlanConstruction():void,
     roomVisualize():void,
     runStructure():void,
@@ -77,5 +77,6 @@ declare namespace NodeJS {
         newTask(roomName:string,taskName:string):void,
         deleteTask(creepName:string):void,
         war:any,
+        help():string,
     }
 }

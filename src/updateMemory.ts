@@ -9,14 +9,11 @@ function getNewSource(room:Room): void {
     if(!Memory.sources){
         Memory.sources = {};
     }
-    let controller = <StructureController>room.controller
-    if(controller.my){
-        let sources = room.find(FIND_SOURCES);
-        for (let source of sources) {
-            let name = source.room.name+'Source'+'['+source.pos.x+','+source.pos.y+']'
-            if (Memory.sources[name] == undefined){
-                source.initsMemory();
-            }
+    let sources = room.find(FIND_SOURCES);
+    for (let source of sources) {
+        let name = source.room.name+'Source'+'['+source.pos.x+','+source.pos.y+']'
+        if (Memory.sources[name] == undefined){
+            source.initsMemory();
         }
     }
 }
@@ -55,7 +52,8 @@ function initSpawnMemory(room:Room): void {
     }
 }
 
-export function initNewRoomSetting(room:Room): void {
+export function initNewRoomSetting(room:Room,ifFarming:boolean): void {
+    if(ifFarming){getNewSource(room);return;}
     getNewSource(room);
     initRoomMemory(room);
     initSpawnMemory(room);

@@ -18,8 +18,8 @@ export class RoomExtension extends Room{
         });
     }
 
-    initMemory(){
-        initNewRoomSetting(this);
+    initMemory(ifFarming:boolean){
+        initNewRoomSetting(this,ifFarming);
     }
 
     autoPlanConstruction(){

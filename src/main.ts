@@ -3,7 +3,7 @@ import { mountPrototypeExtension } from "mount/mountPrototypeExtension";
 import profiler from "utils/profiler";
 //import actionCounter from "./utils/actionCounter";
 import creepWork from "./work/creep/index";
-//import './utils/bypass';
+import './utils/bypass';
 //import { mountCreepEnergyMonitor } from "utils/energyMonitor";
 import { errorStackVisualize } from "visual/roomVisual/GUIsetting";
 import manageCreep from "task/manager";
@@ -37,11 +37,13 @@ export const loop = () => {
             _.forEach(Game.rooms, room => {
                 if (room.controller?.my) {
                     room.autoSafeMode();
-                    room.initMemory();
+                    room.initMemory(false);
                     room.autoPlanConstruction();
                     room.roomVisualize();
                     room.runStructure();
                     room.manageTask();
+                }else{
+                    room.initMemory(true);
                 }
             });
 

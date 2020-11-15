@@ -38,7 +38,7 @@ function getQueueFromObject(wantedTaskQueueName: string,taskPoolMemory: TaskPool
             return taskQueue;
         }
     }
-    console.log('[error]'+'任务池中没有任务列表：' + wantedTaskQueueName);
+    console.log('[error] '+'任务池中没有任务列表：' + wantedTaskQueueName);
     return undefined;
 }
 
@@ -97,7 +97,7 @@ function initQueue(wantedTaskQueueName: string,taskPoolMemory: TaskPool, towards
         return queue;
     }
     else{
-        console.log('[init] 创建新任务队列: '+wantedTaskQueueName);
+        console.log('[init]  创建新任务队列: '+wantedTaskQueueName);
         taskPoolMemory[wantedTaskQueueName]=[];
         return newQueue(towards);
     }

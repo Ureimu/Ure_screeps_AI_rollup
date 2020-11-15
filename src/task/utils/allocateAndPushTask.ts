@@ -10,7 +10,7 @@ import taskPool from "./taskPool";
 export function allocatingSpawnTask(QueueName: string): void {
     let roomListToAllocate:{[roomName:string] :number} = {}
     for(let roomName in Memory.rooms){
-        if(Memory.rooms[roomName].taskPool[QueueName].length>0){
+        if(Memory.rooms[roomName]?.taskPool?.[QueueName].length>0){
             roomListToAllocate[roomName] = 1;
         }
     }
