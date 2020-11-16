@@ -1,7 +1,7 @@
 import { isPosEqual } from "utils/findEx";
 import { initConstructionMemory } from "construction/utils/initConstructionMemory";
 
-export function putConstructionSites(room: Room, posList: RoomPosition[], name: string, structureType:StructureConstant, bundledPos: RoomPositionStr) {
+export function putConstructionSites(room: Room, posList: RoomPosition[], name: string, structureType:StructureConstant, bundledPos?: RoomPositionStr) {
     let listC = [];
     initConstructionMemory(room, name, structureType);
     for (let i = 0; i < posList.length; i++) {
@@ -24,7 +24,7 @@ export function putConstructionSites(room: Room, posList: RoomPosition[], name: 
                     break;
                 }
                 room.memory.construction[name].pos.push(posList[i]);
-                room.memory.construction[name].memory.bundledPos.push(bundledPos)
+                if(bundledPos)room.memory.construction[name].memory.bundledPos.push(bundledPos)
                 countx[0]=1;
                 break;
             }
@@ -33,7 +33,7 @@ export function putConstructionSites(room: Room, posList: RoomPosition[], name: 
             listC[i] = room.createConstructionSite(posList[i], structureType);
             if (listC[i] == OK) {
                 room.memory.construction[name].pos.push(posList[i]);
-                room.memory.construction[name].memory.bundledPos.push(bundledPos)
+                if(bundledPos)room.memory.construction[name].memory.bundledPos.push(bundledPos)
             }
         }
     }

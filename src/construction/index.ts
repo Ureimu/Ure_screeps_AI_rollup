@@ -1,6 +1,7 @@
 import { lookForStructurePos } from "utils/findEx";
 import { putContainerConstructionSites } from "./container";
 import { putExtensionConstructionSites } from "./extension";
+import { putRampartConstructionSites } from "./ramparts";
 import { putRoadConstructionSites } from "./road";
 import { putTowerConstructionSites } from "./tower";
 
@@ -41,6 +42,10 @@ export function autoConstruction(room:Room) {
         case 13:
             if(!room.memory.construction["tower"]||room.memory.construction["tower"].constructionSitesCompleted != true){
                 putTowerConstructionSites(roomName);
+            }
+        case 14:
+            if(room.memory.roomControlLevel>3&&!room.memory.construction["rampart"]||room.memory.construction["rampart"].constructionSitesCompleted != true){
+                putRampartConstructionSites(room);
             }
         default:
             break;

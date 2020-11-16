@@ -1,4 +1,6 @@
+import { getCutTiles, getMinCut, pruneDeadEnds, testMinCutSubset } from "construction/utils/minCut";
 import actionCounter from "utils/actionCounter";
+import profiler from "utils/profiler";
 
 export function globalFunctionRegister(): void {//在global上写入全局函数对象
     if (!global.getNum) {
@@ -69,5 +71,35 @@ export function globalFunctionRegister(): void {//在global上写入全局函数
 
             Game.profiler.restart();`
         }
+    }
+
+    //测试时会使用的全局变量
+    if(!global.minCut) {
+        global.minCut={
+            getMinCut,
+            getCutTiles,
+            pruneDeadEnds,
+            testMinCutSubset,
+            colonies:{},
+            ifQuit:false,
+            quit:()=>{global.minCut.ifQuit=true}
+        }
+        profiler.registerObject(global.minCut,"construction.minCut");
+        for(let roomName in Memory.rooms){
+            global.minCut.colonies[roomName]
+        }
+    }
+
+    //main循环会一直调用的函数
+    if(!global.stateLoop) {
+        global.stateLoop={
+            minCutVisual:()=>{
+                if(global.minCut.graph&&!global.minCut.ifQuit){
+                    const visual = new RoomVisual(global.minCut.graphingRoom);
+                    visual.import(global.minCut.graph);
+                }
+            }
+        }
+        profiler.registerObject(global.stateLoop,"stateLoop");
     }
 }

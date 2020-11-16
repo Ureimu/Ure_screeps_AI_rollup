@@ -31,3 +31,9 @@ interface constructionSitesInf{
         bundledPos:RoomPositionStr[]
     }
 }
+
+declare namespace NodeJS {
+    interface Global {
+        minCut:any;
+    }
+}

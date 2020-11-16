@@ -38,14 +38,16 @@ export default {
     //screeps({config: cfg, dryRun: cfg == null}),
     copy({
       files: ['src/task/utils/priority_queue.wasm','dist/main.js'],//在新增了二进制文件后记得在这里添上
-      dest: 'C:/Users/a1090/AppData/Local/Screeps/scripts/127_0_0_1___21025/default',//这里填服务器的文件夹名称
+      //C:/Users/a1090/AppData/Local/Screeps/scripts/47_103_128_236___21025/default
+      //dest: 'C:/Users/a1090/AppData/Local/Screeps/scripts/127_0_0_1___21025/default',//这里填服务器的文件夹名称
+      dest: `C:/Users/a1090/AppData/Local/Screeps/scripts/47_103_128_236___21025/default`,//这里填服务器的文件夹名称
       options: {
         verbose: true,
       }
     }),
     copy({
       files: ['dist/main.js.map'],//在新增了二进制文件后记得在这里添上
-      dest: 'C:/Users/a1090/AppData/Local/Screeps/scripts/127_0_0_1___21025/default',//这里填服务器的文件夹名称
+      dest: `C:/Users/a1090/AppData/Local/Screeps/scripts/47_103_128_236___21025/default`,//这里填服务器的文件夹名称
       options: {
         verbose: true,
         rename: basename => `${basename}`,

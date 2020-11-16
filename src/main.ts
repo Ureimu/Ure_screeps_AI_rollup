@@ -27,6 +27,9 @@ profiler.enable();
 export const loop = () => {
     profiler.wrap(function () {
         try {
+            for(let stateCut in global.stateLoop){
+                global.stateLoop[stateCut]();
+            }
             //actionCounter.init();
             if (Game.cpu.bucket > 9000) {
                 if (!!Game.cpu.generatePixel) {

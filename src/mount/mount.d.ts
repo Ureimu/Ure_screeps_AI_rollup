@@ -78,5 +78,6 @@ declare namespace NodeJS {
         deleteTask(creepName:string):void,
         war:any,
         help():string,
+        stateLoop:{[name: string]:()=>void},
     }
 }
