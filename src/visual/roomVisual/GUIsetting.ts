@@ -9,18 +9,18 @@ export function roomVisualize(room:Room) {
                 x: 0,
                 y: 0,
                 width: 20,
-                height: 2,
+                height: 3,
                 background: "#000000",
                 opacity: 0.3
             },
             child: [
                 {
                     type: "Text",
-                    layout: {
+                    layout: <Text>{
                         content: `现在的游戏时间是${Game.time}tick`,
                         x: 0,
                         y: 0,
-                        align: "left"
+                        align: "left",
                     }
                 },
                 {
@@ -35,10 +35,21 @@ export function roomVisualize(room:Room) {
                 {
                     type: "Progress",
                     layout: {
-                        x: 4,
-                        y: 2
+                        width:10,
+                        value:room.energyAvailable/room.energyCapacityAvailable*100,
+                        x: 0,
+                        y: 2.25
                     }
-                }
+                },
+                {
+                    type: "Text",
+                    layout: {
+                        content: `${room.energyAvailable}/${room.energyCapacityAvailable}`,
+                        x: 5,
+                        y: 2,
+                        align: "center"
+                    }
+                },
             ]
         }
     ]);
