@@ -10,12 +10,12 @@ export function getStringList(str:string){
     return strList;
 }
 
-export function printMulText(layoutF:{content:string,x:number,y:number,align:string}){
+export function printMulText(layoutF:Text):map<elementsConstant>[]{
     let objList = [];
     let strList = getStringList(layoutF.content);
     let i = 0;
     for(let strx of strList){
-        objList.push({type:"Text",layout:{content:strx,x:layoutF.x,y:layoutF.y+i,align:layoutF.align}});
+        objList.push({type:<elementsConstant>"Text",layout:{content:strx,x:layoutF.x,y:layoutF.y+i,align:layoutF.align}});
         i+=1;
     }
     return objList;

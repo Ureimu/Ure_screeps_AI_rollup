@@ -2,6 +2,8 @@
  * Screeps-GUI-VisualEngine 视图渲染工具 ts版本
  * https://gitee.com/mingzey/Screeps-GUI-VisualEngine js原版
  * visualGUI.d.ts文件注明了该文件使用的变量类型。
+ *
+ * 使用方法：
  */
 
 class Box<T extends elementsLayout> implements BoxConstructor<T> {
@@ -26,7 +28,7 @@ class Box<T extends elementsLayout> implements BoxConstructor<T> {
 
 export function GUIfun(): GUIclass {
     return {
-        draw: function (visual: RoomVisual, map: map[]) {
+        draw: function <T extends elementsConstant>(visual: RoomVisual, map: map<T>[]) {
             this.drawMap(visual, map, -0.5, -0.5);
         },
 
@@ -39,10 +41,7 @@ export function GUIfun(): GUIclass {
                 //获取布局和子布局
                 let layout = item.layout;
                 if (layout == undefined) {
-                    layout = <elementsLayoutGeneral>{
-                        x: 0,
-                        y: 0
-                    };
+                    console.log("[GUI]警告:未定义的组件布局," + item.type);
                 }
                 let child = item.child;
 
@@ -76,6 +75,7 @@ export function GUIfun(): GUIclass {
                 //检查componentData数据
                 //包含检查，有些类型的组件不允许绘制内部组件
                 if (componentData.allowChild == false) {
+                    console.log("[GUI]警告，检测到在不允许绘制内部组件的组件" + item.type + "进行了子组件绘制，这可能会造成无法预料的错误");
                     continue;
                 }
 
@@ -100,6 +100,7 @@ export function GUIfun(): GUIclass {
          * 关于return对象的书写，请见GITHUB说明文档
          *
          */
+
         /**
          * 容器组件，用于内置其他组件
          */
@@ -146,10 +147,11 @@ export function GUIfun(): GUIclass {
             //配置style
             let style = {
                 align: <"left" | "center" | "right" | undefined>"left",
-                font: 0.5,
+                font: <number | string>0.5,
                 backgroundColor: "#00000000",
                 stroke: "",
-                backgroundPadding: 0.3
+                backgroundPadding: 0.3,
+                content: ""
             };
 
             //从layout中导出style
@@ -167,12 +169,15 @@ export function GUIfun(): GUIclass {
                 if (layout.stroke != undefined) {
                     style.stroke = layout.stroke;
                 }
+                if (layout.content != undefined) {
+                    style.content = layout.content;
+                }
                 box.y += 0.5;
             }
 
             // console.log(JSON.stringify(style));
             // console.log(JSON.stringify(box));
-            visual.text(layout.content, box.x, box.y, style);
+            visual.text(<string>style.content, box.x, box.y, style);
 
             //需要正确的返回组件信息
             return {
@@ -223,7 +228,7 @@ export function GUIfun(): GUIclass {
             let pwidth = width * (value / 100);
 
             let map = [
-                {
+                <map<"Div">>{
                     type: "Div",
                     layout: <elementsLayoutGeneral>{
                         width: width,
@@ -237,7 +242,7 @@ export function GUIfun(): GUIclass {
                                 height: height,
                                 width: pwidth,
                                 background: progressColor
-                            },
+                            }
                         }
                     ]
                 }
@@ -274,4 +279,3 @@ export function GUIfun(): GUIclass {
         }
     };
 }
-

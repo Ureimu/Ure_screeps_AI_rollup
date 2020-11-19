@@ -78,5 +78,6 @@ declare namespace NodeJS {
         war:any,
         help():string,
         stateLoop:{[name: string]:()=>void},
+        GUI:GUIclass
     }
 }

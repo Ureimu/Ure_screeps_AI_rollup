@@ -13,25 +13,13 @@ export function roomVisualize(room:Room) {
                 background: "#000000",
                 opacity: 0.3
             },
-            child: [
-                {
-                    type: "Text",
-                    layout: <Text>{
-                        content: `现在的游戏时间是${Game.time}tick`,
-                        x: 0,
-                        y: 0,
-                        align: "left",
-                    }
-                },
-                {
-                    type: "Text",
-                    layout: {
-                        content: `该房间spawn在维持的creep的部件总数为${getBpSum(room.name)}`,
-                        x: 0,
-                        y: 1,
-                        align: "left"
-                    }
-                },
+            child: printMulText({
+                content: `现在的游戏时间是${Game.time}tick
+                该房间spawn在维持的creep的部件总数为${getBpSum(room.name)}`,
+                x: 0,
+                y: 0,
+                align: "left"
+            }).concat([
                 {
                     type: "Progress",
                     layout: {
@@ -50,7 +38,7 @@ export function roomVisualize(room:Room) {
                         align: "center"
                     }
                 },
-            ]
+            ])
         }
     ]);
 }
