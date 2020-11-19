@@ -14,8 +14,7 @@ export function roomVisualize(room:Room) {
                 opacity: 0.3
             },
             child: printMulText({
-                content: `现在的游戏时间是${Game.time}tick
-                该房间spawn在维持的creep的部件总数为${getBpSum(room.name)}`,
+                content: `现在的游戏时间是${Game.time}tick\n该房间spawn在维持的creep的部件总数为${getBpSum(room.name)}`,
                 x: 0,
                 y: 0,
                 align: "left"
@@ -52,8 +51,7 @@ export function errorStackVisualize(err: string) {
     if (errIndex == -1) {
         Memory.errors.errorCount.push(1);
         lastErrStr += `
-        这是第${Memory.errors.errorList.length + 1}个错误，重复了${1}次
-        `;
+        这是第${Memory.errors.errorList.length + 1}个错误，重复了${1}次`;
         Memory.errors.errorList.push(err);
         Memory.errors.errorIntervals.push([Game.time]);
     } else {
@@ -64,8 +62,7 @@ export function errorStackVisualize(err: string) {
         平均时间间隔为${
             (_.sum(Memory.errors.errorIntervals[errIndex]) - Memory.errors.errorIntervals[errIndex][0]) /
             (Memory.errors.errorCount[errIndex]-1)
-        }
-        `;
+        }`;
         Memory.errors.errorList[errIndex] = err;
     }
     printErrorList(lastErrStr);

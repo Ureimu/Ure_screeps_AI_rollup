@@ -1,6 +1,6 @@
 export function getStringList(str:string){
     let j = -1;
-    let m = str;
+    let m = str+"\n";
     let strList = [];
     while(m.includes("\n")){
         j=m.indexOf("\n");

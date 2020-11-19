@@ -248,7 +248,7 @@ export function GUIfun(): GUIclass {
                 }
             ];
 
-            this.drawMap(visual, map, box.x, box.y);
+            GUIfun().drawMap(visual, map, box.x, box.y);
 
             //需要正确的返回组件信息
             return {
