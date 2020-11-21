@@ -70,7 +70,7 @@ export function lookForStructurePos(room: Room, structureName: string): RoomPosi
     }
 }
 
-export function lookForStructureName(structure: AnyStructure | undefined | null): string {
+export function lookForStructureName(structure?: AnyStructure|null): string {
     if (!structure) {
         return "";
     }

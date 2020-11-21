@@ -10,13 +10,15 @@ let manageCreep = function () {
             for(let taskKindName in global.spawnTaskList){
                 switch (taskKindName) {
                     case "roomMaintance":
-                        if(Memory.creeps[name].task.taskInf.taskType in global.spawnTaskList[taskKindName]){
-                            let task = <SpawnTaskInf>Memory.creeps[name].task;
-                            let roomTask = new RoomTask(task.spawnInf.roomName,task.taskInf.taskType);
+                        if(Memory.creeps[name].task.taskType in global.spawnTaskList[taskKindName]){
+                            let task = <SpawnTaskInf><unknown>Memory.creeps[name].task;
+                            let roomTask = new RoomTask(task.spawnInf.roomName,task.taskType);
                             if(!!task.spawnInf){
-                                task.spawnInf.bodyparts = getBpByRole(task.taskInf.taskType,task.spawnInf.roomName);
+                                task.spawnInf.bodyparts = getBpByRole(task.taskType,task.spawnInf.roomName);
                             }
-                            Memory.creeps[name].task.taskInf.state = [];
+                            if(Memory.creeps[name].task.taskInf){
+                                Memory.creeps[name].task.taskInf.state = [];
+                            }
                             delete Memory.creeps[name];
                             delete global.creepMemory[name];
                             roomTask.pushTaskToSpawn(task);

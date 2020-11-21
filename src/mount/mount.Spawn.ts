@@ -48,7 +48,7 @@ export class SpawnExtension extends StructureSpawn {
                     errorText = "你不是该母巢 (spawn) 的所有者。";
                     break;
                 case -3:
-                    errorText = `已经有一个叫这个名字的 creep 了。名称：${task.taskInf.creepName}`;
+                    errorText = `已经有一个叫这个名字的 creep 了。名称：${task.spawnInf.creepName}`;
                     break;
                 case -4:
                     errorText = "这个母巢 (spawn) 已经在孵化另一个 creep 了。";

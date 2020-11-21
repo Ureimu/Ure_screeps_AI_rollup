@@ -6,5 +6,6 @@ export function globalConstantRegister(): void {//在global上写入全局常量
     global.spawnTaskList = spawnTaskList();
     global.GUI = GUIfun();
     global.creepMemory={}
+    global.test={}
     actionCounter.warpActions();
 }

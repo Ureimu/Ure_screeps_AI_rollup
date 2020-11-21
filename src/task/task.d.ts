@@ -1,6 +1,5 @@
-
 /**
- * 任务的类，包含优先级属性和任务信息。
+ * 任务的基本类，包含优先级属性。不建议直接使用，而应使用继承对应功能的类。
  *
  * @interface BaseTask
  */
@@ -11,7 +10,7 @@ interface BaseTaskInf {
      * @type {number}
      * @memberof BaseTask
      */
-    priority: number,
+    priority: number;
 
     /**
      * 任务的发起者的id
@@ -19,44 +18,41 @@ interface BaseTaskInf {
      * @type {Sponsor}可以是任何建筑或creep,source
      * @memberof BaseTask
      */
-    sponsor?: Sponsor,
+    sponsor?: Sponsor;
     /**
      * 标识该任务是否在执行状态。
      *
      * @type {boolean}
      * @memberof BaseTask
      */
-    isRunning: boolean,
-    /**
-     * 该对象存放了任务信息
-     *
-     * @type {{
-     *         [name: string]: string,
-     *     }}
-     * @memberof BaseTask
-     */
-    taskInf: {
-        state: number[],
-        [name: string]: any,
-    }
+    isRunning: boolean;
+
+    taskType: string;
 }
 
-interface SpawnTaskInf extends BaseTaskInf{
+interface SpawnTaskInf extends BaseTaskInf {
     spawnInf: {
-        bodyparts: bpgGene[],
-        creepName: string,
-        roomName: string,
-    },
+        bodyparts: bpgGene[];
+        creepName: string;
+        roomName: string;
+    };
+    taskInf?: {
+        state:[]
+    };
 }
 
-interface CreepTaskInf extends BaseTaskInf{
-    missionInf: {
-        [name: string]: any,
-    }
+interface CreepTaskInf extends BaseTaskInf {
+    taskInf: {};
 }
 
-interface CarryCreepTaskInf extends CreepTaskInf{
-
+interface CarryTaskInf extends BaseTaskInf {
+    taskInf: {
+        resourceType: ResourceConstant;
+        structureCarryFrom: string;
+        structureCarryTo: string;
+        resourceNumber: number;
+        state:[]
+    };
 }
 
 /**
@@ -65,22 +61,21 @@ interface CarryCreepTaskInf extends CreepTaskInf{
  * @type TaskQueue
  */
 
-
 /**
  * 任务池，由多个任务队列组成。
  *
  * @interface TaskPool
  */
 interface TaskPool {
-    [name: string]: BaseTaskInf[],
+    [name: string]: BaseTaskInf[];
 }
 
-interface RoomTaskInte{
-    isMyRoom: boolean,
-    runNow: boolean,
-    ifPushNewSpawnTask: boolean,
-    NewSpawnTaskQueue: SpawnTaskInf[],
-    ifAllocateNewSpawnTaskToSpawn: boolean,
-    hasPushed: boolean,
-    hasPushedToSpawn: boolean,
+interface RoomTaskInte {
+    isMyRoom: boolean;
+    runNow: boolean;
+    ifPushNewSpawnTask: boolean;
+    NewSpawnTaskQueue: SpawnTaskInf[];
+    ifAllocateNewSpawnTaskToSpawn: boolean;
+    hasPushed: boolean;
+    hasPushedToSpawn: boolean;
 }

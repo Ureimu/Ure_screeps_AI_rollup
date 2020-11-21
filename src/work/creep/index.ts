@@ -24,7 +24,7 @@ let creepWork ={
     },
 
     compareTaskType(creep: Creep, workFunction: {(creep: Creep):void}, taskType: string) {
-        if (creep.memory.task.taskInf.taskType == taskType) {
+        if (creep.memory.task.taskType == taskType) {
             creep.pushBackTask();
             workFunction(creep);
         }

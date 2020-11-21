@@ -1,17 +1,24 @@
+import taskPool from "task/utils/taskPool";
 import { lookForStructure } from "utils/findEx";
 import { stateCut } from "work/creep/utils/utils";
 
 export function carryResource(creep: Creep): void {
-    let task = <CarryCreepTaskInf>creep.memory.task;
-    if (!!task.missionInf) {
-        let resourceType = <ResourceConstant>task.missionInf["resourceType"];
-        let carryFrom = <string>task.missionInf["carryFrom"];
-        let carryTo = <string>task.missionInf["carryTo"];
+    let task = <CarryTaskInf>creep.memory.task;
+    if (task?.taskInf) {
+        let resourceType = <ResourceConstant>task.taskInf.resourceType;
+        let carryFrom = <string>task.taskInf.structureCarryFrom;
+        let carryTo = <string>task.taskInf.structureCarryTo;
 
         let ifHarvesting = stateCut(
             creep,
             [() => ~~(creep.store[resourceType] == 0), () => ~~(creep.store.getFreeCapacity() != 0)],
             0
+        );
+
+        let ifFinishTask = stateCut(
+            creep,
+            [()=>0,()=>0],
+            1
         );
 
         if (ifHarvesting) {
@@ -25,7 +32,17 @@ export function carryResource(creep: Creep): void {
                 creep.transportResource(structureCarryTo[0], resourceType);
             }
         }
+
+        if(ifFinishTask){
+            delete Memory.creeps[creep.name].task.taskInf
+        }
+
     } else {
-        //TODO 让creep获取在room的task。
+        if(Game.time%5!=0)return;
+        let m = taskPool.initQueue("carryTask",Memory.rooms[creep.room.name].taskPool);
+        if(m.isEmpty()){
+            creep.memory.task.taskInf=m.pop().taskInf;
+        }
+        taskPool.setQueue(m,"carryTask",Memory.rooms[creep.room.name].taskPool);
     }
 }

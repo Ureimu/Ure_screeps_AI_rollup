@@ -1,5 +1,6 @@
 import { getCutTiles, getMinCut, pruneDeadEnds, testMinCutSubset } from "construction/utils/minCut";
 import actionCounter from "utils/actionCounter";
+import downloader from "utils/downloader";
 import profiler from "utils/profiler";
 
 export function globalFunctionRegister(): void {//在global上写入全局函数对象
@@ -80,5 +81,9 @@ export function globalFunctionRegister(): void {//在global上写入全局函数
             }
         }
     }
+
+    global.test.download = downloader.download
+
     profiler.registerObject(global.stateLoop,"stateLoop");
+
 }

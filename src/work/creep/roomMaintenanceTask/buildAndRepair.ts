@@ -44,18 +44,22 @@ export function buildAndRepair(creep: Creep): void {
                     });
                 }
             } else if (creep.memory.task.taskInf.lastRenovate) {
-                let target_x = <AnyStructure>Game.getObjectById(creep.memory.task.taskInf.lastRenovate);
-                if (
-                    target_x.hits >= creep.memory.task.taskInf.lastRenovateHit + 120000 ||
-                    target_x.hits == target_x.hitsMax
-                ) {
-                    creep.memory.task.taskInf.lastRenovate = null;
-                } else if (creep.repair(target_x) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(target_x, {
-                        visualizePathStyle: {
-                            stroke: "#ffaa00"
-                        }
-                    });
+                let target_x = <AnyStructure|undefined>Game.getObjectById(creep.memory.task.taskInf.lastRenovate);
+                if(!target_x){
+                    creep.memory.task.taskInf.lastRenovate = null
+                }else{
+                    if (
+                        target_x.hits >= creep.memory.task.taskInf.lastRenovateHit + 120000 ||
+                        target_x.hits == target_x.hitsMax
+                    ) {
+                        creep.memory.task.taskInf.lastRenovate = null;
+                    } else if (creep.repair(target_x) == ERR_NOT_IN_RANGE) {
+                        creep.moveTo(target_x, {
+                            visualizePathStyle: {
+                                stroke: "#ffaa00"
+                            }
+                        });
+                    }
                 }
             } else {
                 creep.say("error");

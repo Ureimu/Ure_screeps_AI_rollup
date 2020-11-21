@@ -97,10 +97,10 @@ export class CreepExtension extends Creep {
         }
     }
 
-    transportResource(target: AnyStructure, resourceType: ResourceConstant) {
+    transportResource(target: AnyStructure, resourceType: ResourceConstant, resourceNumber?:number) {
         if(this.memory.task.taskInf.lastSource == lookForStructureName(target)) return false;
         if(!target) return false;
-        if (this.transfer(target, resourceType) == ERR_NOT_IN_RANGE) {
+        if (this.transfer(target, resourceType,resourceNumber) == ERR_NOT_IN_RANGE) {
             this.moveTo(target, {
                 visualizePathStyle: {
                     stroke: "#ffffff"
@@ -110,9 +110,9 @@ export class CreepExtension extends Creep {
         return true;
     }
 
-    getResourceFromStructure(structure: AnyStoreStructure, resourceType: ResourceConstant) {
+    getResourceFromStructure(structure: AnyStoreStructure, resourceType: ResourceConstant,resourceNumber?:number) {
         if (structure) {
-            if (this.withdraw(structure, resourceType) == ERR_NOT_IN_RANGE) {
+            if (this.withdraw(structure, resourceType,resourceNumber) == ERR_NOT_IN_RANGE) {
                 this.moveTo(structure, {
                     visualizePathStyle: {
                         stroke: "#ffffff"

@@ -1,6 +1,7 @@
 import { globalFunctionRegister } from "mount/mountGlobalFunction";
 import { mountPrototypeExtension } from "mount/mountPrototypeExtension";
 import profiler from "utils/profiler";
+import actionMonitor from "utils/actionMonitor"
 //import actionCounter from "./utils/actionCounter";
 import creepWork from "./work/creep/index";
 import './utils/bypass';
@@ -27,6 +28,8 @@ profiler.enable();
 export const loop = () => {
     profiler.wrap(function () {
         try {
+            actionMonitor.getEnergyAction();
+
             for(let stateCut in global.stateLoop){
                 global.stateLoop[stateCut]();
             }
@@ -62,6 +65,7 @@ export const loop = () => {
             for (let creepName in Game.creeps) {
                 creepWork.run(Game.creeps[creepName]);
             }
+
 
             //actionCounter.save(1500);
         } catch (err) {

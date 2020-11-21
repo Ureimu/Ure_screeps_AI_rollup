@@ -44,7 +44,7 @@ export function autoConstruction(room:Room) {
                 putTowerConstructionSites(roomName);
             }
         case 14:
-            if(room.memory.roomControlLevel>3&&!room.memory.construction["rampart"]||room.memory.construction["rampart"].constructionSitesCompleted != true){
+            if(room.memory.roomControlLevel>3&&(!room.memory.construction["rampart"]||room.memory.construction["rampart"].constructionSitesCompleted != true)){
                 putRampartConstructionSites(room);
             }
         default:

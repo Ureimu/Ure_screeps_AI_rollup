@@ -79,5 +79,6 @@ declare namespace NodeJS {
         help():string,
         stateLoop:{[name: string]:()=>void},
         GUI:GUIclass
+        test:any
     }
 }
