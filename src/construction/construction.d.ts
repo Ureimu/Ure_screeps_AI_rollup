@@ -7,8 +7,8 @@ interface RoomMemory{
     constructionSchedule: {
         [name:string]: {
             constructionCompleted: boolean,
+            centerPos?:RoomPositionStr[]
         }
-
     }
 }
 /**

@@ -14,6 +14,20 @@ export class RoomPositionExtension extends RoomPosition {
         }
         return squareList;
     };
+    checkBlankSpace():RoomPosition[] {
+        let square:RoomPosition[] = this.getSquare();
+        let BlankSpace: RoomPosition[] = [];
+        for (const squared of square) {
+            const look = squared.look();
+            look.forEach(function(lookObject) {
+                if(lookObject.type == 'terrain' &&
+                lookObject.terrain != 'wall') {
+                    BlankSpace.push(squared);
+                }
+            });
+        }
+        return BlankSpace;
+    };
     // 填充所有 spawn 和 extension
     fillSpawnEngry() {
         // 代码实现...

@@ -1,4 +1,4 @@
-import { RoomPositionExtension } from "./mount.RoomPoition";
+import { RoomPositionExtension } from "./mount.RoomPosition";
 import { CreepExtension } from "./mount.Creep";
 import { SourceExtension } from "./mount.Source";
 import { SpawnExtension } from "./mount.Spawn";

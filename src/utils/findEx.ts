@@ -30,6 +30,7 @@ export function lookForStructure(
     }
 }
 
+//不建议在寻找某pos上的所有建筑时使用此函数！
 export function lookForStructureByPos(
     pos: RoomPosition | undefined,
     structureType: StructureConstant,

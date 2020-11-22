@@ -25,7 +25,7 @@ export function roomVisualize(room:Room) {
                         width:10,
                         value:room.energyAvailable/room.energyCapacityAvailable*100,
                         x: 0,
-                        y: 2.25
+                        y: 2.215
                     }
                 },
                 {
@@ -34,7 +34,8 @@ export function roomVisualize(room:Room) {
                         content: `${room.energyAvailable}/${room.energyCapacityAvailable}`,
                         x: 5,
                         y: 2,
-                        align: "center"
+                        align: "center",
+                        stroke: "#000000"
                     }
                 },
             ])
