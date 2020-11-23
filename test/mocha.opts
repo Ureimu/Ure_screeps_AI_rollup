@@ -9,5 +9,5 @@
 --colors
 
 --recursive
---timeout 5000
+--timeout 36000000
 --exit

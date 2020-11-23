@@ -1,48 +1,42 @@
-const { readFileSync } = require('fs');
-const _ = require('lodash');
-const { ScreepsServer, stdHooks } = require('screeps-server-mockup');
-const DIST_MAIN_JS = 'dist/main.js';
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable max-classes-per-file */
 
-/*
- * Helper class for creating a ScreepsServer and resetting it between tests.
- * See https://github.com/Hiryus/screeps-server-mockup for instructions on
- * manipulating the terrain and game state.
- */
-class IntegrationTestHelper {
-  private _server: any;
-  private _player: any;
+const { ScreepsServer, stdHooks } = require("screeps-server-mockup");
 
-  get server() {
-    return this._server;
+export class IntegrationTestHelper {
+  private mockedServer!: MockedServer;
+
+  public get server(): MockedServer {
+    return this.mockedServer as MockedServer;
   }
 
-  get player() {
-    return this._player;
+  private mockedUser!: MockedUser;
+
+  public get player(): MockedUser {
+    return this.mockedUser as MockedUser;
   }
 
-  async beforeEach() {
-    this._server = new ScreepsServer();
+  public set player(player: MockedUser) {
+    this.mockedUser = player;
+  }
 
-    // reset world but add invaders and source keepers bots
-    await this._server.world.reset();
-
-    // create a stub world composed of 9 rooms with sources and controller
-    await this._server.world.stubWorld();
-
-    // add a player with the built dist/main.js file
-    const modules = {
-        main: readFileSync(DIST_MAIN_JS).toString(),
-    };
-    this._player = await this._server.world.addBot({ username: 'player', room: 'W0N1', x: 15, y: 15, modules });
+  public async beforeEach(): Promise<void> {
+    this.mockedServer = new ScreepsServer();
+    await this.mockedServer.world.reset();
 
     // Start server
-    await this._server.start();
+    await this.mockedServer.start();
   }
 
-  async afterEach() {
-    await this._server.stop();
+  public async afterEach(): Promise<void> {
+    await this.mockedServer.stop();
   }
 }
+
+export const helper = new IntegrationTestHelper();
 
 beforeEach(async () => {
   await helper.beforeEach();
@@ -53,7 +47,6 @@ afterEach(async () => {
 });
 
 before(() => {
-  stdHooks.hookWrite();
+  (stdHooks as StdHooks).hookWrite();
 });
 
-export const helper = new IntegrationTestHelper();
