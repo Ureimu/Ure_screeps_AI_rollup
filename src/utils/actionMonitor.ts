@@ -37,7 +37,7 @@ function getName(target:AnyStructure|Creep,roomName:string):string{
         name = target.name;
     }else{
         if((name = lookForStructureName(target)) == ""){
-            name = roomName+"-"+target.structureType
+            name = roomName+"-"+target?.structureType
         }else{
             name = roomName+"-"+name
         }
