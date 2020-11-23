@@ -1,0 +1,48 @@
+name: RCL
+
+on:
+  push:
+    branches: [master, dev]
+  pull_request:
+    branches: [master]
+
+jobs:
+  RCLtest:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [10.x]
+        RCL: ["RCL1ToRCL2", "RCL2ToRCL3", "RCL3ToRCL4", "RCL4ToRCL5", "RCL5ToRCL6", "RCL6ToRCL7", "RCL7ToRCL8"]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - run: npm install
+      - run: npm run build
+      - run: npx rollup -c rollup.test-integration-config.js -i test/integration/${{ matrix.RCL }}.test.ts
+      - run: npx mocha dist/test-integration.bundle.js
+
+      - name: Update Code Artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: dist
+          path: dist
+
+      - name: Update Server Artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: server
+          path: server
