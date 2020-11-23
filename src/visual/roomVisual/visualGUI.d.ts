@@ -57,7 +57,9 @@ interface baseLayout {
 interface map<T extends elementsConstant> {
     /**
      * 组件类型名称。
-     *
+     *```ts
+     * [11,2,22,1].sort((a, b) => a - b)
+     * ```
      * @type {T extends elementsConstant}
      * @memberof map
      */

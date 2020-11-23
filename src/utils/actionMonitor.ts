@@ -28,7 +28,7 @@ function getEnergyAction(){
 }
 
 function isCreep(target:AnyStructure|Creep):target is Creep {
-    return typeof (<Creep>target).name !== "undefined"
+    return typeof (<Creep>target)?.name !== "undefined"
 }
 
 function getName(target:AnyStructure|Creep,roomName:string):string{

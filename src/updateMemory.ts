@@ -31,7 +31,7 @@ function initRoomMemory(room:Room): void {
                 construction: {},
                 constructionSchedule: {},
                 constructionStartTime: Game.time,
-                roomControlLevel: 1,
+                roomControlStatus: [1],
             }
         }
     }

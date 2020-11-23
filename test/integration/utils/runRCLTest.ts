@@ -14,9 +14,10 @@ export async function runRCLTest(RCL: number, _RCL: number, tickNum: number): Pr
         const memory: Memory = JSON.parse(await helper.player.memory);
         printDebugInfo(memory, gameTime);
 
-        const controllerLevel = memory.rooms?.["W0N0"].roomControlLevel;
+        const controllerLevel = memory.rooms?.["W0N0"].roomControlStatus[0];
         if (controllerLevel !== undefined && controllerLevel >= _RCL) {
             console.log(`RCL${RCL} -> RCL${_RCL} ${gameTime} tick`);
+            await helper.player.console(`Game.profiler.callgrind();`);
             break;
         }
 

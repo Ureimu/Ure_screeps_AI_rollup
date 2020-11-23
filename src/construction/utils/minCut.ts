@@ -80,7 +80,7 @@ export class Graph {
         }
         this.level.fill(-1); // reset old levels
         this.level[from] = 0;
-        const q = []; // queue with s as starting point
+        const q:number[] = []; // queue with s as starting point
         q.push(from);
         let u = 0;
         let edge = null;

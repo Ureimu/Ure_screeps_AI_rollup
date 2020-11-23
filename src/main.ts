@@ -2,9 +2,8 @@ import { globalFunctionRegister } from "mount/mountGlobalFunction";
 import { mountPrototypeExtension } from "mount/mountPrototypeExtension";
 import profiler from "utils/profiler";
 import actionMonitor from "utils/actionMonitor"
-//import actionCounter from "./utils/actionCounter";
 import creepWork from "./work/creep/index";
-import './utils/bypass';
+//import './utils/bypass';
 //import { mountCreepEnergyMonitor } from "utils/energyMonitor";
 import { errorStackVisualize } from "visual/roomVisual/GUIsetting";
 import manageCreep from "task/manager";
@@ -12,7 +11,6 @@ import { globalConstantRegister } from "mount/mountGlobalConstant";
 import { allocatingSpawnTask } from "task/utils/allocateAndPushTask";
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
-//export const loop = ErrorMapper.wrapLoop(() => {
 mountPrototypeExtension();
 //mountCreepEnergyMonitor();
 globalConstantRegister();
@@ -25,6 +23,7 @@ if (!Memory.errors) {
     };
 }
 profiler.enable();
+//export const loop = ErrorMapper.wrapLoop(() => {
 export const loop = () => {
     profiler.wrap(function () {
         try {

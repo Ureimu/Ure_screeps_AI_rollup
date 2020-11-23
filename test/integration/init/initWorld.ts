@@ -5,6 +5,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import { IntegrationTestHelper } from "../helper";
+import { getRectWall } from "../utils/getRectWall";
 const { readFileSync } = require("fs");
 const { TerrainMatrix } = require("screeps-server-mockup");
 const DIST_MAIN_JS = "dist/main.js";
@@ -15,12 +16,7 @@ export async function initWorld(helper: IntegrationTestHelper, RCL: number): Pro
   const { db } = helper.server.common.storage;
   const C = helper.server.constants;
   const terrain: MockedTerrainMatrix = new TerrainMatrix();
-  const walls = [
-    [10, 10],
-    [10, 40],
-    [40, 10],
-    [40, 40]
-  ];
+  const walls = getRectWall([10,40],[40,10])
   _.each(walls, ([x, y]) => terrain.set(x, y, "wall"));
 
   await helper.server.world.addRoom("W0N0");
@@ -48,7 +44,7 @@ export async function initWorld(helper: IntegrationTestHelper, RCL: number): Pro
     "priority_queue": {binary:readFileSync(DIST_WASM,"base64")},
   };
   helper.player = await helper.server.world.addBot({ username: "Ureium", room: "W0N0", x: 21, y: 26, modules });
-  await helper.player.console(`Memory.rooms.W0N0.center = [24, 24]`);
+  await helper.player.console(`Game.profiler.reset();Game.profiler.background()`);
   await Promise.all([
     db["rooms.objects"].update(
       { _id: controller._id },

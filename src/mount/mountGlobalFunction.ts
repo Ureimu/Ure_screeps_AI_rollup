@@ -1,5 +1,4 @@
 import { getCutTiles, getMinCut, pruneDeadEnds, testMinCutSubset } from "construction/utils/minCut";
-import actionCounter from "utils/actionCounter";
 import downloader from "utils/downloader";
 import profiler from "utils/profiler";
 
@@ -37,8 +36,6 @@ export function globalFunctionRegister(): void {//在global上写入全局函数
 
     global.war = {
     }
-
-    global.detail = actionCounter.singleTick; //打印所有任务的详细cpu消耗情况列表
 
     global.help = function ():string {
         return `profilerHelp
