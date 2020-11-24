@@ -51,6 +51,9 @@ function setupProfiler() {
       /* eslint-enable */
       console.log(download.split('\n').map((s) => s.trim()).join(''));
     },
+    callgrindStr() {
+      return Profiler.callgrind()
+    },
     restart() {
       if (Profiler.isProfiling()) {
         const filter = Memory.profiler.filter;

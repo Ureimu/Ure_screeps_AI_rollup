@@ -46,3 +46,9 @@ jobs:
         with:
           name: server
           path: server
+
+      - name: Update Data Artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: data
+          path: test/data
