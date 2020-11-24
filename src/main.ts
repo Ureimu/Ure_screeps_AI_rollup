@@ -3,7 +3,7 @@ import { mountPrototypeExtension } from "mount/mountPrototypeExtension";
 import profiler from "utils/profiler";
 import actionMonitor from "utils/actionMonitor"
 import creepWork from "./work/creep/index";
-//import './utils/bypass';
+import './utils/bypass';
 //import { mountCreepEnergyMonitor } from "utils/energyMonitor";
 import { errorStackVisualize } from "visual/roomVisual/GUIsetting";
 import manageCreep from "task/manager";
