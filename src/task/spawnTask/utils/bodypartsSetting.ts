@@ -19,12 +19,12 @@ export function getBpByRole(roleName: string, roomName: string) {
             if(getBpNum(roleList[key])<=50){
                 return roleList[key];
             } else {
-                let i = _.floor(
+                let i = Math.max(_.floor(
                     (50 -
                         getBpNum(roleList[key]) +
                         getBpNum([roleList[key][0]])) /
                         getBpNum([roleList[key][0]])
-                );
+                ),1);
                 roleList[key][0].repeat = i;
                 return roleList[key];
             }

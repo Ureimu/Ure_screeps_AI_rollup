@@ -24,24 +24,27 @@ export async function initWorld(helper: IntegrationTestHelper, RCL: number, spaw
             let roomName = `W${i}N${j}`
             await helper.server.world.addRoom(roomName);
             await helper.server.world.setTerrain(roomName, terrain);
+            if(roomName!=spawnRoom){
+                await helper.server.world.addRoomObject(roomName, "controller", 10, 10, { level: 1 });
+            }
+            await helper.server.world.addRoomObject(roomName, "source", 10, 40, {
+                energy: C.SOURCE_ENERGY_CAPACITY,
+                energyCapacity: C.SOURCE_ENERGY_CAPACITY,
+                ticksToRegeneration: 300
+            });
+            await helper.server.world.addRoomObject(roomName, "source", 40, 10, {
+                energy: C.SOURCE_ENERGY_CAPACITY,
+                energyCapacity: C.SOURCE_ENERGY_CAPACITY,
+                ticksToRegeneration: 300
+            });
+            await helper.server.world.addRoomObject(roomName, "mineral", 40, 40, {
+                mineralType: "X",
+                density: 3,
+                mineralAmount: C.MINERAL_DENSITY[3]
+            });
         }
     }
     const controller = await helper.server.world.addRoomObject(spawnRoom, "controller", 10, 10, { level: 1 });
-    await helper.server.world.addRoomObject(spawnRoom, "source", 10, 40, {
-        energy: C.SOURCE_ENERGY_CAPACITY,
-        energyCapacity: C.SOURCE_ENERGY_CAPACITY,
-        ticksToRegeneration: 300
-    });
-    await helper.server.world.addRoomObject(spawnRoom, "source", 40, 10, {
-        energy: C.SOURCE_ENERGY_CAPACITY,
-        energyCapacity: C.SOURCE_ENERGY_CAPACITY,
-        ticksToRegeneration: 300
-    });
-    await helper.server.world.addRoomObject(spawnRoom, "mineral", 40, 40, {
-        mineralType: "X",
-        density: 3,
-        mineralAmount: C.MINERAL_DENSITY[3]
-    });
 
     const modules = {
         main: readFileSync(DIST_MAIN_JS).toString(),

@@ -4,6 +4,7 @@ export function bpg(bodyparts: Array<bpgGene>): BodyPartConstant[] {
     具体使用示例：
     传入：[{'move':1,'work':1},{'move':2,'carry':2}]
     传出：['move','work','move','move','carry','carry']
+    repeat属性不可以为0！
     *
     * @param {Array<bpgGene>} bodyparts 一个由多个bpgGene类型构成的数组。
     * @returns {BodyPartConstant[]} 身体部件常量列表。
@@ -12,7 +13,7 @@ export function bpg(bodyparts: Array<bpgGene>): BodyPartConstant[] {
     let bodypartsList: BodyPartConstant[] = [];
     for (let i = 0, j = bodyparts.length; i < j; i++) {
         let repeatNum = 1;
-        if (bodyparts[i].repeat !== undefined) {
+        if (bodyparts[i].repeat !== undefined&&bodyparts[i].repeat!=0) {
             repeatNum = <number>bodyparts[i]["repeat"];
         }
         if (repeatNum == 1) {

@@ -45,3 +45,5 @@ export async function runRCLTest(RCL: number, _RCL: number, tickNum: number): Pr
         _.each(await helper.player.newNotifications, ({ message }) => console.log("[notification]", message));
     }
 }
+//storage.db["rooms.objects"].update({ room: "W3N7", type: "constructionSite" }, { $set: { progress: 99999 } })
+//storage.db["rooms.objects"].update({ room: "W3N7", type: "rampart" }, { $set: { hits: 3000000 } })

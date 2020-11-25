@@ -1,7 +1,6 @@
 import { RoomTask } from "./utils/RoomTask";
 import { PriorityQueue } from "./utils/PriorityQueue";
-import { spawnTaskList } from "./spawnTask";
-import { allocatingSpawnTask, autoPush } from "./utils/allocateAndPushTask";
+import { autoPush } from "./utils/allocateAndPushTask";
 
 
 export function manageTask(room:Room): void {

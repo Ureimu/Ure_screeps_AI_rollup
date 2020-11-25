@@ -13,6 +13,7 @@ interface Room {
 }
 
 interface StructureSpawn {
+    runSpawnTask():boolean,
     spawnTask():void,
 }
 

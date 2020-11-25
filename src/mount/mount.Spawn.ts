@@ -3,8 +3,17 @@ import { bpg, getBpEnergy } from "utils/bodypartsGenerator";
 
 // 自定义的 Spawn 的拓展
 export class SpawnExtension extends StructureSpawn {
-    spawnTask() {
+    runSpawnTask(){
         if (Game.time % 15 != 0 || this.room.energyAvailable < 300) {
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    spawnTask() {
+        if (!this.runSpawnTask()) {
             return;
         }
         let spawnQueue = taskPool.initQueue("spawnQueue", this.memory.taskPool);

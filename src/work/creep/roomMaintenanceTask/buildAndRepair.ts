@@ -28,6 +28,8 @@ export function buildAndRepair(creep: Creep): void {
             whatToDo = "build";
         } else if (wallsToFix.length>0){
             whatToDo = "repairWall";
+        } else {
+            whatToDo = "upgrade"
         }
         creep.say(whatToDo)
         switch (whatToDo) {
@@ -50,6 +52,16 @@ export function buildAndRepair(creep: Creep): void {
 
             case "repairWall":
                 repair(creep,wallsToFix);
+                break;
+
+            case "upgrade":
+                if (creep.upgradeController(<StructureController>creep.room.controller) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(<StructureController>creep.room.controller, {
+                        visualizePathStyle: {
+                            stroke: "#ffffff"
+                        }
+                    });
+                }
                 break;
             default:
                 break;

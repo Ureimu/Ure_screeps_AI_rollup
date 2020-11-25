@@ -11,7 +11,7 @@
 /node_modules
 /_book
 /build/*
-/test/data
+/test/data/*
 
 # TypeScript definitions installed by Typings
 /typings
