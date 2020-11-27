@@ -21,8 +21,8 @@ export function autoConstruction(room:Room) {
     switch ((Game.time - room.memory.constructionStartTime) % 100) {
         case 10:
             if (
-                !room.memory.construction["roadToSource"] ||
-                room.memory.construction["roadToSource"].constructionSitesCompleted != true
+                !room.memory.construction["roadAroundExtension"] ||
+                room.memory.construction["roadAroundExtension"].constructionSitesCompleted != true
             ) {
                 putRoadConstructionSites(roomName,[]);
             }

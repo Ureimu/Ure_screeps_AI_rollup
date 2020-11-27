@@ -1,7 +1,7 @@
 import { isPosEqual } from "utils/findEx";
 import { initConstructionMemory } from "construction/utils/initConstructionMemory";
 
-export function putContainerConstruction(room: Room, posList: RoomPosition[], name: string, bundledPos: RoomPositionStr) {
+export function putContainerConstruction(room: Room, posList: RoomPosition[], name: string, bundledPos: RoomPositionMem) {
     let listC = [];
     initConstructionMemory(room, name, STRUCTURE_CONTAINER);
     for (let i = 0; i < posList.length; i++) {

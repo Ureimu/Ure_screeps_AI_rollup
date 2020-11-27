@@ -1,61 +1,98 @@
-export function getCenterConstruction(room: Room){
-    if(room.controller){
-        if(!Memory.rooms[room.name].constructionSchedule.center){
-            let path = PathFinder.search(room.find(FIND_MY_SPAWNS)[0].pos,{pos:room.controller.pos,range: 3},{maxOps: 5000})
-            if(path.path.length>0){
-                let lastpoint = <RoomPosition>path.path.pop();
+import { isStructureinPos } from "utils/findEx";
+import { initConstructionScheduleMemory } from "./initConstructionMemory";
+import { RoomPositionMemListToRoomPositionList } from "./putConstructionSites";
+import { getPosfromStr, setPosToStr } from "./strToRoomPosition";
+
+export function getCenterConstruction(room: Room) {
+    initConstructionScheduleMemory(room, "center");
+    if (room.controller) {
+        if (!(Memory.rooms[room.name].constructionSchedule.center?.centerPos?.length == 4)) {
+            let lastpoint = Game.spawns[room.memory.firstSpawnName].pos;
+            if (lastpoint) {
+                console.log("[build] 未寻找建筑中心点，开始寻找。");
                 let posList = getBlankDiagonalSquarePlace(lastpoint);
-                return posList
-            }else {
-                console.log("[build] 寻找建筑中心点时发生错误：没有到controller的路径。");
-                return []
+                Memory.rooms[room.name].constructionSchedule.center.centerPos = posList;
+                return posList;
+            } else {
+                console.log("[build] 寻找建筑中心点时发生错误：没有firstSpawnName。");
+                return [];
             }
-        }else{
-            return RoomPositionStrListToRoomPositionList(<RoomPositionStr[]>Memory.rooms[room.name].constructionSchedule.center.centerPos)
+        } else {
+            console.log("[build] 使用已寻找到的中心点作为中心布局");
+            return RoomPositionMemListToRoomPositionList(
+                <RoomPositionMem[]>Memory.rooms[room.name].constructionSchedule.center.centerPos
+            );
         }
-    }else{
+    } else {
         console.log("[build] 寻找建筑中心点时发生错误：房间没有controller。");
         return [];
     }
 }
 
-function RoomPositionStrListToRoomPositionList(posStrList:RoomPositionStr[]):RoomPosition[]{
-    let posList = [];
-    for(let posStr of posStrList){
-        posList.push(new RoomPosition(posStr.x,posStr.y,posStr.roomName));
-    }
-    return posList;
-}
-
-export function getBlankDiagonalSquarePlace(point:RoomPosition){
+export function getBlankDiagonalSquarePlace(point: RoomPosition) {
     let lastpoint = point;
-    let square = lastpoint.getSquare()
-    let numList=[[0,2],[1,1],[-1,1],[0,0]]
-    let sign = [[1,1],[1,-1],[-1,-1],[-1,1]]
-    let signNumListAll = []
-    let centerPos:RoomPosition[]=[];
-    for(let i = 0;i<4;i++){
-        let signNumList = numList
-        signNumList.map((pos,j)=>{pos=[pos[0]*sign[j][0],pos[1]*sign[j][1]]; return pos})
-        signNumListAll.push(signNumList)
+    //计算扩张一格后的正方形的所有位置
+    let squareExpandStrList: RoomPositionStr[] = [];
+    let squareExpandPosList: RoomPosition[] = [];
+    lastpoint.getSquare().forEach(pos => {
+        squareExpandStrList.push(setPosToStr(pos));
+    });
+    let squareExpand = new Set(squareExpandStrList);
+    let ExpandList: RoomPosition[] = [];
+    //扩张3次，最终正方形的边长为9
+    for(let i = 0 ; i<3;i++){
+        squareExpand.forEach((posStr: RoomPositionStr) => {
+            getPosfromStr(posStr)
+                .getSquare()
+                .forEach((posE: RoomPosition) => {
+                    ExpandList.push(posE);
+                });
+        });
+        ExpandList.forEach(pos => {
+            squareExpand.add(setPosToStr(pos));
+        });
+        ExpandList = [];
     }
-    for(let pos of square){
-        for(let i = 0;i<4;i++){
-            let rectPosList:RoomPosition[] = [];
-            for(let j = 0;j<4;j++){
-                let m = new RoomPosition(pos.x+signNumListAll[i][j][0],pos.y+signNumListAll[i][j][1],pos.roomName);
-                let x = m.lookFor(LOOK_STRUCTURES)
-                if(x.length!=0){
-                    rectPosList.splice(0)
-                    break;
-                }
-                rectPosList.push(m);
-            }
-            if(rectPosList.length == 4){
-                centerPos = rectPosList;
+    squareExpand.forEach((posStr: RoomPositionStr) => {
+        squareExpandPosList.push(getPosfromStr(posStr));
+    });
+    //计算中心位置
+    let axis = [
+        [0,1],
+        [1,0],
+        [0,-1],
+        [-1,0]
+    ]
+
+    let centerPos: RoomPosition[] = [];
+    for (let pos of squareExpandPosList) {
+        let rectPosList: RoomPosition[] = [];
+        for (let j = 0; j < 4; j++) {
+            let m = new RoomPosition(
+                pos.x + axis[j][0],
+                pos.y + axis[j][1],
+                pos.roomName
+            );
+            let x = m.lookFor(LOOK_STRUCTURES);
+            let terrain: Terrain[] = m.lookFor(LOOK_TERRAIN);
+            if (x.length != 0 || terrain[0] == "wall") {
+                //if (!isStructureinPos(x, STRUCTURE_ROAD)) {
+                rectPosList.splice(0);
                 break;
+                //}
             }
+            rectPosList.push(m);
+        }
+        if (rectPosList.length == 4) {
+            centerPos = rectPosList;
+            break;
         }
     }
-    return centerPos
+
+    if (centerPos.length == 0) {
+        console.log("[build] 无法确定中心布局位置。");
+    }else{
+        console.log("[build] 已经确定中心布局位置。");
+    }
+    return centerPos;
 }

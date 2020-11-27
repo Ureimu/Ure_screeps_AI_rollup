@@ -3,24 +3,30 @@ interface RoomMemory{
     roomControlStatus: number[],//用来与上一次建造时做比较，在每次升级时会重新建造一次
     construction: {
         [name:string]: constructionSitesInf
-    };
+    },
     constructionSchedule: {
         [name:string]: {
             constructionCompleted: boolean,
-            centerPos?:RoomPositionStr[]
+            centerPos?:RoomPositionMem[]
         }
-    }
+    },
+    firstSpawnName:string,
 }
 /**
- * 这个是为了和RoomPosition区分开的接口。
+ * 这个是为了和RoomPosition区分开的接口。只需要有x,y,roomName三个属性。
  *
- * @interface RoomPositionStr
+ * @interface RoomPositionMem
  */
-interface RoomPositionStr {
+interface RoomPositionMem {
     x: number,
     y: number,
     roomName: string
 }
+
+/**
+ * RoomPosition字符串，格式为x0y0rE0S0
+*/
+type RoomPositionStr = string
 
 interface constructionSitesInf{
     constructionSitesCompleted: boolean,
@@ -29,6 +35,7 @@ interface constructionSitesInf{
     memory: {
         [name:string]: any,
         bundledPos:RoomPositionStr[]
+        calculatedPosList?:RoomPositionStr[]
     }
 }
 

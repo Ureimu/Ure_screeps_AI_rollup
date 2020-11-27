@@ -1,5 +1,6 @@
 import { lookForStructureByPos } from "utils/findEx";
 import { initConstructionMemory, initConstructionScheduleMemory } from "construction/utils/initConstructionMemory";
+import { getPosfromStr, setPosToStr } from "construction/utils/strToRoomPosition";
 
 export function putTowerConstructionSites(roomName: string) {//TODO 改进放置位置
     let room = Game.rooms[roomName];
@@ -11,7 +12,8 @@ export function putTowerConstructionSites(roomName: string) {//TODO 改进放置
         road.pop();
         road.shift();
         road.shift();
-        for(let roadPos of road){
+        for(let roadPosStr of road){
+            let roadPos = getPosfromStr(roadPosStr);
             let pos = new RoomPosition(roadPos.x,roadPos.y,roadPos.roomName);
             let square = pos.getSquare();
             for(let exPos of square){
@@ -21,7 +23,7 @@ export function putTowerConstructionSites(roomName: string) {//TODO 改进放置
                     if(returnCode == ERR_RCL_NOT_ENOUGH){
                         return;
                     } else if(returnCode == OK){
-                        room.memory.construction["tower"].pos.push(exPos);
+                        room.memory.construction["tower"].pos.push(setPosToStr(exPos));
                     }
                 }
             }

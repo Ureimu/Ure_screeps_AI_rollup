@@ -1,4 +1,5 @@
 import { initConstructionScheduleMemory } from "construction/utils/initConstructionMemory";
+import { roadAroundExtension } from "./roadAroundExtension";
 import { roadAroundSpawn } from "./roadAroundSpawn";
 import { roadToController } from "./roadToController";
 import { roadToOutSource } from "./roadToOutSource";
@@ -6,7 +7,7 @@ import { roadToSource } from "./roadToSource";
 
 export function putRoadConstructionSites(roomName: string, outRoomName: string[]) {
     let room = Game.rooms[roomName];
-    let indexList = [roadToSource,roadToController,roadAroundSpawn];
+    let indexList = [roadAroundExtension,roadToSource,roadToController,roadAroundSpawn];
     initConstructionScheduleMemory(room,"baseRoad");
     for(let func of indexList){
         func(room);
