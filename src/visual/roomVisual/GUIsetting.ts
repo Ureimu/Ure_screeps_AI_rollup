@@ -11,10 +11,10 @@ export function roomVisualize(room:Room) {
                 width: 20,
                 height: 3,
                 background: "#000000",
-                opacity: 0.3
+                opacity: 0.5
             },
             child: printMulText({
-                content: `现在的游戏时间是${Game.time}tick\n该房间spawn在维持的creep的部件总数为${getBpSum(room.name)}`,
+                content: `现在的游戏时间是${Game.time}tick\n该房间spawn在维持的creep的部件总数为${getBpSum(room.name)}\n\n工地数：${room.find(FIND_CONSTRUCTION_SITES).length}`,
                 x: 0,
                 y: 0,
                 align: "left"
@@ -79,7 +79,7 @@ function printErrorList(err: string) {
                 width: 20,
                 height: 20,
                 background: "#000000",
-                opacity: 0.3
+                opacity: 0.5
             },
             child: printMulText({
                 content: err,

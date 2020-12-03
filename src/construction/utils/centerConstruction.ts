@@ -6,7 +6,7 @@ import { getPosfromStr, setPosToStr } from "./strToRoomPosition";
 export function getCenterConstruction(room: Room) {
     initConstructionScheduleMemory(room, "center");
     if (room.controller) {
-        if (!(Memory.rooms[room.name].constructionSchedule.center?.centerPos?.length == 4)) {
+        if (!(Memory.rooms[room.name].constructionSchedule.center.centerPos?.length == 4)) {
             let lastpoint = Game.spawns[room.memory.firstSpawnName].pos;
             if (lastpoint) {
                 console.log("[build] 未寻找建筑中心点，开始寻找。");
@@ -19,9 +19,7 @@ export function getCenterConstruction(room: Room) {
             }
         } else {
             console.log("[build] 使用已寻找到的中心点作为中心布局");
-            return RoomPositionMemListToRoomPositionList(
-                <RoomPositionMem[]>Memory.rooms[room.name].constructionSchedule.center.centerPos
-            );
+            return <RoomPositionStr[]>Memory.rooms[room.name].constructionSchedule.center.centerPos;
         }
     } else {
         console.log("[build] 寻找建筑中心点时发生错误：房间没有controller。");
@@ -94,5 +92,7 @@ export function getBlankDiagonalSquarePlace(point: RoomPosition) {
     }else{
         console.log("[build] 已经确定中心布局位置。");
     }
-    return centerPos;
+    let posStrList:RoomPositionStr[] = [];
+    centerPos.forEach((pos)=>{posStrList.push(setPosToStr(pos))})
+    return posStrList;
 }

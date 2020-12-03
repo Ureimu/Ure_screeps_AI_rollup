@@ -8,7 +8,7 @@ export function buildAndRepair(creep: Creep): void {
     );
 
     if (ifHarvesting) {
-        creep.getEnergy([{ innerSourceContainer: 900 }]);
+        creep.getEnergy([{ sourceContainer: 900 }]);
     } else {
         let whatToDo = "";
         let targetsToFix = creep.room.find(FIND_STRUCTURES, {
@@ -40,6 +40,9 @@ export function buildAndRepair(creep: Creep): void {
             case "build":
                 let cloestTarget = creep.pos.findClosestByRange(targets);
                 if (cloestTarget) {
+                    if(creep.pos.isEqualTo(cloestTarget.pos)){//避免卡住constructionSites
+                        creep.move(<DirectionConstant>_.random(1,8))//随机移动
+                    }
                     if (creep.build(cloestTarget) == ERR_NOT_IN_RANGE) {
                         creep.moveTo(cloestTarget, {
                             visualizePathStyle: {

@@ -1,5 +1,5 @@
-import { lookForStructureName } from "./findEx";
-import profiler from "./profiler";
+import { lookForStructureName } from "utils/findEx";
+import profiler from "utils/profiler";
 
 let fun = {
     getEnergyAction,
@@ -37,7 +37,7 @@ function getName(target:AnyStructure|Creep,roomName:string):string{
         name = target.name;
     }else{
         if((name = lookForStructureName(target)) == ""){
-            name = roomName+"-"+target?.structureType
+            name = roomName+"-"+target?.structureType//可能上一个tick对象还存在，这个tick对象就不存在了，考虑缓存上一个tick的对象。
         }else{
             name = roomName+"-"+name
         }

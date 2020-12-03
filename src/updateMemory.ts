@@ -32,6 +32,7 @@ function initRoomMemory(room:Room): void {
                 constructionSchedule: {},
                 constructionStartTime: Game.time,
                 roomControlStatus: [1],
+                firstSpawnName: room.find(FIND_MY_SPAWNS)[0].name,
             }
         }
     }

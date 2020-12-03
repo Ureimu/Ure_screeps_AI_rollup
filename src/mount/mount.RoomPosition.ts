@@ -1,7 +1,7 @@
 
 // 自定义的 RoomPosition 的拓展
 export class RoomPositionExtension extends RoomPosition {
-        /**
+    /**
      * 返回一个在该pos正方形周围的pos数组,顺序为按照时钟12点为起点顺时针旋转.
      *
      * @returns 在该pos正方形周围的pos数组.
@@ -10,6 +10,32 @@ export class RoomPositionExtension extends RoomPosition {
         let squareList: RoomPosition[] = [];
         let squarePos: number[] = [0, 1, 1, 1, 1, 0, 1, -1, 0, -1, -1, -1, -1, 0, -1, 1]
         for (let i = 0; i < 16; i += 2) {
+            squareList.push(new RoomPosition(this.x + squarePos[i], this.y + squarePos[i + 1], this.roomName))
+        }
+        return squareList;
+    };
+    /**
+     * 返回一个在该pos正方形周围的上下左右的pos数组,顺序为按照时钟12点为起点顺时针旋转.
+     *
+     * @returns 在该pos正方形周围的上下左右的pos数组.
+     */
+    getDiagSquare() {
+        let squareList: RoomPosition[] = [];
+        let squarePos: number[] = [0, 1, 1, 0, 0, -1, -1, 0]
+        for (let i = 0; i < 8; i += 2) {
+            squareList.push(new RoomPosition(this.x + squarePos[i], this.y + squarePos[i + 1], this.roomName))
+        }
+        return squareList;
+    };
+    /**
+     * 返回一个在该pos正方形周围的四个角的pos数组,顺序为按照时钟12点为起点顺时针旋转.
+     *
+     * @returns 在该pos正方形周围的四个角的pos数组.
+     */
+    getQuadSquare() {
+        let squareList: RoomPosition[] = [];
+        let squarePos: number[] = [1, 1, 1, -1, -1, -1, -1, 1]
+        for (let i = 0; i < 8; i += 2) {
             squareList.push(new RoomPosition(this.x + squarePos[i], this.y + squarePos[i + 1], this.roomName))
         }
         return squareList;
@@ -28,6 +54,9 @@ export class RoomPositionExtension extends RoomPosition {
         }
         return BlankSpace;
     };
+    toStr():string{
+        return `x${this.x}y${this.y}r${this.roomName}`
+    }
     // 填充所有 spawn 和 extension
     fillSpawnEngry() {
         // 代码实现...

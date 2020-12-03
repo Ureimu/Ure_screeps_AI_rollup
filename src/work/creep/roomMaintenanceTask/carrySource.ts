@@ -10,7 +10,7 @@ export function carrySource(creep: Creep): void {
     );
 
     if (ifHarvesting) {
-        creep.getEnergy([{ innerSourceContainer: 0 }, { spawnSourceContainer: 0 }]);
+        creep.getEnergy([{centerLink: 0},{ sourceContainer: 0 }, { spawnSourceContainer: 0 }, { storage: 0 }]);
     } else {
         let targets = findSpawnOrExtensionNotFull(creep);
         if (targets.length > 0) {
@@ -25,7 +25,8 @@ export function carrySource(creep: Creep): void {
         } else {
             let gList = [
                 { controllerSourceContainer: { isStorable: true, upperLimit: 1500 } },
-                { spawnSourceContainer: { isStorable: true, upperLimit: 1500 } },
+                //{ spawnSourceContainer: { isStorable: true, upperLimit: 1500 } },
+                { storage: { isStorable: true, upperLimit: 1000000 } }
                 // { tower: { isStorable: true, upperLimit: 400 } }
             ];
             doStuff(creep, gList);

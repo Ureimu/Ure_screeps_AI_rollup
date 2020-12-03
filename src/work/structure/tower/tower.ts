@@ -1,15 +1,17 @@
-import { pushCarryTask } from "task/utils/pushCreepTask";
 import { CarryTask } from "task/utils/TaskClass";
 
 export function tower(tower: StructureTower) {
-    if(tower.store["energy"]<600 && !tower.room.memory.construction["tower"].memory["hasPushed"]){
+    if(!tower.room.memory.construction["tower"].memory[tower.id])tower.room.memory.construction["tower"].memory[tower.id]={
+        hasPushed:false,
+    }
+    if(tower.store["energy"]<600 && !tower.room.memory.construction["tower"].memory[tower.id].hasPushed){
         let taskInf:CarryTaskInf = {
             priority:6,
             isRunning:false,
             taskInf:
             {
                 resourceType:RESOURCE_ENERGY,
-                structureCarryFrom:"innerSourceContainer",
+                structureCarryFrom:"sourceContainer",
                 structureCarryTo:"tower",
                 resourceNumber:600,
                 state:[]
@@ -17,11 +19,11 @@ export function tower(tower: StructureTower) {
             taskType:""
         }
         let task = new CarryTask(taskInf)
-        pushCarryTask(tower.room.name,task.task);
-        tower.room.memory.construction["tower"].memory["hasPushed"] = true;
+        task.pushTask(tower.room)
+        tower.room.memory.construction["tower"].memory[tower.id].hasPushed = true;
     }
 
-    if(tower.store["energy"]>600 && tower.room.memory.construction["tower"].memory["hasPushed"]){
-        tower.room.memory.construction["tower"].memory["hasPushed"] = false;
+    if(tower.store["energy"]>600 && tower.room.memory.construction["tower"].memory[tower.id].hasPushed){
+        tower.room.memory.construction["tower"].memory[tower.id].hasPushed = false;
     }
 }

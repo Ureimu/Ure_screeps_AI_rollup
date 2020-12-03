@@ -7,10 +7,19 @@ interface RoomMemory{
     constructionSchedule: {
         [name:string]: {
             constructionCompleted: boolean,
-            centerPos?:RoomPositionMem[]
+            layout?:formedLayout,
+            [name:string]: any;
+            centerPos?:any
         }
     },
     firstSpawnName:string,
+}
+
+type formedLayout= {
+    [structureName in BuildableStructureConstant]?:
+    {
+        [name:string]: string[],
+    };
 }
 /**
  * 这个是为了和RoomPosition区分开的接口。只需要有x,y,roomName三个属性。

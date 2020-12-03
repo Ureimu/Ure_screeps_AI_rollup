@@ -106,14 +106,14 @@ interface GUIclass {
      *
      * @memberof GUIclass
      */
-    draw: <T extends elementsConstant>(visual: RoomVisual, map: map<T>[]) => void;
+    draw: <T extends elementsConstant>(visual: RoomVisual, map: map<T>[]) => RoomVisual;
 
     /**
      * 迭代循环布局结构。
      *
      * @memberof GUIclass
      */
-    drawMap: <T extends elementsConstant>(visual: RoomVisual, map: map<T>[], x: number, y: number) => void;
+    drawMap: <T extends elementsConstant>(visual: RoomVisual, map: map<T>[], x: number, y: number) => RoomVisual;
 
     [name: string]:
         | standardReturnelementsLayout
@@ -310,6 +310,14 @@ interface Text extends baseLayout {
      * @memberof Text
      */
     backgroundPadding?: number;
+
+    /**
+     * 字体颜色。
+     *
+     * @type {string}
+     * @memberof Text
+     */
+    color?:string
 }
 
 /**

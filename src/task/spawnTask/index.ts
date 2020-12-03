@@ -9,6 +9,7 @@ import { ferret } from "./outwardsTask/outwardsSource/ferret";
 import { oCarrySource } from "./outwardsTask/outwardsSource/oCarrySource";
 import { oClaimer } from "./outwardsTask/outwardsSource/oClaimer";
 import { oHarvestSource } from "./outwardsTask/outwardsSource/oHarvestSource";
+import { centerCarry } from "./roomMaintenceTask/centerCarry";
 
 export function spawnTaskList() {
     return {
@@ -18,6 +19,7 @@ export function spawnTaskList() {
             upgradeController: upgradeController,
             buildAndRepair: buildAndRepair,
             carryResource: carryResource,
+            centerCarry: centerCarry,
         },
         war:{
             sledge: sledge,

@@ -2,7 +2,6 @@ import { RoomTask } from "./utils/RoomTask";
 import { PriorityQueue } from "./utils/PriorityQueue";
 import { autoPush } from "./utils/allocateAndPushTask";
 
-
 export function manageTask(room:Room): void {
     // let startTime = Game.cpu.getUsed();
     // let cpuInf: {[roomName:string] :number} = {};

@@ -7,46 +7,45 @@
 const { ScreepsServer, stdHooks } = require("screeps-server-mockup");
 
 export class IntegrationTestHelper {
-  private mockedServer!: MockedServer;
+    private mockedServer!: MockedServer;
 
-  public get server(): MockedServer {
-    return this.mockedServer as MockedServer;
-  }
+    public get server(): MockedServer {
+        return this.mockedServer as MockedServer;
+    }
 
-  private mockedUser!: MockedUser;
+    private mockedUser!: MockedUser;
 
-  public get player(): MockedUser {
-    return this.mockedUser as MockedUser;
-  }
+    public get player(): MockedUser {
+        return this.mockedUser as MockedUser;
+    }
 
-  public set player(player: MockedUser) {
-    this.mockedUser = player;
-  }
+    public set player(player: MockedUser) {
+        this.mockedUser = player;
+    }
 
-  public async beforeEach(): Promise<void> {
-    this.mockedServer = new ScreepsServer();
-    await this.mockedServer.world.reset();
+    public async beforeEach(): Promise<void> {
+        this.mockedServer = new ScreepsServer();
+        await this.mockedServer.world.reset();
 
-    // Start server
-    await this.mockedServer.start();
-  }
+        // Start server
+        await this.mockedServer.start();
+    }
 
-  public async afterEach(): Promise<void> {
-    await this.mockedServer.stop();
-  }
+    public async afterEach(): Promise<void> {
+        await this.mockedServer.stop();
+    }
 }
 
 export const helper = new IntegrationTestHelper();
 
 beforeEach(async () => {
-  await helper.beforeEach();
+    await helper.beforeEach();
 });
 
 afterEach(async () => {
-  await helper.afterEach();
+    await helper.afterEach();
 });
 
 before(() => {
-  (stdHooks as StdHooks).hookWrite();
+    (stdHooks as StdHooks).hookWrite();
 });
-

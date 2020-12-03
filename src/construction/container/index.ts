@@ -1,6 +1,6 @@
 import { initConstructionScheduleMemory } from "construction/utils/initConstructionMemory";
 import { putControllerSourceContainerConstructionSites } from "./controllerSourceContainer";
-import { putInnerContainerConstructionSites } from "./innerSourceContainer";
+import { putInnerContainerConstructionSites } from "./sourceContainer";
 import { putSpawnSourceContainerConstructionSites } from "./spawnSourceContainer";
 
 export function putContainerConstructionSites(roomName: string) {

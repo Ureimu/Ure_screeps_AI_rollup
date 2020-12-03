@@ -4,6 +4,7 @@ import { sledge } from "./outwardsTask/war/sledge";
 import { buildAndRepair } from "./roomMaintenanceTask/buildAndRepair";
 import { carryResource } from "./roomMaintenanceTask/carryResource";
 import { carrySource } from "./roomMaintenanceTask/carrySource";
+import { centerCarry } from "./roomMaintenanceTask/centerCarry";
 import { harvestSource } from "./roomMaintenanceTask/harvestSource";
 import { upgradeController } from "./roomMaintenanceTask/upgradeController";
 
@@ -15,6 +16,7 @@ let creepWork ={
             upgradeController: upgradeController,
             buildAndRepair: buildAndRepair,
             carryResource: carryResource,
+            centerCarry: centerCarry,
             //war
             sledge:sledge,
             aio:aio,

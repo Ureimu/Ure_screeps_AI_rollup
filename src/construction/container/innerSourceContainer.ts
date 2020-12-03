@@ -6,7 +6,7 @@ export function putInnerContainerConstructionSites(room: Room) {
         let path = PathFinder.search(Game.spawns[room.memory.firstSpawnName].pos,{pos:sourceTargets[i].pos,range: 1},{maxOps: 5000});
         if(path.path.length>0){
             let lastpoint = <RoomPosition>path.path.pop();
-            putConstructionSites(room,[lastpoint],"innerSourceContainer",STRUCTURE_CONTAINER,sourceTargets[i].pos);
+            putConstructionSites(room,[lastpoint],"sourceContainer",STRUCTURE_CONTAINER,[sourceTargets[i].pos]);
         }
     }
 }

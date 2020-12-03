@@ -2,7 +2,7 @@ import { isPosEqual } from "utils/findEx";
 import { initConstructionMemory } from "construction/utils/initConstructionMemory";
 import { getPosfromStr, setPosToStr } from "./strToRoomPosition";
 
-export function putConstructionSites(room: Room, posList: RoomPosition[], name: string, structureType:StructureConstant, bundledPos?: RoomPosition) {
+export function putConstructionSites(room: Room, posList: RoomPosition[], name: string, structureType:StructureConstant, bundledPos?: RoomPosition[]) {
     let listC = [];
     let posStrList:string[] = [];
     posList.forEach((pos)=>{posStrList.push(setPosToStr(pos))})
@@ -31,7 +31,15 @@ export function putConstructionSites(room: Room, posList: RoomPosition[], name: 
                     break;
                 }
                 room.memory.construction[name].pos.push(setPosToStr(posList[i]));
-                if(bundledPos)room.memory.construction[name].memory.bundledPos.push(setPosToStr(bundledPos))
+                let posStrList:string[] = [];
+                if(bundledPos){
+                    bundledPos.forEach((pos)=>{posStrList.push(setPosToStr(pos))})
+                    let bundledPosSet = new Set(posStrList);
+                    room.memory.construction[name].memory.bundledPos.forEach((posStr)=>{bundledPosSet.add(posStr)})
+                    posStrList = [];
+                    bundledPosSet.forEach((posStr)=>{posStrList.push(posStr)})
+                    room.memory.construction[name].memory.bundledPos = posStrList;
+                }
                 countx[0]=1;
                 break;
             }
@@ -40,7 +48,15 @@ export function putConstructionSites(room: Room, posList: RoomPosition[], name: 
             listC[i] = room.createConstructionSite(posList[i], structureType);
             if (listC[i] == OK) {
                 room.memory.construction[name].pos.push(setPosToStr(posList[i]));
-                if(bundledPos)room.memory.construction[name].memory.bundledPos.push(setPosToStr(bundledPos))
+                let posStrList:string[] = [];
+                if(bundledPos){
+                    bundledPos.forEach((pos)=>{posStrList.push(setPosToStr(pos))})
+                    let bundledPosSet = new Set(posStrList);
+                    room.memory.construction[name].memory.bundledPos.forEach((posStr)=>{bundledPosSet.add(posStr)})
+                    posStrList = [];
+                    bundledPosSet.forEach((posStr)=>{posStrList.push(posStr)})
+                    room.memory.construction[name].memory.bundledPos = posStrList;
+                }
             }
         }
     }

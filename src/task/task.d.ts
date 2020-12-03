@@ -55,6 +55,16 @@ interface CarryTaskInf extends BaseTaskInf {
     };
 }
 
+interface LinkTaskInf extends BaseTaskInf {
+    taskInf: {
+        resourceType: RESOURCE_ENERGY;
+        linkTransferFrom: Id<StructureLink>;
+        linkTransferTo: Id<StructureLink>;
+        resourceNumber: number;
+        state:[]
+    };
+}
+
 /**
  * 任务队列，是任务对象组成的数组。
  *

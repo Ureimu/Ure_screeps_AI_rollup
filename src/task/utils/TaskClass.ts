@@ -1,3 +1,5 @@
+import taskPool from "./taskPool";
+
 export class BaseTask {
     public task: BaseTaskInf;
     constructor(priority: number = 10, isRunning: boolean = false) {
@@ -31,5 +33,25 @@ export class CarryTask extends BaseTask {
     constructor(taskInf:CarryTaskInf) {
         super(taskInf.priority, taskInf.isRunning);
         this.task = taskInf
+    }
+
+    pushTask(room:Room){
+        let m = taskPool.initQueue("carryTask",room.memory.taskPool);
+        m.push(this.task);
+        taskPool.setQueue(m,"carryTask",room.memory.taskPool);
+    }
+}
+
+export class LinkTask extends BaseTask {
+    public task: LinkTaskInf
+    constructor(taskInf:LinkTaskInf) {
+        super(taskInf.priority, taskInf.isRunning);
+        this.task = taskInf
+    }
+
+    pushTask(room:Room){
+        let m = taskPool.initQueue("linkTask",room.memory.taskPool);
+        m.push(this.task);
+        taskPool.setQueue(m,"linkTask",room.memory.taskPool);
     }
 }

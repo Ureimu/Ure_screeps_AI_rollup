@@ -1,3 +1,4 @@
+import { getGridLayout } from "construction/composition/gridLayout";
 import { getCutTiles, getMinCut, pruneDeadEnds, testMinCutSubset } from "construction/utils/minCut";
 import downloader from "utils/downloader";
 import profiler from "utils/profiler";
@@ -79,8 +80,15 @@ export function globalFunctionRegister(): void {//在global上写入全局函数
         }
     }
 
+    global.state = {};
+
+    global.test = {};
+
+    global.test.runGridLayout=getGridLayout
+
     global.test.download = downloader.download
 
     profiler.registerObject(global.stateLoop,"stateLoop");
 
 }
+//test.runGridLayout(Game.rooms["W8N3"])

@@ -1,4 +1,3 @@
-import { pushCarryTask } from "task/utils/pushCreepTask";
 import { CarryTask } from "task/utils/TaskClass";
 
 export function storage(storage: StructureStorage) {
@@ -9,7 +8,7 @@ export function storage(storage: StructureStorage) {
             taskInf:
             {
                 resourceType:RESOURCE_ENERGY,
-                structureCarryFrom:"innerSourceContainer",
+                structureCarryFrom:"sourceContainer",
                 structureCarryTo:"storage",
                 resourceNumber:50000,
                 state:[]
@@ -17,7 +16,7 @@ export function storage(storage: StructureStorage) {
             taskType:""
         }
         let task = new CarryTask(taskInf)
-        pushCarryTask(storage.room.name,task.task);
+        task.pushTask(storage.room);
         storage.room.memory.construction["storage"].memory["hasPushed"] = true;
     }
 

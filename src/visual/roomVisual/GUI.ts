@@ -30,6 +30,7 @@ export function GUIfun(): GUIclass {
     return {
         draw: function <T extends elementsConstant>(visual: RoomVisual, map: map<T>[]) {
             this.drawMap(visual, map, -0.5, -0.5);
+            return visual;
         },
 
         drawMap: function (this: GUIclass, visual: RoomVisual, map, x, y) {
@@ -84,6 +85,7 @@ export function GUIfun(): GUIclass {
                     this.drawMap(visual, child, box.x, box.y);
                 }
             }
+            return visual;
         },
 
         /**
@@ -151,7 +153,8 @@ export function GUIfun(): GUIclass {
                 backgroundColor: "#00000000",
                 stroke: "",
                 backgroundPadding: 0.3,
-                content: ""
+                content: "",
+                color:"#ffffff",
             };
 
             //从layout中导出style
@@ -171,6 +174,9 @@ export function GUIfun(): GUIclass {
                 }
                 if (layout.content != undefined) {
                     style.content = layout.content;
+                }
+                if (layout.color != undefined) {
+                    style.color = layout.color;
                 }
                 box.y += 0.5;
             }

@@ -320,19 +320,19 @@ export function createGraph(roomName: string, toProtect: Rectangle[],
         for (x = bounds.x1; x <= bounds.x2; x++) {
             for (y = bounds.y1; y <= bounds.y2; y++) {
                 if (roomArray[x][y] === UNWALKABLE) {
-                    visual.circle(x, y, {radius: 0.5, fill: '#1b1b9f', opacity: 0.3});
+                    visual.circle(x, y, {radius: 0.5, fill: '#1b1b9f', opacity: 0.07});
                 } else if (roomArray[x][y] > UNWALKABLE && roomArray[x][y] < NORMAL) {
-                    visual.circle(x, y, {radius: 0.5, fill: '#42cce8', opacity: 0.3});
+                    visual.circle(x, y, {radius: 0.5, fill: '#42cce8', opacity: 0.07});
                 } else if (roomArray[x][y] === NORMAL) {
-                    visual.circle(x, y, {radius: 0.5, fill: '#bdb8b8', opacity: 0.3});
+                    visual.circle(x, y, {radius: 0.5, fill: '#bdb8b8', opacity: 0.07});
                 } else if (roomArray[x][y] > NORMAL && roomArray[x][y] < PROTECTED) {
-                    visual.circle(x, y, {radius: 0.5, fill: '#9929e8', opacity: 0.3});
+                    visual.circle(x, y, {radius: 0.5, fill: '#9929e8', opacity: 0.07});
                 } else if (roomArray[x][y] === PROTECTED) {
-                    visual.circle(x, y, {radius: 0.5, fill: '#e800c6', opacity: 0.3});
+                    visual.circle(x, y, {radius: 0.5, fill: '#e800c6', opacity: 0.07});
                 } else if (roomArray[x][y] === CANNOT_BUILD) {
-                    visual.circle(x, y, {radius: 0.5, fill: '#e8000f', opacity: 0.3});
+                    visual.circle(x, y, {radius: 0.5, fill: '#e8000f', opacity: 0.07});
                 } else if (roomArray[x][y] === EXIT) {
-                    visual.circle(x, y, {radius: 0.5, fill: '#000000', opacity: 0.3});
+                    visual.circle(x, y, {radius: 0.5, fill: '#000000', opacity: 0.07});
                 }
             }
         }
@@ -420,7 +420,7 @@ export function getCutTiles(roomName: string, toProtect: Rectangle[],
         }
     }
     // Visualise Result
-    if (positions.length > 0) {
+    if (positions.length > 0 && visualize) {
         const visual = new RoomVisual(roomName);
         for (let i = positions.length - 1; i >= 0; i--) {
             visual.circle(positions[i].x, positions[i].y, {radius: 0.5, fill: '#ff7722', opacity: 0.9});
@@ -576,7 +576,7 @@ export function getMinCut(colonyName: string, preferCloserBarriers = true) {
     return coordToRoomPosition(positions,colony.name);
 }
 
-function coordToRoomPosition(coordList:Coord[],roomName:string){
+export function coordToRoomPosition(coordList:Coord[],roomName:string){
     let roomPositionList=[]
     for(const coord of coordList){
         roomPositionList.push(new RoomPosition(coord.x,coord.y,roomName))

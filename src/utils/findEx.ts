@@ -1,3 +1,5 @@
+import { getPosfromStr } from "construction/utils/strToRoomPosition";
+
 export function lookForStructure(
     room: Room,
     structureName: string,
@@ -30,7 +32,7 @@ export function lookForStructure(
     }
 }
 
-//不建议在寻找某pos上的所有建筑时使用此函数！
+//不建议在寻找某pos上的所有建筑时使用此函数！请直接使用lookFor(LOOK_STRUCTURES)
 export function lookForStructureByPos(
     pos: RoomPosition | undefined,
     structureType: StructureConstant,
@@ -61,7 +63,8 @@ export function lookForStructureByPos(
 export function lookForStructurePos(room: Room, structureName: string): RoomPosition[] | undefined {
     if (!!room.memory.construction[structureName] && !!room.memory.construction[structureName].pos[0]) {
         let posList = [];
-        for (let npos of room.memory.construction[structureName].pos) {
+        for (let posStr of room.memory.construction[structureName].pos) {
+            let npos = getPosfromStr(posStr)
             let Pos = new RoomPosition(npos.x, npos.y, npos.roomName);
             posList.push(Pos);
         }
@@ -78,7 +81,8 @@ export function lookForStructureName(structure?: AnyStructure|null): string {
     for (let con in structure.room.memory.construction) {
         let m: { [name: string]: constructionSitesInf } = structure.room.memory.construction;
         if (m[con].structureType == structure.structureType) {
-            for (let n of m[con].pos) {
+            for (let nStr of m[con].pos) {
+                let n = getPosfromStr(nStr)
                 if (isPosEqual(n, structure.pos)) {
                     return con;
                 }
@@ -88,7 +92,7 @@ export function lookForStructureName(structure?: AnyStructure|null): string {
     return "";
 }
 
-export function isPosEqual(pos1: RoomPosition|RoomPositionStr, pos2: RoomPosition|RoomPositionStr) {
+export function isPosEqual(pos1: RoomPosition|RoomPositionMem, pos2: RoomPosition|RoomPositionMem) {
     if (pos1.x == pos2.x && pos1.y == pos2.y && pos1.roomName == pos2.roomName) {
         return true;
     }
@@ -111,4 +115,13 @@ export function getStructureFromArray(room:Room,StructureArray: structureInfoLis
     }
     structureList.reverse();
     return structureList;
+}
+
+export function isStructureinPos(structures: Structure<StructureConstant>[], structureType: StructureConstant): boolean {
+    for (let structure of structures) {
+        if (structure.structureType == structureType) {
+            return true;
+        }
+    }
+    return false;
 }

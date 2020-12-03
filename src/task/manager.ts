@@ -5,7 +5,7 @@ import { RoomTask } from "./utils/RoomTask";
 let manageCreep = function () {
 
     // Automatically delete memory of missing creeps
-    if((Game.time+1) % 15 != 0)return;//在spawn执行任务之前运行
+    if((Game.time-1) % 15 != 0)return;//在spawn执行任务之前运行
     for (const name in Memory.creeps) {
         if (!(name in Game.creeps)) {
             for(let taskKindName in global.spawnTaskList){

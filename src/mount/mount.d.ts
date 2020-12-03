@@ -1,6 +1,7 @@
 interface RoomPosition {
     getSquare(): RoomPosition[],
-
+    getDiagSquare(): RoomPosition[],
+    getQuadSquare(): RoomPosition[],
 }
 
 interface Room {
@@ -79,6 +80,7 @@ declare namespace NodeJS {
         war:any,
         help():string,
         stateLoop:{[name: string]:()=>void},
+        state:{[name: string]:boolean|number}
         GUI:GUIclass
         test:any
     }

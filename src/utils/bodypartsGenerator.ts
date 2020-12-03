@@ -9,7 +9,6 @@ export function bpg(bodyparts: Array<bpgGene>): BodyPartConstant[] {
     * @param {Array<bpgGene>} bodyparts 一个由多个bpgGene类型构成的数组。
     * @returns {BodyPartConstant[]} 身体部件常量列表。
     */
-    if (!!global.GenedGetBodyparts && bodyparts == global.GenedGetBodyparts) return global.GenedBodypartsList; //如果上一次的和这一次的设置一样，则跳过。
     let bodypartsList: BodyPartConstant[] = [];
     for (let i = 0, j = bodyparts.length; i < j; i++) {
         let repeatNum = 1;
@@ -53,7 +52,6 @@ export function getBpNum(bodyparts: Array<bpgGene>, bodypartName?: BodyPartConst
     * @param {Array<bpgGene>} bodyparts 一个由多个bpgGene类型构成的数组。
     * @returns {BodyPartConstant[]} 身体部件常量列表。
     */
-    if (!!global.GenedGetBodypartsNum && bodyparts == global.GenedGetBodypartsNum) return global.GenedBodypartsNum; //如果上一次的和这一次的设置一样，则跳过。
     let bodypartNumber = 0;
     for (let i = 0, j = bodyparts.length; i < j; i++) {
         let repeatNum = 1;
@@ -78,8 +76,6 @@ export function getBpNum(bodyparts: Array<bpgGene>, bodypartName?: BodyPartConst
 }
 
 export function getBpEnergy(bodyparts: Array<bpgGene>): number {
-    if (!!global.GenedgetBpEnergyBodyparts && bodyparts == global.GenedgetBpEnergyBodyparts)
-        return global.GenedgetBpEnergyBodypartsCost; //如果上一次的和这一次的设置一样，则跳过。
     let enengyNum = 0;
     let bodypartCost = {
         move: 50,
