@@ -1,4 +1,6 @@
-export function centerLink(centerLink: StructureLink) {
-    if(!centerLink.room.memory.construction["centerLink"].memory.id)centerLink.room.memory.construction["centerLink"].memory.id=centerLink.id;
-
+export function centerLink(link: StructureLink): void {
+    if (!link.room.memory.construction.centerLink.memory[link.id])
+        link.room.memory.construction.centerLink.memory[link.id] = {
+            hasPushed: false
+        };
 }

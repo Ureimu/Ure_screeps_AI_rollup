@@ -1,17 +1,15 @@
 import { getGridLayout } from "./composition/gridLayout";
 import { runLayout } from "./composition/runLayOut";
 
-export function autoConstruction(room:Room) {
-    if(room.memory.roomControlStatus[0] != room.controller?.level){
-        for(let m in room.memory.construction){
-            room.memory.construction[m].constructionSitesCompleted=false;
+export function autoConstruction(room: Room): void {
+    if (room.memory.roomControlStatus[0] !== room.controller?.level) {
+        for (const m in room.memory.construction) {
+            room.memory.construction[m].constructionSitesCompleted = false;
         }
-        console.log("[build] 房间等级提升，重新检查建筑数量")
-        //FIXME 1.不停推pos导致内存溢出 fixed 2.由于下面的原因导致的find失灵
-        /** 原因大概是RoomPosition在转化为memory字符串后丢失了原来的对象属性，需要在使用memory时重新转换为RoomPosition对象 */
+        console.log("[build] 房间等级提升，重新检查建筑数量");
     }
-    room.memory.roomControlStatus[0] = <number>room.controller?.level;
-    room.memory.roomControlStatus[1] = <number>room.controller?.progress;
-    room.memory.roomControlStatus[2] = <number>room.controller?.progressTotal;
-    if(Game.time%100==0) runLayout(room,"gridLayout",getGridLayout);
+    room.memory.roomControlStatus[0] = room.controller?.level as number;
+    room.memory.roomControlStatus[1] = room.controller?.progress as number;
+    room.memory.roomControlStatus[2] = room.controller?.progressTotal as number;
+    if (Game.time % global.workRate.construction === 0) runLayout(room, "gridLayout", getGridLayout);
 }

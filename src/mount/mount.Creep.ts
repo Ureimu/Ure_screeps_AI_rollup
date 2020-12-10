@@ -1,71 +1,52 @@
-import { getBpNum } from "utils/bodypartsGenerator";
 import { getStructureFromArray, lookForStructureName } from "utils/findEx";
+import { getBpNum } from "utils/bodypartsGenerator";
 
 // 自定义的 Creep 的拓展
 export class CreepExtension extends Creep {
-    // 自定义敌人检测
-    checkEnemy() {
-        // 代码实现...
-    };
-    // 填充所有 spawn 和 extension
-    fillSpawnEngry() {
-        // 代码实现...
-    };
-    // 填充所有 tower
-    fillTower() {
-        // 代码实现...
-    };
-    harvestEnergy() {
-
-    }
-    pushBackTask() {
-    }
     // 其他更多自定义拓展
-    getEnergy(lowerLimit: Array<{[name:string]: number}> = [{}]): string {
-
-        let structureList: Array<{ [name: string]: AnyStoreStructure[]; }> = getStructureFromArray(this.room, lowerLimit);
-        let containersL = [];
-        for(let i = 0, j=structureList.length;i<j;i++){
-            let st1 = structureList[i];
-            for(let st2 in st1){
+    public getEnergy(lowerLimit: { [name: string]: number }[] = [{}]): string {
+        if (!this.memory.task.taskInf) return "";
+        const structureList: { [name: string]: AnyStoreStructure[] }[] = getStructureFromArray(this.room, lowerLimit);
+        const containersL = [];
+        for (let i = 0, j = structureList.length; i < j; i++) {
+            const st1 = structureList[i];
+            for (const st2 in st1) {
                 const containers = _.filter(
                     st1[st2],
                     (k: { store: { [x: string]: number } }) =>
                         k.store[RESOURCE_ENERGY] > 50 * getBpNum(this.memory.bodyparts, "carry") + lowerLimit[i][st2]
                 );
-                //console.log(this.name+" "+st2+" "+containers.length+" "+lowerLimit[i][st2]+" "+String(50 * getBpNum(this.memory.bodyparts, "carry") + lowerLimit[i][st2]));
-                if(containers.length>0){
+                // console.log(this.name+" "+st2+" "+containers.length+" "+lowerLimit[i][st2]+" "+String(50 * getBpNum(this.memory.bodyparts, "carry") + lowerLimit[i][st2]));
+                if (containers.length > 0) {
                     containersL.push(...containers);
-                    //console.log(""+lowerLimit[i][st2]);
+                    // console.log(""+lowerLimit[i][st2]);
                 }
             }
-            if(containersL.length!=0){
+            if (containersL.length !== 0) {
                 break;
             }
         }
 
-        let containersEnergy = this.pos.findClosestByRange(containersL);
-        let containersName = lookForStructureName(containersEnergy);
-        //console.log(this.name+" "+containersEnergy?.structureType+containersName);
+        const containersEnergy = this.pos.findClosestByRange(containersL);
+        const containersName = lookForStructureName(containersEnergy);
+        // console.log(this.name+" "+containersEnergy?.structureType+containersName);
 
         const target = this.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {
             filter: resource => {
                 return (
-                    resource.resourceType == RESOURCE_ENERGY &&
+                    resource.resourceType === RESOURCE_ENERGY &&
                     resource.amount > 50 * getBpNum(this.memory.bodyparts, "carry")
                 );
             }
         });
         const target2 = this.pos.findClosestByRange(FIND_RUINS, {
             filter: resource => {
-                return (
-                    resource.store["energy"] > 50 * getBpNum(this.memory.bodyparts, "carry")
-                );
+                return resource.store.energy > 50 * getBpNum(this.memory.bodyparts, "carry");
             }
         });
 
         if (containersEnergy) {
-            if (this.withdraw(containersEnergy, "energy") == ERR_NOT_IN_RANGE) {
+            if (this.withdraw(containersEnergy, "energy") === ERR_NOT_IN_RANGE) {
                 this.moveTo(containersEnergy, {
                     visualizePathStyle: {
                         stroke: "#ffffff"
@@ -80,7 +61,7 @@ export class CreepExtension extends Creep {
                     stroke: "#ffffff"
                 }
             });
-            this.withdraw(target2,"energy");
+            this.withdraw(target2, "energy");
             this.memory.task.taskInf.lastSource = "ruins";
             return "ruins";
         } else if (target) {
@@ -90,17 +71,18 @@ export class CreepExtension extends Creep {
                 }
             });
             this.pickup(target);
-            this.memory.task.taskInf.lastSource = "droppedEnergy"
+            this.memory.task.taskInf.lastSource = "droppedEnergy";
             return "droppedEnergy";
         } else {
             return "null";
         }
     }
 
-    transportResource(target: AnyStructure, resourceType: ResourceConstant, resourceNumber?:number) {
-        if(this.memory.task.taskInf.lastSource == lookForStructureName(target)) return false;
-        if(!target) return false;
-        if (this.transfer(target, resourceType,resourceNumber) == ERR_NOT_IN_RANGE) {
+    public transportResource(target: AnyStructure, resourceType: ResourceConstant, resourceNumber?: number): boolean {
+        if (!this.memory.task.taskInf) return false;
+        if (this.memory.task.taskInf.lastSource === lookForStructureName(target)) return false;
+        if (!target) return false;
+        if (this.transfer(target, resourceType, resourceNumber) === ERR_NOT_IN_RANGE) {
             this.moveTo(target, {
                 visualizePathStyle: {
                     stroke: "#ffffff"
@@ -110,9 +92,13 @@ export class CreepExtension extends Creep {
         return true;
     }
 
-    getResourceFromStructure(structure: AnyStoreStructure, resourceType: ResourceConstant,resourceNumber?:number) {
+    public getResourceFromStructure(
+        structure: AnyStoreStructure,
+        resourceType: ResourceConstant,
+        resourceNumber?: number
+    ): void {
         if (structure) {
-            if (this.withdraw(structure, resourceType,resourceNumber) == ERR_NOT_IN_RANGE) {
+            if (this.withdraw(structure, resourceType, resourceNumber) === ERR_NOT_IN_RANGE) {
                 this.moveTo(structure, {
                     visualizePathStyle: {
                         stroke: "#ffffff"

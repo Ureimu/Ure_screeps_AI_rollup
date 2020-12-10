@@ -1,20 +1,18 @@
-export function initConstructionMemory(room: Room,name: string,structureType: StructureConstant) {
-    if(!room.memory.construction[name]){
+export function initConstructionMemory(room: Room, name: string, structureType: StructureConstant): void {
+    if (!room.memory.construction[name]) {
         room.memory.construction[name] = {
             constructionSitesCompleted: false,
             pos: [],
-            structureType: structureType,
-            memory: {
-                bundledPos: []
-            },
+            structureType,
+            memory: {}
         };
     }
 }
 
-export function initConstructionScheduleMemory(room: Room,name: string){
-    if(!room.memory.constructionSchedule[name]){
+export function initConstructionScheduleMemory(room: Room, name: string): void {
+    if (!room.memory.constructionSchedule[name]) {
         room.memory.constructionSchedule[name] = {
-            constructionCompleted : false,
-        }
+            constructionCompleted: false
+        };
     }
 }

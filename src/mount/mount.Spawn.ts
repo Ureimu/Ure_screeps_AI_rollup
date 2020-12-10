@@ -1,56 +1,76 @@
-import taskPool from "../task/utils/taskPool";
+import { getBpByRole } from "task/spawnTask/utils/bodypartsSetting";
 import { bpg, getBpEnergy } from "utils/bodypartsGenerator";
-
+import taskPool from "../task/utils/taskPool";
 // 自定义的 Spawn 的拓展
 export class SpawnExtension extends StructureSpawn {
-    runSpawnTask(){
-        if (Game.time % 15 != 0 || this.room.energyAvailable < 300) {
+    public runSpawnTask(): boolean {
+        if (this.spawning) {
+            if (!this.memory.isSpawning) {
+                this.memory.isSpawning = true;
+            }
             return false;
-        }
-        else{
-            return true;
+        } else {
+            if (this.memory.isSpawning) {
+                this.memory.lastFinishSpawnTime = Game.time;
+                this.memory.isSpawning = false;
+            }
+            if (
+                (Game.time -
+                    this.memory.lastFinishSpawnTime -
+                    global.workRate.spawn *
+                        Math.floor((this.room.energyCapacityAvailable - this.room.energyAvailable) / 200 + 1) >
+                    0 ||
+                    this.room.energyAvailable < 300) &&
+                this.room.energyAvailable !== this.room.energyCapacityAvailable
+            ) {
+                return false;
+            } else {
+                return true;
+            }
         }
     }
 
-    spawnTask() {
+    public spawnTask(): void {
         if (!this.runSpawnTask()) {
             return;
         }
-        let spawnQueue = taskPool.initQueue("spawnQueue", this.memory.taskPool);
-        let taskList: SpawnTaskInf[] = [];
-        let ifOK: number = 1;
-        let errorList: number[] = [];
+        const spawnQueue = taskPool.initQueue("spawnQueue", this.memory.taskPool);
+        const taskList: SpawnTaskInf[] = [];
+        let ifOK = 1;
+        const errorList: number[] = [];
         do {
             if (spawnQueue.isEmpty()) {
-                let task = <SpawnTaskInf>spawnQueue.pop();
-                let inf = task.spawnInf;
-                if(typeof inf === 'undefined'){
+                const task = spawnQueue.pop() as SpawnTaskInf;
+                const inf = task.spawnInf;
+                if (typeof inf === "undefined") {
                     console.log("未定义spawn任务");
-                } else  {
+                } else {
+                    inf.bodyparts = getBpByRole(task.taskType, task.spawnInf.roomName);
                     ifOK = this.spawnCreep(bpg(inf.bodyparts), inf.creepName, {
-                        memory: { task: task, taskPool: {}, bodyparts: inf.bodyparts }
+                        memory: { task, taskPool: {}, bodyparts: inf.bodyparts }
                     });
-                    if (ifOK != OK) {
+                    if (ifOK !== OK) {
                         taskList.push(task);
                         errorList.push(ifOK);
-                    } else {//确认已经在生成creep时执行的任务
-                        //global.creepMemory[inf.creepName]={};
-                        if (!!Game.getObjectById(<Sponsor>task.sponsor)) {
-                            //Game.getObjectById(<Sponsor>task.sponsor)!.memory!.taskPool['spawnQueue'].pop()
+                    } else {
+                        // 确认已经在生成creep时执行的任务
+                        // global.creepMemory[inf.creepName]={};
+                        if (Game.getObjectById(task.sponsor as Sponsor)) {
+                            // Game.getObjectById(<Sponsor>task.sponsor)!.memory!.taskPool['spawnQueue'].pop()
                         }
                     }
                 }
             } else {
                 ifOK = OK;
             }
-        } while (ifOK != OK);
-        for (let task of taskList) {
+        } while (ifOK !== OK);
+        for (const task of taskList) {
             spawnQueue.push(task);
         }
         for (let i = 0, j = taskList.length; i < j; i++) {
-            //返回任务错误信息
-            let task = taskList[i];
-            let errorNum = errorList[i];
+            // 返回任务错误信息
+            const task = taskList[i];
+            const errorNum = errorList[i];
             let errorText = "";
             switch (errorNum) {
                 case -1:

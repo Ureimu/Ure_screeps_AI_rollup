@@ -1,4 +1,4 @@
-export function bpg(bodyparts: Array<bpgGene>): BodyPartConstant[] {
+export function bpg(bodyparts: bpgGene[]): BodyPartConstant[] {
     /**
      *一个bodyparts生成器。
     具体使用示例：
@@ -12,27 +12,27 @@ export function bpg(bodyparts: Array<bpgGene>): BodyPartConstant[] {
     let bodypartsList: BodyPartConstant[] = [];
     for (let i = 0, j = bodyparts.length; i < j; i++) {
         let repeatNum = 1;
-        if (bodyparts[i].repeat !== undefined&&bodyparts[i].repeat!=0) {
-            repeatNum = <number>bodyparts[i]["repeat"];
+        if (bodyparts[i].repeat !== undefined && bodyparts[i].repeat !== 0) {
+            repeatNum = bodyparts[i].repeat as number;
         }
-        if (repeatNum == 1) {
-            for (let key in bodyparts[i]) {
-                if (BODYPARTS_ALL.includes(<BodyPartConstant>key)) {
-                    for (let i1 = 0, j1 = <number>bodyparts[i][<BodyPartConstant>key]; i1 < j1; i1++) {
-                        bodypartsList.push(<BodyPartConstant>key);
+        if (repeatNum === 1) {
+            for (const key in bodyparts[i]) {
+                if (BODYPARTS_ALL.includes(key as BodyPartConstant)) {
+                    for (let i1 = 0, j1 = bodyparts[i][key as BodyPartConstant] as number; i1 < j1; i1++) {
+                        bodypartsList.push(key as BodyPartConstant);
                     }
                 }
             }
         } else {
-            let nowList: BodyPartConstant[] = [];
-            for (let key in bodyparts[i]) {
-                if (BODYPARTS_ALL.includes(<BodyPartConstant>key)) {
-                    for (let i1 = 0, j1 = <number>bodyparts[i][<BodyPartConstant>key]; i1 < j1; i1++) {
-                        nowList.push(<BodyPartConstant>key);
+            const nowList: BodyPartConstant[] = [];
+            for (const key in bodyparts[i]) {
+                if (BODYPARTS_ALL.includes(key as BodyPartConstant)) {
+                    for (let i1 = 0, j1 = bodyparts[i][key as BodyPartConstant] as number; i1 < j1; i1++) {
+                        nowList.push(key as BodyPartConstant);
                     }
                 }
             }
-            for (let i = 0; i < repeatNum; i++) {
+            for (let k = 0; k < repeatNum; k++) {
                 bodypartsList = bodypartsList.concat(nowList);
             }
         }
@@ -42,7 +42,7 @@ export function bpg(bodyparts: Array<bpgGene>): BodyPartConstant[] {
     return bodypartsList;
 }
 
-export function getBpNum(bodyparts: Array<bpgGene>, bodypartName?: BodyPartConstant): number {
+export function getBpNum(bodyparts: bpgGene[], bodypartName?: BodyPartConstant): number {
     /**
      *一个bodyparts生成器。
     具体使用示例：
@@ -56,16 +56,16 @@ export function getBpNum(bodyparts: Array<bpgGene>, bodypartName?: BodyPartConst
     for (let i = 0, j = bodyparts.length; i < j; i++) {
         let repeatNum = 1;
         if (bodyparts[i].repeat !== undefined) {
-            repeatNum = <number>bodyparts[i]["repeat"];
+            repeatNum = bodyparts[i].repeat as number;
         }
-        for (let key in <bpgGene>bodyparts[i]) {
-            if(typeof bodypartName !== "undefined"){
-                if (key == bodypartName) {
-                    bodypartNumber += <number>bodyparts[i][key] * repeatNum;
+        for (const key in bodyparts[i]) {
+            if (typeof bodypartName !== "undefined") {
+                if (key === bodypartName) {
+                    bodypartNumber += (bodyparts[i][key] as number) * repeatNum;
                 }
             } else {
-                if (BODYPARTS_ALL.includes(<BodyPartConstant>key)){
-                    bodypartNumber += <number>bodyparts[i][<BodyPartConstant>key] * repeatNum;
+                if (BODYPARTS_ALL.includes(key as BodyPartConstant)) {
+                    bodypartNumber += (bodyparts[i][key as BodyPartConstant] as number) * repeatNum;
                 }
             }
         }
@@ -75,9 +75,9 @@ export function getBpNum(bodyparts: Array<bpgGene>, bodypartName?: BodyPartConst
     return bodypartNumber;
 }
 
-export function getBpEnergy(bodyparts: Array<bpgGene>): number {
+export function getBpEnergy(bodyparts: bpgGene[]): number {
     let enengyNum = 0;
-    let bodypartCost = {
+    const bodypartCost = {
         move: 50,
         work: 100,
         carry: 50,
@@ -90,22 +90,22 @@ export function getBpEnergy(bodyparts: Array<bpgGene>): number {
     for (let i = 0, j = bodyparts.length; i < j; i++) {
         let repeatNum = 1;
         if (bodyparts[i].repeat !== undefined) {
-            repeatNum = <number>bodyparts[i]["repeat"];
+            repeatNum = bodyparts[i].repeat as number;
         }
-        if (repeatNum == 1) {
-            for (let key in bodyparts[i]) {
-                if (BODYPARTS_ALL.includes(<BodyPartConstant>key)) {
-                    for (let i1 = 0, j1 = <number>bodyparts[i][<BodyPartConstant>key]; i1 < j1; i1++) {
-                        enengyNum += bodypartCost[<BodyPartConstant>key];
+        if (repeatNum === 1) {
+            for (const key in bodyparts[i]) {
+                if (BODYPARTS_ALL.includes(key as BodyPartConstant)) {
+                    for (let i1 = 0, j1 = bodyparts[i][key as BodyPartConstant] as number; i1 < j1; i1++) {
+                        enengyNum += bodypartCost[key as BodyPartConstant];
                     }
                 }
             }
         } else {
-            let nowEnergy: number = 0;
-            for (let key in bodyparts[i]) {
-                if (BODYPARTS_ALL.includes(<BodyPartConstant>key)) {
-                    for (let i1 = 0, j1 = <number>bodyparts[i][<BodyPartConstant>key]; i1 < j1; i1++) {
-                        nowEnergy += bodypartCost[<BodyPartConstant>key];
+            let nowEnergy = 0;
+            for (const key in bodyparts[i]) {
+                if (BODYPARTS_ALL.includes(key as BodyPartConstant)) {
+                    for (let i1 = 0, j1 = bodyparts[i][key as BodyPartConstant] as number; i1 < j1; i1++) {
+                        nowEnergy += bodypartCost[key as BodyPartConstant];
                     }
                 }
             }
@@ -116,4 +116,3 @@ export function getBpEnergy(bodyparts: Array<bpgGene>): number {
     global.GenedgetBpEnergyBodypartsCost = enengyNum;
     return enengyNum;
 }
-

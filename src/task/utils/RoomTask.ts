@@ -14,47 +14,47 @@ export class RoomTask {
     public roomName: string;
     public roomTaskName: string;
 
-    constructor(roomName: string, roomTaskName: string, pushAtBeginning:boolean = false) {
+    public constructor(roomName: string, roomTaskName: string, pushAtBeginning = false) {
         this.roomName = roomName;
         this.roomTaskName = roomTaskName;
-        if(typeof Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName] == 'undefined'){
+        if (typeof Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName] == "undefined") {
             Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName] = {
                 isMyRoom: false,
-                //interval: 1500,
+                // interval: 1500,
                 runNow: true,
                 ifPushNewSpawnTask: true,
                 NewSpawnTaskQueue: [],
                 ifAllocateNewSpawnTaskToSpawn: true,
-                //nextPushTimePoint: Game.time + 1500,
+                // nextPushTimePoint: Game.time + 1500,
                 hasPushed: pushAtBeginning,
-                hasPushedToSpawn: false,
+                hasPushedToSpawn: false
             };
         }
     }
 
     /**
-    *
-    * 初始化一个房间任务对象。
-    * @param {boolean} ismyRoom 是否判断该房间为已经拥有的房间，如果判断为没有拥有的房间，则到时间也不会执行任务
-    * @param {boolean} runNow 是否立即执行，nextPushTimePoint的值会因此立即重置。
-    * @param {boolean} ifPushNewSpawnTask 传入值被用来判断是否在interval到了的时候进行新的生成creep任务推送。
-    * @param {TaskQueue} NewSpawnTaskQueue 新的spawn任务对象。会被用来推送。
-    * @param {boolean} ifAllocateNewSpawnTaskToSpawn 是否在到时间后分配任务到spawn,如果现在不分配，会在下一次一起分配。
-    * @param {boolean} hasPushed 是否已经完成推送任务到NewSpawnTaskQueue。
-    *
-    * @memberof RoomTask
-    */
-    inits() {
+     *
+     * 初始化一个房间任务对象。
+     * @param {boolean} ismyRoom 是否判断该房间为已经拥有的房间，如果判断为没有拥有的房间，则到时间也不会执行任务
+     * @param {boolean} runNow 是否立即执行，nextPushTimePoint的值会因此立即重置。
+     * @param {boolean} ifPushNewSpawnTask 传入值被用来判断是否在interval到了的时候进行新的生成creep任务推送。
+     * @param {TaskQueue} NewSpawnTaskQueue 新的spawn任务对象。会被用来推送。
+     * @param {boolean} ifAllocateNewSpawnTaskToSpawn 是否在到时间后分配任务到spawn,如果现在不分配，会在下一次一起分配。
+     * @param {boolean} hasPushed 是否已经完成推送任务到NewSpawnTaskQueue。
+     *
+     * @memberof RoomTask
+     */
+    public inits(): void {
         Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName] = {
             isMyRoom: false,
-            //interval: 1500,
+            // interval: 1500,
             runNow: true,
             ifPushNewSpawnTask: true,
             NewSpawnTaskQueue: [],
             ifAllocateNewSpawnTaskToSpawn: true,
-            //nextPushTimePoint: Game.time + 1500,
+            // nextPushTimePoint: Game.time + 1500,
             hasPushed: false,
-            hasPushedToSpawn: false,
+            hasPushedToSpawn: false
         };
     }
 
@@ -69,37 +69,41 @@ export class RoomTask {
      * -3:dryRun执行成功。
      * @memberof RoomTask
      */
-    run(dryRun: boolean=false) {
-        if(/*Game.time!=this.nextPushTimePoint &&*/this.runNow!=true){
+    public run(dryRun = false): number {
+        if (/* Game.time!=this.nextPushTimePoint &&*/ this.runNow !== true) {
             return -1;
         }
 
-        if(this.isMyRoom){
-            if (!!Game.rooms[this.roomName] && Game.rooms[this.roomName].controller && Game.rooms[this.roomName].controller?.my) {
+        if (this.isMyRoom) {
+            if (
+                !!Game.rooms[this.roomName] &&
+                Game.rooms[this.roomName].controller &&
+                Game.rooms[this.roomName].controller?.my
+            ) {
                 return -2;
             }
         }
 
-        //this.runNow=false;
-        if(this.ifPushNewSpawnTask&&!dryRun){
-            let roomSpawnQueue = taskPool.initQueue("spawnQueue", Memory.rooms[this.roomName].taskPool);
-            let NewSpawnTaskQueue = taskPool.initQueueFromTaskQueue(this.NewSpawnTaskQueue);
-            while(taskPool.transTask(NewSpawnTaskQueue,roomSpawnQueue));
+        // this.runNow=false;
+        if (this.ifPushNewSpawnTask && !dryRun) {
+            const roomSpawnQueue = taskPool.initQueue("spawnQueue", Memory.rooms[this.roomName].taskPool);
+            const NewSpawnTaskQueue = taskPool.initQueueFromTaskQueue(this.NewSpawnTaskQueue);
+            while (taskPool.transTask(NewSpawnTaskQueue, roomSpawnQueue));
             taskPool.setQueue(roomSpawnQueue, "spawnQueue", Memory.rooms[this.roomName].taskPool);
-            taskPool.setQueueFromTaskQueue(NewSpawnTaskQueue,this.NewSpawnTaskQueue);
-            this.hasPushed=true;
+            taskPool.setQueueFromTaskQueue(NewSpawnTaskQueue, this.NewSpawnTaskQueue);
+            this.hasPushed = true;
             return 0;
         }
-        if(dryRun){
-            return -3
+        if (dryRun) {
+            return -3;
         }
         return 1;
     }
 
-    pushTask(task:SpawnTaskInf) {
+    public pushTask(task: SpawnTaskInf): void {
         this.NewSpawnTaskQueue.push(task);
     }
-/*
+    /*
     get interval() {
         return Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].interval;
     }
@@ -108,49 +112,48 @@ export class RoomTask {
     }
 */
 
-    pushTaskToSpawn(task:SpawnTaskInf) {
+    public pushTaskToSpawn(task: SpawnTaskInf): void {
         this.pushTask(task);
         this.hasPushedToSpawn = false;
         this.run();
     }
 
-
-    get isMyRoom() {
+    public get isMyRoom(): boolean {
         return Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].isMyRoom;
     }
-    set isMyRoom(bool: boolean) {
+    public set isMyRoom(bool: boolean) {
         Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].isMyRoom = bool;
     }
 
-    get runNow() {
+    public get runNow(): boolean {
         return Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].runNow;
     }
-    set runNow(bool: boolean) {
+    public set runNow(bool: boolean) {
         Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].runNow = bool;
     }
 
-    get ifPushNewSpawnTask() {
+    public get ifPushNewSpawnTask(): boolean {
         return Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].ifPushNewSpawnTask;
     }
-    set ifPushNewSpawnTask(bool: boolean) {
+    public set ifPushNewSpawnTask(bool: boolean) {
         Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].ifPushNewSpawnTask = bool;
     }
 
-    get NewSpawnTaskQueue() {
+    public get NewSpawnTaskQueue(): SpawnTaskInf[] {
         return Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].NewSpawnTaskQueue;
     }
-    set NewSpawnTaskQueue(Queue: SpawnTaskInf[]) {
+    public set NewSpawnTaskQueue(Queue: SpawnTaskInf[]) {
         Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].NewSpawnTaskQueue = Queue;
     }
 
-    get ifAllocateNewSpawnTaskToSpawn() {
+    public get ifAllocateNewSpawnTaskToSpawn(): boolean {
         return Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].ifAllocateNewSpawnTaskToSpawn;
     }
-    set ifAllocateNewSpawnTaskToSpawn(bool: boolean) {
+    public set ifAllocateNewSpawnTaskToSpawn(bool: boolean) {
         Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].ifAllocateNewSpawnTaskToSpawn = bool;
     }
 
-/*
+    /*
     get nextPushTimePoint() {
         return Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].nextPushTimePoint;
     }
@@ -159,17 +162,17 @@ export class RoomTask {
     }
 */
 
-    get hasPushed() {
+    public get hasPushed(): boolean {
         return Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].hasPushed;
     }
-    set hasPushed(bool: boolean) {
+    public set hasPushed(bool: boolean) {
         Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].hasPushed = bool;
     }
 
-    get hasPushedToSpawn() {
+    public get hasPushedToSpawn(): boolean {
         return Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].hasPushedToSpawn;
     }
-    set hasPushedToSpawn(bool: boolean) {
+    public set hasPushedToSpawn(bool: boolean) {
         Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].hasPushedToSpawn = bool;
     }
 }

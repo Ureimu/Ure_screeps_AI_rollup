@@ -1,26 +1,29 @@
-import { CarryTask } from "task/utils/TaskClass";
+import { CarryTask } from "task/taskClass/extends/CarryTask";
 
-export function storage(storage: StructureStorage) {
-    if(storage.store["energy"]<50000 && !storage.room.memory.construction["storage"].memory["hasPushed"]){
-        let taskInf:CarryTaskInf = {
-            priority:4,
-            isRunning:false,
-            taskInf:
-            {
-                resourceType:RESOURCE_ENERGY,
-                structureCarryFrom:"sourceContainer",
-                structureCarryTo:"storage",
-                resourceNumber:50000,
-                state:[]
+export function runStorage(storage: StructureStorage): void {
+    if (!storage.room.memory.construction.storage.memory[storage.id])
+        storage.room.memory.construction.storage.memory[storage.id] = {
+            hasPushed: false
+        };
+    if (storage.store.energy < 50000 && !storage.room.memory.construction.storage.memory[storage.id].hasPushed) {
+        const taskInf: CarryTaskInf = {
+            priority: 4,
+            isRunning: false,
+            taskInf: {
+                resourceType: RESOURCE_ENERGY,
+                structureCarryFrom: "sourceContainer",
+                structureCarryTo: "storage",
+                resourceNumber: 50000,
+                state: []
             },
-            taskType:""
-        }
-        let task = new CarryTask(taskInf)
+            taskType: ""
+        };
+        const task = new CarryTask(taskInf);
         task.pushTask(storage.room);
-        storage.room.memory.construction["storage"].memory["hasPushed"] = true;
+        storage.room.memory.construction.storage.memory[storage.id].hasPushed = true;
     }
 
-    if(storage.store["energy"]>50000 && storage.room.memory.construction["storage"].memory["hasPushed"]){
-        storage.room.memory.construction["storage"].memory["hasPushed"] = false;
+    if (storage.store.energy > 50000 && storage.room.memory.construction.storage.memory[storage.id].hasPushed) {
+        storage.room.memory.construction.storage.memory[storage.id].hasPushed = false;
     }
 }

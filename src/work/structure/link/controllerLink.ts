@@ -1,27 +1,29 @@
-import { LinkTask } from "task/utils/TaskClass";
+import { LinkTask } from "task/taskClass/extends/LinkTask";
 
-export function controllerLink(controllerLink: StructureLink) {
-    if(!controllerLink.room.memory.construction["controllerLink"].memory.id)controllerLink.room.memory.construction["controllerLink"].memory.id=controllerLink.id
-    if(controllerLink.store["energy"]<100 && !controllerLink.room.memory.construction["controllerLink"].memory.hasPushed){
-        let taskInf:LinkTaskInf = {
-            priority:4,
-            isRunning:false,
-            taskInf:
-            {
-                resourceType:RESOURCE_ENERGY,
-                linkTransferFrom:controllerLink.room.memory.construction["centerLink"].memory.id,
-                linkTransferTo:controllerLink.id,
-                resourceNumber:50000,
-                state:[]
+export function controllerLink(link: StructureLink): void {
+    if (!link.room.memory.construction.controllerLink.memory[link.id])
+        link.room.memory.construction.controllerLink.memory[link.id] = {
+            hasPushed: false
+        };
+    if (link.store.energy < 100 && !link.room.memory.construction.controllerLink.memory[link.id].hasPushed) {
+        const taskInf: LinkTaskInf = {
+            priority: 4,
+            isRunning: false,
+            taskInf: {
+                resourceType: RESOURCE_ENERGY,
+                linkTransferFrom: Object.keys(link.room.memory.construction.centerLink.memory)[0] as Id<StructureLink>,
+                linkTransferTo: link.id,
+                resourceNumber: 50000,
+                state: []
             },
-            taskType:""
-        }
-        let task = new LinkTask(taskInf)
-        task.pushTask(controllerLink.room)
-        controllerLink.room.memory.construction["controllerLink"].memory.hasPushed = true;
+            taskType: ""
+        };
+        const task = new LinkTask(taskInf);
+        task.pushTask(link.room);
+        link.room.memory.construction.controllerLink.memory[link.id].hasPushed = true;
     }
 
-    if(controllerLink.store["energy"]>700 && controllerLink.room.memory.construction["controllerLink"].memory.hasPushed){
-        controllerLink.room.memory.construction["controllerLink"].memory.hasPushed = false;
+    if (link.store.energy > 700 && link.room.memory.construction.controllerLink.memory[link.id].hasPushed) {
+        link.room.memory.construction.controllerLink.memory[link.id].hasPushed = false;
     }
 }

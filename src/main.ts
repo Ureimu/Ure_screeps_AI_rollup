@@ -1,18 +1,18 @@
+import { allocatingSpawnTask } from "task/utils/allocateAndPushTask";
 import { globalFunctionRegister } from "mount/mountGlobalFunction";
 import { mountPrototypeExtension } from "mount/mountPrototypeExtension";
-import profiler from "utils/profiler";
-import actionMonitor from "utils/actionMonitor"
+import actionMonitor from "utils/actionMonitor";
 import creepWork from "./work/creep/index";
-import './utils/bypass';
-//import { mountCreepEnergyMonitor } from "utils/energyMonitor";
+import "../utils/bypass/index";
 import { errorStackVisualize } from "visual/roomVisual/GUIsetting";
-import manageCreep from "task/manager";
+import manageCreep from "task/manager/manageCreep";
 import { globalConstantRegister } from "mount/mountGlobalConstant";
-import { allocatingSpawnTask } from "task/utils/allocateAndPushTask";
+import * as profiler from "../utils/profiler";
+
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 mountPrototypeExtension();
-//mountCreepEnergyMonitor();
+// mountCreepEnergyMonitor();
 globalConstantRegister();
 globalFunctionRegister();
 if (!Memory.errors) {
@@ -23,18 +23,18 @@ if (!Memory.errors) {
     };
 }
 profiler.enable();
-//export const loop = ErrorMapper.wrapLoop(() => {
-export const loop = () => {
+// export const loop = ErrorMapper.wrapLoop(() => {
+export const loop = (): void => {
     profiler.wrap(function () {
         try {
             actionMonitor.getEnergyAction();
 
-            for(let stateCut in global.stateLoop){
+            for (const stateCut in global.stateLoop) {
                 global.stateLoop[stateCut]();
             }
-            //actionCounter.init();
+            // actionCounter.init();
             if (Game.cpu.bucket > 9000) {
-                if (!!Game.cpu.generatePixel) {
+                if (Game.cpu.generatePixel) {
                     Game.cpu.generatePixel();
                 }
             }
@@ -47,7 +47,7 @@ export const loop = () => {
                     room.roomVisualize();
                     room.runStructure();
                     room.manageTask();
-                }else{
+                } else {
                     room.initMemory(true);
                 }
             });
@@ -55,20 +55,19 @@ export const loop = () => {
             allocatingSpawnTask("spawnQueue");
             manageCreep();
 
-            for (let spawnName in Game.spawns) {
+            for (const spawnName in Game.spawns) {
                 if (!Game.spawns[spawnName].spawning) {
                     Game.spawns[spawnName].spawnTask();
                 }
             }
 
-            for (let creepName in Game.creeps) {
+            for (const creepName in Game.creeps) {
                 creepWork.run(Game.creeps[creepName]);
             }
 
-
-            //actionCounter.save(1500);
+            // actionCounter.save(1500);
         } catch (err) {
-            errorStackVisualize(err.stack);
+            errorStackVisualize((err as { stack: string }).stack);
         }
     });
-}; //);
+}; // );

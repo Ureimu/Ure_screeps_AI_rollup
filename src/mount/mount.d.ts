@@ -1,21 +1,21 @@
 interface RoomPosition {
-    getSquare(): RoomPosition[],
-    getDiagSquare(): RoomPosition[],
-    getQuadSquare(): RoomPosition[],
+    getSquare(): RoomPosition[];
+    getDiagSquare(): RoomPosition[];
+    getQuadSquare(): RoomPosition[];
 }
 
 interface Room {
-    autoSafeMode(): void,
-    initMemory(ifFarming:boolean):void,
-    autoPlanConstruction():void,
-    roomVisualize():void,
-    runStructure():void,
-    manageTask():void,
+    autoSafeMode(): void;
+    initMemory(ifFarming: boolean): void;
+    autoPlanConstruction(): void;
+    roomVisualize(): void;
+    runStructure(): void;
+    manageTask(): void;
 }
 
 interface StructureSpawn {
-    runSpawnTask():boolean,
-    spawnTask():void,
+    runSpawnTask(): boolean;
+    spawnTask(): void;
 }
 
 interface Source {
@@ -24,7 +24,7 @@ interface Source {
      *
      * @returns {number} 非wall的空格个数
      */
-    checkBlankSpace(): RoomPosition[],
+    checkBlankSpace(): RoomPosition[];
 
     /**
      * source的名称.
@@ -32,14 +32,14 @@ interface Source {
      * @type {string}
      * @memberof Source
      */
-    name: string,
+    name: string;
 
     /**
      * 初始化source的memory.
      *
      * @memberof Source
      */
-    initsMemory(): void,
+    initsMemory(): void;
 
     /**
      * 任务管理函数。用来检测是否需要推送任务。
@@ -47,41 +47,46 @@ interface Source {
      * @param {()=>bpgGene[]} manage_bodyParts 一个函数，返回bpgGene对象。
      * @memberof Source
      */
-    check():CheckStatus,
+    check(): CheckStatus;
 }
 
 interface Creep {
-    pushBackTask():void,
-    getEnergy(lowerLimit: Array<{[name:string]: number}>): string,
-    transportResource(target: AnyStructure, resourceType: ResourceConstant):boolean,
-    getResourceFromStructure(structure: AnyStoreStructure, resourceType: ResourceConstant):void,
+    getEnergy(lowerLimit: { [name: string]: number }[]): string;
+    transportResource(target: AnyStructure, resourceType: ResourceConstant): boolean;
+    getResourceFromStructure(structure: AnyStoreStructure, resourceType: ResourceConstant): void;
 }
 
 declare namespace NodeJS {
     interface Global {
-        log: any,
-        detail: ()=>void,
-        bpg: (arg0: Array<bpgGene>)=>BodyPartConstant[],
-        GenedGetBodyparts: Array<bpgGene>,
-        GenedGetBodypartsNum: Array<bpgGene>,
-        GenedBodypartsList: BodyPartConstant[],
-        GenedBodypartsNum: number,
-        GenedgetBpEnergyBodyparts:Array<bpgGene>,
-        GenedgetBpEnergyBodypartsCost:number
-        prototypeMounted: boolean,
-        getNewSource():void,
-        repushTask():void,
-        getNum(arg0: number):number,
-        CreepEnergyMonitorprototypeMounted:boolean,
-        memoryReset():void,
-        spawnTaskList:{[name: string]: {[name: string]:(roomName: string) => BaseTaskInf[]}},
-        newTask(roomName:string,taskName:string):void,
-        deleteTask(creepName:string):void,
-        war:any,
-        help():string,
-        stateLoop:{[name: string]:()=>void},
-        state:{[name: string]:boolean|number}
-        GUI:GUIclass
-        test:any
+        testMode: boolean;
+        workRate: { [name: string]: number | string; manageTask: number; construction: number; spawn: number };
+        log: any;
+        detail: () => void;
+        bpg: (arg0: bpgGene[]) => BodyPartConstant[];
+        GenedGetBodyparts: bpgGene[];
+        GenedGetBodypartsNum: bpgGene[];
+        GenedBodypartsList: BodyPartConstant[];
+        GenedBodypartsNum: number;
+        GenedgetBpEnergyBodyparts: bpgGene[];
+        GenedgetBpEnergyBodypartsCost: number;
+        prototypeMounted: boolean;
+        getNewSource(): void;
+        repushTask(): void;
+        getNum(arg0: number): number;
+        CreepEnergyMonitorprototypeMounted: boolean;
+        memoryReset(): void;
+        spawnTaskList: { [name: string]: { [name: string]: (roomName: string) => BaseTaskInf[] } };
+        newTask(roomName: string, taskName: string): void;
+        deleteTask(creepName: string): void;
+        war: any;
+        help(): string;
+        stateLoop: { [name: string]: () => void };
+        state: { [name: string]: boolean | number };
+        GUI: GUIclass;
+        testX: {
+            logger: string;
+            gridLayout?: string;
+            gridLayoutRoom?: string;
+        };
     }
 }

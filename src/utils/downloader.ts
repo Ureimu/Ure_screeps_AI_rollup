@@ -1,5 +1,5 @@
 export default {
-    download(data:string,docName:string) {
+    download(data: string, docName: string): void {
         const id = `id${Math.random()}`;
         /* eslint-disable */
         const download = `

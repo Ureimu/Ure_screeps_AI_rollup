@@ -1,4 +1,4 @@
-import { runRCLTest } from "./utils/runRCLTest";
+import { runRCLTest } from "./run/runRCLTest";
 const TICK_NUM = 10000;
 const RCL = 2;
 

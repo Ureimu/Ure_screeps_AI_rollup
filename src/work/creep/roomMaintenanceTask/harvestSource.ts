@@ -5,46 +5,50 @@ import { stateCut } from "../utils/utils";
 export function harvestSource(creep: Creep): void {
     if (!creep.memory.dontPullMe) creep.memory.dontPullMe = true;
     getGlobalMemory(creep);
-    let source = <Source>Game.getObjectById(<Id<Source>>creep.memory.task.sponsor);
+    const source = Game.getObjectById(creep.memory.task.sponsor as Id<Source>) as Source;
+    ifMove();
     if (!global.creepMemory[creep.name].bundledLinkPos) {
-        ifMove(creep.harvest(source));
+        creep.harvest(source);
     } else {
-        let container: StructureContainer = <StructureContainer>(
-            lookForStructureByPos(global.creepMemory[creep.name].bundledPos, STRUCTURE_CONTAINER)
-        );
-        let link: StructureLink = <StructureLink>(
-            lookForStructureByPos(global.creepMemory[creep.name].bundledLinkPos, STRUCTURE_LINK)
-        );
-        let state = stateCut(
+        const container: StructureContainer = lookForStructureByPos(
+            global.creepMemory[creep.name].bundledPos,
+            STRUCTURE_CONTAINER
+        ) as StructureContainer;
+        const link: StructureLink = lookForStructureByPos(
+            global.creepMemory[creep.name].bundledLinkPos,
+            STRUCTURE_LINK
+        ) as StructureLink;
+        const state = stateCut(
             creep,
             [
                 () => {
-                    if(container.store["energy"]<2000){
+                    if (container.store.energy < 2000) {
                         return 0;
-                    }else{
+                    } else {
                         return 1;
                     }
                 },
                 () => {
-                    if(link.store["energy"]==800){
+                    if (link.store.energy === 800) {
                         return 0;
-                    }else{
+                    } else {
                         return 1;
                     }
                 }
             ],
             0,
-            ["harvest","carryEnergyToLink"]
+            ["harvest", "carryEnergyToLink"]
         );
-        let carryMax = getBpNum(creep.memory.bodyparts, "carry") * 50;
+        const carryMax = getBpNum(creep.memory.bodyparts, "carry") * 50;
         switch (state) {
             case 0:
-                ifMove(creep.harvest(source));
+                creep.harvest(source);
+                break;
             case 1:
-                if (creep.store["energy"] == carryMax) {
-                    ifMove(creep.transfer(link, "energy"));
+                if (creep.store.energy === carryMax) {
+                    creep.transfer(link, "energy");
                 } else {
-                    ifMove(creep.withdraw(container, "energy"));
+                    creep.withdraw(container, "energy");
                 }
                 break;
             default:
@@ -52,20 +56,18 @@ export function harvestSource(creep: Creep): void {
         }
     }
 
-    function ifMove(code: number) {
-        if (
-            !creep.pos.isEqualTo(
-                global.creepMemory[creep.name].bundledPos ? global.creepMemory[creep.name].bundledPos : source
-            )
-        ) {
-            creep.moveTo(
-                global.creepMemory[creep.name].bundledPos ? global.creepMemory[creep.name].bundledPos : source,
-                {
-                    visualizePathStyle: {
-                        stroke: "#ffaa00"
-                    }
+    function ifMove() {
+        const targetPos:
+            | RoomPosition
+            | {
+                  pos: RoomPosition;
+              } = global.creepMemory[creep.name].bundledPos || source;
+        if (!creep.pos.isEqualTo(targetPos)) {
+            creep.moveTo(targetPos, {
+                visualizePathStyle: {
+                    stroke: "#ffaa00"
                 }
-            );
+            });
         }
     }
 }
@@ -78,18 +80,18 @@ function getGlobalMemory(creep: Creep) {
 }
 
 function setBundledPos(creep: Creep) {
-    let source = <Source>Game.getObjectById<Source>(<Id<Source>>creep.memory.task.sponsor);
+    const source = Game.getObjectById<Source>(creep.memory.task.sponsor as Id<Source>) as Source;
     global.creepMemory[creep.name].bundledPos = source.pos
         .findInRange(FIND_STRUCTURES, 1, {
             filter: structure => {
-                return structure.structureType == STRUCTURE_CONTAINER;
+                return structure.structureType === STRUCTURE_CONTAINER;
             }
         })
         .pop()?.pos;
     global.creepMemory[creep.name].bundledLinkPos = source.pos
         .findInRange(FIND_STRUCTURES, 2, {
             filter: structure => {
-                return structure.structureType == STRUCTURE_LINK;
+                return structure.structureType === STRUCTURE_LINK;
             }
         })
         .pop()?.pos;

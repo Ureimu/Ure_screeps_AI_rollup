@@ -2,25 +2,33 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable max-classes-per-file */
-
 const { ScreepsServer, stdHooks } = require("screeps-server-mockup");
 
 export class IntegrationTestHelper {
     private mockedServer!: MockedServer;
 
     public get server(): MockedServer {
-        return this.mockedServer as MockedServer;
+        return this.mockedServer;
     }
 
     private mockedUser!: MockedUser;
 
-    public get player(): MockedUser {
-        return this.mockedUser as MockedUser;
+    public get user(): MockedUser {
+        return this.mockedUser;
     }
 
-    public set player(player: MockedUser) {
-        this.mockedUser = player;
+    public set user(user: MockedUser) {
+        this.mockedUser = user;
+    }
+
+    private mockedTarget!: MockedUser;
+
+    public get target(): MockedUser {
+        return this.mockedTarget;
+    }
+
+    public set target(user: MockedUser) {
+        this.mockedTarget = user;
     }
 
     public async beforeEach(): Promise<void> {

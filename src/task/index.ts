@@ -1,32 +1,34 @@
+import PriorityQueue from "../../utils/PriorityQueue";
 import { RoomTask } from "./utils/RoomTask";
-import { PriorityQueue } from "./utils/PriorityQueue";
 import { autoPush } from "./utils/allocateAndPushTask";
 
-export function manageTask(room:Room): void {
+export function manageTask(room: Room): void {
     // let startTime = Game.cpu.getUsed();
     // let cpuInf: {[roomName:string] :number} = {};
 
     // cpuInf[roomName] = 0;
     // cpuInf[roomName] -= Game.cpu.getUsed();
-    if(Game.time%25 != 0) return;
-    let roomName = room.name;
-    for(let taskKindName in global.spawnTaskList){
+    if (Game.time % 25 !== 0) return;
+    const roomName = room.name;
+    for (const taskKindName in global.spawnTaskList) {
         let ifPush = false;
-        if(taskKindName != "roomMaintance") ifPush= true;
-        for(let taskName in global.spawnTaskList[taskKindName]){
-            let taskList = new PriorityQueue(false);
-            let rTaskList: BaseTaskInf[] = [];
-            let AnyRoomTask = new RoomTask(roomName,taskName,ifPush);
-            if(!AnyRoomTask.hasPushed){
-                AnyRoomTask.hasPushed=true;
-                let gTask = global.spawnTaskList[taskKindName][taskName](roomName);
-                if(typeof gTask !== 'undefined'){
+        if (taskKindName !== "roomMaintance") ifPush = true;
+        for (const taskName in global.spawnTaskList[taskKindName]) {
+            let iftaskPush = false;
+            if (taskName === "centerCarry") iftaskPush = true;
+            const taskList = new PriorityQueue(false);
+            const rTaskList: BaseTaskInf[] = [];
+            const AnyRoomTask = new RoomTask(roomName, taskName, iftaskPush || ifPush);
+            if (!AnyRoomTask.hasPushed) {
+                AnyRoomTask.hasPushed = true;
+                const gTask = global.spawnTaskList[taskKindName][taskName](roomName);
+                if (typeof gTask !== "undefined") {
                     rTaskList.push(...gTask);
                 }
-                for(let xTask of rTaskList){
+                for (const xTask of rTaskList) {
                     taskList.push(xTask);
                 }
-                autoPush(AnyRoomTask,taskList);
+                autoPush(AnyRoomTask, taskList);
             }
         }
     }
@@ -40,5 +42,5 @@ export function manageTask(room:Room): void {
     //     const inf = [roomName,cpuInf[roomName].toFixed(3)].join('\t\t');
     //     text = text.concat(inf,'\n');
     // }
-    //console.log(text);
+    // console.log(text);
 }

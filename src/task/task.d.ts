@@ -37,12 +37,12 @@ interface SpawnTaskInf extends BaseTaskInf {
         roomName: string;
     };
     taskInf?: {
-        state:[]
+        state: number[];
     };
 }
 
 interface CreepTaskInf extends BaseTaskInf {
-    taskInf: {};
+    taskInf: Record<string, unknown>;
 }
 
 interface CarryTaskInf extends BaseTaskInf {
@@ -51,7 +51,7 @@ interface CarryTaskInf extends BaseTaskInf {
         structureCarryFrom: string;
         structureCarryTo: string;
         resourceNumber: number;
-        state:[]
+        state: [];
     };
 }
 
@@ -61,7 +61,7 @@ interface LinkTaskInf extends BaseTaskInf {
         linkTransferFrom: Id<StructureLink>;
         linkTransferTo: Id<StructureLink>;
         resourceNumber: number;
-        state:[]
+        state: [];
     };
 }
 

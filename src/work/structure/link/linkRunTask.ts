@@ -1,45 +1,52 @@
 import taskPool from "task/utils/taskPool";
 
-export function linkRunTask(room: Room) {
-    if (Game.time % 5 != 0) {
+export function linkRunTask(room: Room): void {
+    if (Game.time % 5 !== 0) {
         return;
     }
-    let linkTaskQueue = taskPool.initQueue("linkTask", room.memory.taskPool);
-    let taskList: LinkTaskInf[] = [];
-    let ifOK: number = 1;
-    let errorList: number[] = [];
+    const linkTaskQueue = taskPool.initQueue("linkTask", room.memory.taskPool);
+    const taskList: LinkTaskInf[] = [];
+    let ifOK = 2;
+    const errorList: number[] = [];
     do {
         if (linkTaskQueue.isEmpty()) {
-            let task = <LinkTaskInf>linkTaskQueue.pop();
-            let inf = task.taskInf;
+            const task = linkTaskQueue.pop() as LinkTaskInf;
+            const inf = task.taskInf;
             if (typeof inf === "undefined") {
                 console.log("未定义link任务");
             } else {
-                let linkTransferFrom = <StructureLink>Game.getObjectById<StructureLink>(inf.linkTransferFrom);
-                let linkTransferTo = <StructureLink>Game.getObjectById<StructureLink>(inf.linkTransferTo);
-                if (linkTransferFrom.store["energy"] == 800) {
-                    ifOK = linkTransferFrom.transferEnergy(linkTransferTo);
+                const linkTransferFrom = Game.getObjectById<StructureLink>(inf.linkTransferFrom);
+                const linkTransferTo = Game.getObjectById<StructureLink>(inf.linkTransferTo);
+                if (linkTransferFrom && linkTransferTo) {
+                    if (linkTransferFrom.store.energy === 800) {
+                        ifOK = linkTransferFrom.transferEnergy(linkTransferTo);
+                    } else {
+                        ifOK = 1;
+                    }
+                    console.log(`${inf.linkTransferFrom}-->${inf.linkTransferTo}`);
                 }
-                console.log(inf.linkTransferFrom + " " + inf.linkTransferTo);
-                if (ifOK != OK || linkTransferFrom.store["energy"] != 0) {
+                if (ifOK !== OK) {
                     taskList.push(task);
                     errorList.push(ifOK);
-                    task.isRunning=true;
+                    task.isRunning = true;
                 }
             }
         } else {
             ifOK = OK;
         }
-    } while (ifOK != OK);
-    for (let task of taskList) {
+    } while (ifOK !== OK);
+    for (const task of taskList) {
         linkTaskQueue.push(task);
     }
     for (let i = 0, j = taskList.length; i < j; i++) {
-        //返回任务错误信息
-        let task = taskList[i];
-        let errorNum = errorList[i];
+        // 返回任务错误信息
+        const task = taskList[i];
+        const errorNum = errorList[i];
         let errorText = "";
         switch (errorNum) {
+            case 2:
+                errorText = "发起或目标不是一个有效的 StructureLink 对象。";
+                break;
             case 1:
                 errorText = "能量未满，等待中";
                 break;
@@ -50,7 +57,7 @@ export function linkRunTask(room: Room) {
                 errorText = "你不是该 link 的所有者。";
                 break;
             case -6:
-                errorText = `这个建筑内的资源少于给定的数量。`;
+                errorText = `这个建筑内的资源少于给定的数量。数量：${task.taskInf.resourceNumber}`;
                 break;
             case -7:
                 errorText = "目标不是一个有效的 StructureLink 对象。";

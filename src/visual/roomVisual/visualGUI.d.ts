@@ -1,32 +1,30 @@
 type elementsConstant = "Div" | "Text" | "Progress" | "SwitchBar" | "LockTarget";
 type elementsLayout = Div | Text | Progress | SwitchBar | LockTarget;
 type elementsLayoutGeneral = Div & Text & Progress & SwitchBar & LockTarget;
-type standardReturnelementsLayout = standardReturn<Div> | standardReturn<Text> | standardReturn<Progress>;
-type getType<T> =
-        T extends "Div"
-        ? Div
-        : T extends "Text"
-        ? Text
-        : T extends "Progress"
-        ? Progress
-        : T extends "SwitchBar"
-        ? SwitchBar
-        : T extends "LockTarget"
-        ? LockTarget
-        : null;
+type standardReturnElementsLayout = standardReturn<Div> | standardReturn<Text> | standardReturn<Progress>;
+type getType<T> = T extends "Div"
+    ? Div
+    : T extends "Text"
+    ? Text
+    : T extends "Progress"
+    ? Progress
+    : T extends "SwitchBar"
+    ? SwitchBar
+    : T extends "LockTarget"
+    ? LockTarget
+    : null;
 
-type setType<T> =
-        T extends Div
-        ? "Div"
-        : T extends Text
-        ? "Text"
-        : T extends Progress
-        ? "Progress"
-        : T extends SwitchBar
-        ? "SwitchBar"
-        : T extends LockTarget
-        ? "LockTarget"
-        : null;
+type setType<T> = T extends Div
+    ? "Div"
+    : T extends Text
+    ? "Text"
+    : T extends Progress
+    ? "Progress"
+    : T extends SwitchBar
+    ? "SwitchBar"
+    : T extends LockTarget
+    ? "LockTarget"
+    : null;
 
 interface baseLayout {
     /**
@@ -63,7 +61,7 @@ interface map<T extends elementsConstant> {
      * @type {T extends elementsConstant}
      * @memberof map
      */
-    type: T; //组件类型
+    type: T; // 组件类型
 
     /**
      * 组件的布局和属性。
@@ -71,7 +69,7 @@ interface map<T extends elementsConstant> {
      * @type {elementsLayout}
      * @memberof map
      */
-    layout: getType<T>
+    layout: getType<T>;
 
     /**
      * 子组件数组。
@@ -79,7 +77,7 @@ interface map<T extends elementsConstant> {
      * @type {map<elementsConstant>[]}
      * @memberof map
      */
-    child?: map<elementsConstant>[]; //子组件数组
+    child?: this[]; // 子组件数组
 }
 
 interface standardReturn<T> {
@@ -116,7 +114,7 @@ interface GUIclass {
     drawMap: <T extends elementsConstant>(visual: RoomVisual, map: map<T>[], x: number, y: number) => RoomVisual;
 
     [name: string]:
-        | standardReturnelementsLayout
+        | standardReturnElementsLayout
         | ((visual: RoomVisual, map: map<elementsConstant>[], x: number, y: number) => void)
         | ((visual: RoomVisual, map: map<elementsConstant>[]) => void);
 
@@ -189,11 +187,7 @@ interface box<T> {
     layout: T;
 }
 
-
-
-
-
-//下面是每个组件的Layout接口定义
+// 下面是每个组件的Layout接口定义
 
 /**
  * 容器组件，用于内置其他组件
@@ -317,7 +311,7 @@ interface Text extends baseLayout {
      * @type {string}
      * @memberof Text
      */
-    color?:string
+    color?: string;
 }
 
 /**
@@ -376,6 +370,6 @@ interface Progress extends baseLayout {
     value: number;
 }
 
-interface SwitchBar extends baseLayout {}
+type SwitchBar = baseLayout;
 
-interface LockTarget extends baseLayout {}
+type LockTarget = baseLayout;

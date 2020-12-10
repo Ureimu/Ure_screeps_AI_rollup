@@ -1,46 +1,48 @@
 import { lookForStructureName } from "utils/findEx";
-import profiler from "utils/profiler";
+import * as profiler from "../../../utils/profiler";
 
-let fun = {
-    getEnergyAction,
-}
-profiler.registerObject(fun,"actionMonitor");
+const fun = {
+    getEnergyAction
+};
+profiler.registerObject(fun, "actionMonitor");
 
-export default fun
+export default fun;
 
-function getEnergyAction(){
-    if(!global.test.logger)global.test.logger="event\t\ttargetFrom\t\t\t\ttargetTo\t\t\t\tamount\tresourceType\n";
-    for(let roomName in Game.rooms){
-        let logger = ""
-        let eventLog = Game.rooms[roomName].getEventLog();
-        for(let event of eventLog){
-            if(event.event==EVENT_TRANSFER){
-                let targetFrom = <AnyStructure|Creep>Game.getObjectById(event.data.targetId)
-                let targetTo = <AnyStructure|Creep>Game.getObjectById(event.objectId)
-                let targetFromName = getName(targetFrom,roomName)
-                let targetToName = getName(targetTo,roomName)
-                let log = `Transfer\t${targetFromName}\t\t${targetToName}\t\t${event.data.amount}\t${event.data.resourceType}\t${Game.time}\n`
-                logger=logger.concat(log);
+function getEnergyAction(): void {
+    if (!global.testX.logger) global.testX.logger = "event\t\ttargetFrom\t\t\t\ttargetTo\t\t\t\tamount\tresourceType\n";
+    for (const roomName in Game.rooms) {
+        let logger = "";
+        const eventLog = Game.rooms[roomName].getEventLog();
+        for (const event of eventLog) {
+            if (event.event === EVENT_TRANSFER) {
+                const targetFrom = Game.getObjectById<AnyStructure | Creep>(event.data.targetId) as
+                    | AnyStructure
+                    | Creep;
+                const targetTo = Game.getObjectById<AnyStructure | Creep>(event.objectId) as AnyStructure | Creep;
+                const targetFromName = getName(targetFrom, roomName);
+                const targetToName = getName(targetTo, roomName);
+                const log = `Transfer\t${targetFromName}\t\t${targetToName}\t\t${event.data.amount}\t${event.data.resourceType}\t${Game.time}\n`;
+                logger = logger.concat(log);
             }
         }
-        global.test.logger=global.test.logger.concat(logger);
+        global.testX.logger = global.testX.logger.concat(logger);
     }
 }
 
-function isCreep(target:AnyStructure|Creep):target is Creep {
-    return typeof (<Creep>target)?.name !== "undefined"
+function isCreep(target: AnyStructure | Creep): target is Creep {
+    return typeof (target as Creep)?.name !== "undefined";
 }
 
-function getName(target:AnyStructure|Creep,roomName:string):string{
-    let name = ""
-    if(isCreep(target)){
+function getName(target: AnyStructure | Creep, roomName: string): string {
+    let name = "";
+    if (isCreep(target)) {
         name = target.name;
-    }else{
-        if((name = lookForStructureName(target)) == ""){
-            name = roomName+"-"+target?.structureType//可能上一个tick对象还存在，这个tick对象就不存在了，考虑缓存上一个tick的对象。
-        }else{
-            name = roomName+"-"+name
+    } else {
+        if ((name = lookForStructureName(target)) === "") {
+            name = roomName + "-" + target?.structureType; // 可能上一个tick对象还存在，这个tick对象就不存在了，考虑缓存上一个tick的对象。
+        } else {
+            name = roomName + "-" + name;
         }
     }
-    return name
+    return name;
 }

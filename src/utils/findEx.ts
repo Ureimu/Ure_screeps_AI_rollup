@@ -1,19 +1,19 @@
-import { getPosfromStr } from "construction/utils/strToRoomPosition";
+import { getPosFromStr } from "construction/utils/strToRoomPosition";
 
 export function lookForStructure(
     room: Room,
     structureName: string,
-    storeable: boolean = false
+    storeable = false
 ): AnyStructure[] | AnyStoreStructure[] | undefined {
-    let pos = lookForStructurePos(room, structureName);
+    const pos = lookForStructurePos(room, structureName);
     if (typeof pos === "undefined") return;
-    let stlist = [];
+    const stlist = [];
     if (storeable) {
-        for (let npos of pos) {
-            for (let i of npos.lookFor(LOOK_STRUCTURES)) {
-                if (i.structureType == room.memory.construction[structureName].structureType) {
-                    let x = <AnyStoreStructure>Game.getObjectById(i.id);
-                    if (!!x.store) {
+        for (const npos of pos) {
+            for (const i of npos.lookFor(LOOK_STRUCTURES)) {
+                if (i.structureType === room.memory.construction[structureName].structureType) {
+                    const x = Game.getObjectById(i.id) as AnyStoreStructure;
+                    if (x.store) {
                         stlist.push(x);
                     }
                 }
@@ -21,10 +21,10 @@ export function lookForStructure(
         }
         return stlist;
     } else {
-        for (let npos of pos) {
-            for (let i of npos.lookFor(LOOK_STRUCTURES)) {
-                if (i.structureType == room.memory.construction[structureName].structureType) {
-                    stlist.push(<AnyStructure>Game.getObjectById(i.id));
+        for (const npos of pos) {
+            for (const i of npos.lookFor(LOOK_STRUCTURES)) {
+                if (i.structureType === room.memory.construction[structureName].structureType) {
+                    stlist.push(Game.getObjectById(i.id) as AnyStructure);
                 }
             }
         }
@@ -32,29 +32,15 @@ export function lookForStructure(
     }
 }
 
-//不建议在寻找某pos上的所有建筑时使用此函数！请直接使用lookFor(LOOK_STRUCTURES)
-export function lookForStructureByPos(
+// 不建议在寻找某pos上的所有建筑时使用此函数！请直接使用lookFor(LOOK_STRUCTURES)
+export function lookForStructureByPos<T extends StructureConstant>(
     pos: RoomPosition | undefined,
-    structureType: StructureConstant,
-    storeable: boolean = false
-): AnyStructure | AnyStoreStructure | undefined {
+    structureType: T
+): ConcreteStructure<T> | undefined {
     if (typeof pos === "undefined") return;
-    if (!storeable) {
-        for (let i of pos.lookFor(LOOK_STRUCTURES)) {
-            if (i.structureType == structureType) {
-                return <AnyStructure>Game.getObjectById(i.id);
-            }
-        }
-    } else {
-        for (let i of pos.lookFor(LOOK_STRUCTURES)) {
-            if (i.structureType == structureType) {
-                let x = <AnyStoreStructure>Game.getObjectById(i.id);
-                if (!!x.store) {
-                    return x;
-                } else {
-                    return;
-                }
-            }
+    for (const i of pos.lookFor(LOOK_STRUCTURES)) {
+        if (i.structureType === structureType) {
+            return Game.getObjectById<ConcreteStructure<T>>(i.id as Id<ConcreteStructure<T>>) as ConcreteStructure<T>;
         }
     }
     return;
@@ -62,10 +48,10 @@ export function lookForStructureByPos(
 
 export function lookForStructurePos(room: Room, structureName: string): RoomPosition[] | undefined {
     if (!!room.memory.construction[structureName] && !!room.memory.construction[structureName].pos[0]) {
-        let posList = [];
-        for (let posStr of room.memory.construction[structureName].pos) {
-            let npos = getPosfromStr(posStr)
-            let Pos = new RoomPosition(npos.x, npos.y, npos.roomName);
+        const posList = [];
+        for (const posStr of room.memory.construction[structureName].pos) {
+            const npos = getPosFromStr(posStr);
+            const Pos = new RoomPosition(npos.x, npos.y, npos.roomName);
             posList.push(Pos);
         }
         return posList;
@@ -74,15 +60,15 @@ export function lookForStructurePos(room: Room, structureName: string): RoomPosi
     }
 }
 
-export function lookForStructureName(structure?: AnyStructure|null): string {
+export function lookForStructureName(structure?: AnyStructure | null): string {
     if (!structure) {
         return "";
     }
-    for (let con in structure.room.memory.construction) {
-        let m: { [name: string]: constructionSitesInf } = structure.room.memory.construction;
-        if (m[con].structureType == structure.structureType) {
-            for (let nStr of m[con].pos) {
-                let n = getPosfromStr(nStr)
+    for (const con in structure.room.memory.construction) {
+        const m: { [name: string]: constructionSitesInf } = structure.room.memory.construction;
+        if (m[con].structureType === structure.structureType) {
+            for (const nStr of m[con].pos) {
+                const n = getPosFromStr(nStr);
                 if (isPosEqual(n, structure.pos)) {
                     return con;
                 }
@@ -92,24 +78,29 @@ export function lookForStructureName(structure?: AnyStructure|null): string {
     return "";
 }
 
-export function isPosEqual(pos1: RoomPosition|RoomPositionMem, pos2: RoomPosition|RoomPositionMem) {
-    if (pos1.x == pos2.x && pos1.y == pos2.y && pos1.roomName == pos2.roomName) {
+export function isPosEqual(pos1: RoomPosition | RoomPositionMem, pos2: RoomPosition | RoomPositionMem): boolean {
+    if (pos1.x === pos2.x && pos1.y === pos2.y && pos1.roomName === pos2.roomName) {
         return true;
     }
     return false;
 }
 
-type structureInfoList = Array<{
+type structureInfoList = {
     [name: string]: any;
-}>;
+}[];
 
-export function getStructureFromArray(room:Room,StructureArray: structureInfoList) {
-    let structureList: Array<{ [name: string]: AnyStoreStructure[]; }> = []; //解析给定条件并转换为对应对象数组
-    for (let st1 of StructureArray) {
+export function getStructureFromArray(
+    room: Room,
+    StructureArray: structureInfoList
+): {
+    [name: string]: AnyStoreStructure[];
+}[] {
+    const structureList: { [name: string]: AnyStoreStructure[] }[] = []; // 解析给定条件并转换为对应对象数组
+    for (const st1 of StructureArray) {
         structureList.unshift({});
-        for (let st2 in st1) {
-            let m = <AnyStoreStructure[]>lookForStructure(room, st2);
-            let x = (typeof m !== "undefined") ? m : [];
+        for (const st2 in st1) {
+            const m = lookForStructure(room, st2) as AnyStoreStructure[];
+            const x = typeof m !== "undefined" ? m : [];
             structureList[0][st2] = x;
         }
     }
@@ -117,9 +108,12 @@ export function getStructureFromArray(room:Room,StructureArray: structureInfoLis
     return structureList;
 }
 
-export function isStructureinPos(structures: Structure<StructureConstant>[], structureType: StructureConstant): boolean {
-    for (let structure of structures) {
-        if (structure.structureType == structureType) {
+export function isStructureinPos(
+    structures: Structure<StructureConstant>[],
+    structureType: StructureConstant
+): boolean {
+    for (const structure of structures) {
+        if (structure.structureType === structureType) {
             return true;
         }
     }

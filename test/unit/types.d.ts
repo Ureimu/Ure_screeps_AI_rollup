@@ -1,3 +1,3 @@
 interface Object {
-  methodIsAssignable(): boolean;
+    methodIsAssignable(): boolean;
 }

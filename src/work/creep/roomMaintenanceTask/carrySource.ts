@@ -1,31 +1,31 @@
+import { findSpawnOrExtensionNotFull } from "../utils/find";
 import { getStructureFromArray } from "utils/findEx";
 import { stateCut } from "work/creep/utils/utils";
-import { findSpawnOrExtensionNotFull } from "../utils/find";
 
 export function carrySource(creep: Creep): void {
-    let ifHarvesting = stateCut(
+    const ifHarvesting = stateCut(
         creep,
-        [() => ~~(creep.store[RESOURCE_ENERGY] < 50), () => ~~(creep.store.getFreeCapacity() != 0)],
+        [() => Number(creep.store[RESOURCE_ENERGY] < 50), () => Number(creep.store.getFreeCapacity() !== 0)],
         0
     );
 
     if (ifHarvesting) {
-        creep.getEnergy([{centerLink: 0},{ sourceContainer: 0 }, { spawnSourceContainer: 0 }, { storage: 0 }]);
+        creep.getEnergy([{ centerLink: 0 }, { sourceContainer: 0 }, { spawnSourceContainer: 0 }, { storage: 0 }]);
     } else {
-        let targets = findSpawnOrExtensionNotFull(creep);
+        const targets = findSpawnOrExtensionNotFull(creep);
         if (targets.length > 0) {
             let go = true;
             while (go) {
-                if (!creep.transportResource(<AnyStructure>creep.pos.findClosestByRange(targets), RESOURCE_ENERGY)) {
+                if (!creep.transportResource(creep.pos.findClosestByRange(targets) as AnyStructure, RESOURCE_ENERGY)) {
                     targets.pop();
                 } else {
                     go = false;
                 }
             }
         } else {
-            let gList = [
+            const gList = [
                 { controllerSourceContainer: { isStorable: true, upperLimit: 1500 } },
-                //{ spawnSourceContainer: { isStorable: true, upperLimit: 1500 } },
+                // { spawnSourceContainer: { isStorable: true, upperLimit: 1500 } },
                 { storage: { isStorable: true, upperLimit: 1000000 } }
                 // { tower: { isStorable: true, upperLimit: 400 } }
             ];
@@ -58,32 +58,32 @@ function doStuff(
             | undefined;
     }[]
 ) {
-    //console.log(JSON.stringify(gList))
-    let sList = getStructureFromArray(creep.room, gList);
-    //console.log(JSON.stringify(gList[0]["controllerSourceContainer"]?.upperLimit))
+    // console.log(JSON.stringify(gList))
+    const sList = getStructureFromArray(creep.room, gList);
+    // console.log(JSON.stringify(gList[0]["controllerSourceContainer"]?.upperLimit))
     for (let i = 0, j = sList.length; i < j; i++) {
-        let structuresL = sList[i];
-        for (let structuresName in structuresL) {
-            let structures = structuresL[structuresName];
+        const structuresL = sList[i];
+        for (const structuresName in structuresL) {
+            const structures = structuresL[structuresName];
             let go = true;
             while (go) {
-                //console.log(`${structuresName}+${structures[0]?.structureType}+${gList[i][structuresName]?.upperLimit}`)
+                // console.log(`${structuresName}+${structures[0]?.structureType}+${gList[i][structuresName]?.upperLimit}`)
                 if (
                     structures?.[0]?.store["energy"] < (gList[i][structuresName]?.upperLimit as number) ||
                     typeof structures?.[0]?.store["energy"] == "undefined"
                 ) {
                     if (!creep.transportResource(structures[0], RESOURCE_ENERGY)) {
-                        //console.log(`${structuresName}+${structures[0]?.structureType} same as last one gotten energy, not transfering!!`)
+                        // console.log(`${structuresName}+${structures[0]?.structureType} same as last one gotten energy, not transfering!!`)
                         structures.shift();
                     } else {
-                        //console.log(`${structuresName}+${structures[0]?.structureType} transfering!!`)
+                        // console.log(`${structuresName}+${structures[0]?.structureType} transfering!!`)
                         go = false;
                     }
                 } else {
-                    //console.log(`${structuresName}+${structures[0]?.structureType} full of energy!! ${structures?.[0]?.store["energy"]}>${gList[i][structuresName]?.upperLimit}`)
+                    // console.log(`${structuresName}+${structures[0]?.structureType} full of energy!! ${structures?.[0]?.store["energy"]}>${gList[i][structuresName]?.upperLimit}`)
                     structures.shift();
                 }
-                if (structures.length == 0) {
+                if (structures.length === 0) {
                     go = false;
                 }
             }
