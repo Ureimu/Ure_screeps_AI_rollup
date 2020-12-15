@@ -17,7 +17,7 @@ interface RoomMemory {
 
 type formedLayout = {
     [structureName in BuildableStructureConstant]?: {
-        [name: string]: string[];
+        [name: string]: { posStrList: string[]; levelToBuild?: number };
     };
 };
 /**

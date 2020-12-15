@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
-import { SourceMapConsumer } from "source-map";
+
+import { SourceMapConsumer } from "../../utils/source-map/source-map";
 
 export class ErrorMapper {
     // Cache consumer
@@ -61,7 +62,7 @@ export class ErrorMapper {
                     break;
                 }
             } else {
-                // no more parseable lines
+                // no more parsable lines
                 break;
             }
         }

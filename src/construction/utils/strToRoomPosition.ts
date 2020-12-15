@@ -76,7 +76,7 @@ interface Coord {
     y: number;
 }
 
-export function getPosCoordFromStr(str: RoomPositionStr): Coord {
+export function ParseCoord(str: RoomPositionStr): Coord {
     const matched = regMatch(str);
     const coord = {
         x: -1,

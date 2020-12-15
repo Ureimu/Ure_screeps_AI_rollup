@@ -7,10 +7,10 @@ export function getCenterConstruction(room: Room): string[] {
         if (
             !((Memory.rooms[room.name].constructionSchedule.center.centerPos as RoomPositionStr[] | null)?.length === 4)
         ) {
-            const lastpoint = Game.spawns[room.memory.firstSpawnName].pos;
-            if (lastpoint) {
+            const lastPoint = Game.spawns[room.memory.firstSpawnName].pos;
+            if (lastPoint) {
                 console.log("[build] 未寻找建筑中心点，开始寻找。");
-                const posList = getBlankDiagonalSquarePlace(lastpoint);
+                const posList = getBlankDiagonalSquarePlace(lastPoint);
                 Memory.rooms[room.name].constructionSchedule.center.centerPos = posList;
                 return posList;
             } else {
@@ -28,11 +28,11 @@ export function getCenterConstruction(room: Room): string[] {
 }
 
 export function getBlankDiagonalSquarePlace(point: RoomPosition): string[] {
-    const lastpoint = point;
+    const lastPoint = point;
     // 计算扩张一格后的正方形的所有位置
     const squareExpandStrList: RoomPositionStr[] = [];
     const squareExpandPosList: RoomPosition[] = [];
-    lastpoint.getSquare().forEach(pos => {
+    lastPoint.getSquare().forEach(pos => {
         squareExpandStrList.push(setPosToStr(pos));
     });
     const squareExpand = new Set(squareExpandStrList);
@@ -70,7 +70,7 @@ export function getBlankDiagonalSquarePlace(point: RoomPosition): string[] {
             const x = m.lookFor(LOOK_STRUCTURES);
             const terrain: Terrain[] = m.lookFor(LOOK_TERRAIN);
             if (x.length !== 0 || terrain[0] === "wall") {
-                // if (!isStructureinPos(x, STRUCTURE_ROAD)) {
+                // if (!isStructureInPos(x, STRUCTURE_ROAD)) {
                 rectPosList.splice(0);
                 break;
                 // }

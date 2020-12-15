@@ -3,14 +3,14 @@
  *
  * @export
  * @param {Creep} creep
- * @param {Array<()=>number>} condiction
+ * @param {Array<()=>number>} condition
  * @param {number} stateIndex
  * @param {string[]} [say=["🔄 harvest", "🚧 working"]]
  * @returns {number}
  */
 export function stateCut(
     creep: Creep,
-    condiction: (() => number)[],
+    condition: (() => number)[],
     stateIndex: number,
     say: string[] = ["🚧 working", "🔄 harvest"]
 ): number {
@@ -21,7 +21,7 @@ export function stateCut(
         creep.memory.task.taskInf.state.push(0);
     }
     // console.log(creep.memory.task.taskInf.state.toString());
-    const stateNum = condiction[Number(creep.memory.task.taskInf.state[stateIndex])]();
+    const stateNum = condition[Number(creep.memory.task.taskInf.state[stateIndex])]();
     if (creep.memory.task.taskInf.state[stateIndex] !== stateNum) {
         creep.memory.task.taskInf.state[stateIndex] = stateNum;
         creep.say(say[stateNum]);

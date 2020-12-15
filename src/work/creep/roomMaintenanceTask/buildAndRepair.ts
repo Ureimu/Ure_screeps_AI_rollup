@@ -1,6 +1,6 @@
 import { stateCut } from "../utils/utils";
 
-function isRoledCreepMemory(target: CreepMemory): target is RoledCreepMemory<"buildAndRepair"> {
+function isRoleCreepMemory(target: CreepMemory): target is RoleCreepMemory<"buildAndRepair"> {
     return target.task.taskType === "buildAndRepair";
 }
 
@@ -12,7 +12,7 @@ export function buildAndRepair(creep: Creep): void {
     );
 
     if (ifHarvesting) {
-        creep.getEnergy([{ sourceContainer: 900 }]);
+        creep.getEnergy([{ sourceContainer: { num: 900 } }]);
     } else {
         let whatToDo = "";
         const targetsToFix = creep.room.find(FIND_STRUCTURES, {
@@ -50,14 +50,14 @@ export function buildAndRepair(creep: Creep): void {
 
             case "build":
                 {
-                    const cloestTarget = creep.pos.findClosestByRange(targets);
-                    if (cloestTarget) {
-                        if (creep.pos.isEqualTo(cloestTarget.pos)) {
+                    const closestTarget = creep.pos.findClosestByRange(targets);
+                    if (closestTarget) {
+                        if (creep.pos.isEqualTo(closestTarget.pos)) {
                             // 避免卡住constructionSites
                             creep.move(_.random(1, 8) as DirectionConstant); // 随机移动
                         }
-                        if (creep.build(cloestTarget) === ERR_NOT_IN_RANGE) {
-                            creep.moveTo(cloestTarget, {
+                        if (creep.build(closestTarget) === ERR_NOT_IN_RANGE) {
+                            creep.moveTo(closestTarget, {
                                 visualizePathStyle: {
                                     stroke: "#ffffff"
                                 }
@@ -87,7 +87,7 @@ export function buildAndRepair(creep: Creep): void {
 }
 
 function repair(creep: Creep, targetsToFix: AnyStructure[]) {
-    if (isRoledCreepMemory(creep.memory)) {
+    if (isRoleCreepMemory(creep.memory)) {
         if (!creep.memory.task.taskInf) return;
         if (!creep.memory.task.taskInf.lastRenovate) {
             const targets = targetsToFix;

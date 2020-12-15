@@ -1,29 +1,19 @@
-import { LinkTask } from "task/taskClass/extends/LinkTask";
+import { checkLinkTask } from "../utils/checkLinkTask";
 
 export function sourceLink(link: StructureLink): void {
-    if (!link.room.memory.construction.sourceLink.memory[link.id])
-        link.room.memory.construction.sourceLink.memory[link.id] = {
-            hasPushed: false
-        };
-    if (link.store.energy > 700 && !link.room.memory.construction.sourceLink.memory[link.id].hasPushed) {
-        const taskInf: LinkTaskInf = {
-            priority: 4,
-            isRunning: false,
-            taskInf: {
-                resourceType: RESOURCE_ENERGY,
-                linkTransferFrom: link.id,
-                linkTransferTo: Object.keys(link.room.memory.construction.centerLink.memory)[0] as Id<StructureLink>,
-                resourceNumber: 50000,
-                state: []
-            },
-            taskType: ""
-        };
-        const task = new LinkTask(taskInf);
-        task.pushTask(link.room);
-        link.room.memory.construction.sourceLink.memory[link.id].hasPushed = true;
-    }
-
-    if (link.store.energy < 100 && link.room.memory.construction.sourceLink.memory[link.id].hasPushed) {
-        link.room.memory.construction.sourceLink.memory[link.id].hasPushed = false;
-    }
+    if (typeof Object.keys(link.room.memory.construction.centerLink.memory)[0] === "undefined") return;
+    const centerLinkId = Object.keys(link.room.memory.construction.centerLink.memory)[0] as Id<StructureLink>;
+    const taskInf: LinkTaskInf = {
+        priority: 4,
+        isRunning: false,
+        taskInf: {
+            resourceType: RESOURCE_ENERGY,
+            linkTransferFrom: link.id,
+            linkTransferTo: centerLinkId,
+            resourceNumber: 50000,
+            state: []
+        },
+        taskType: ""
+    };
+    checkLinkTask(taskInf);
 }

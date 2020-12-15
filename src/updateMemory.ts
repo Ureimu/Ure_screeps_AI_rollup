@@ -41,12 +41,11 @@ function initSpawnMemory(room: Room): void {
     const controller = room.controller as StructureController;
     if (controller.my) {
         for (const spawn of room.find(FIND_MY_SPAWNS)) {
-            if (spawn.memory.taskPool === undefined) {
+            if (Object.keys(spawn.memory).length === 0) {
                 spawn.memory = {
                     taskPool: {
                         spawnQueue: []
                     },
-                    lastFinishSpawnTime: 0,
                     isSpawning: false
                 };
             }

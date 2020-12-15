@@ -1,22 +1,27 @@
-import { getBpSum } from "./roominf/creeps";
+import { getBpSum } from "./roomInf/creeps";
+import { getUpgradeSpeed } from "./roomInf/upgradeSpeed";
 import { printMulText } from "./utils";
 
 export function roomVisualize(room: Room): void {
+    const upgradeSpeed: string = getUpgradeSpeed(room.name);
     global.GUI.draw(new RoomVisual(room.name), [
         {
             type: "Div",
             layout: {
                 x: 0,
                 y: 0,
-                width: 20,
-                height: 3,
+                width: 15,
+                height: 5,
                 background: "#000000",
                 opacity: 0.5
             },
             child: printMulText({
                 content: `现在的游戏时间是${Game.time}tick\n该房间spawn在维持的creep的部件总数为${getBpSum(
                     room.name
-                )}\n\n工地数：${room.find(FIND_CONSTRUCTION_SITES).length}`,
+                )}\n能量值：\n工地数：\n升级速度：${upgradeSpeed}/tick,还有${(
+                    ((room.controller?.progressTotal as number) - (room.controller as StructureController).progress) /
+                    Number(upgradeSpeed)
+                ).toFixed(0)}ticks升到下一级`,
                 x: 0,
                 y: 0,
                 align: "left"
@@ -26,7 +31,7 @@ export function roomVisualize(room: Room): void {
                     layout: {
                         width: 10,
                         value: (room.energyAvailable / room.energyCapacityAvailable) * 100,
-                        x: 0,
+                        x: 3,
                         y: 2.215
                     }
                 },
@@ -34,8 +39,27 @@ export function roomVisualize(room: Room): void {
                     type: "Text",
                     layout: {
                         content: `${room.energyAvailable}/${room.energyCapacityAvailable}`,
-                        x: 5,
+                        x: 5 + 3,
                         y: 2,
+                        align: "center",
+                        stroke: "#000000"
+                    }
+                },
+                {
+                    type: "Progress",
+                    layout: {
+                        width: 10,
+                        value: (room.find(FIND_CONSTRUCTION_SITES).length / 100) * 100,
+                        x: 3,
+                        y: 3.215
+                    }
+                },
+                {
+                    type: "Text",
+                    layout: {
+                        content: `${room.find(FIND_CONSTRUCTION_SITES).length}/${100}`,
+                        x: 5 + 3,
+                        y: 3,
                         align: "center",
                         stroke: "#000000"
                     }

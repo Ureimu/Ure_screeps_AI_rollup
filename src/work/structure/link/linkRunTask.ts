@@ -18,7 +18,7 @@ export function linkRunTask(room: Room): void {
                 const linkTransferFrom = Game.getObjectById<StructureLink>(inf.linkTransferFrom);
                 const linkTransferTo = Game.getObjectById<StructureLink>(inf.linkTransferTo);
                 if (linkTransferFrom && linkTransferTo) {
-                    if (linkTransferFrom.store.energy === 800) {
+                    if (linkTransferFrom.store.energy >= 700) {
                         ifOK = linkTransferFrom.transferEnergy(linkTransferTo);
                     } else {
                         ifOK = 1;

@@ -23,6 +23,7 @@ export default {
         format: "cjs",
         sourcemap: true
     },
+    external: [ 'priority_queue' ],
     plugins: [
         nodeResolve({
             customResolveOptions: {moduleDirectory: "utils"}

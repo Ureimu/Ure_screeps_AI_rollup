@@ -25,7 +25,7 @@ interface CreepMemory {
     dontPullMe?: boolean;
 }
 
-interface RoledCreepMemory<T extends creepRoleConstant> {
+interface RoleCreepMemory<T extends creepRoleConstant> {
     task: SpawnTaskInf & { taskInf?: concreteCreepRoleMemory<T> };
     taskPool?: TaskPool;
     bodyparts: bpgGene[];

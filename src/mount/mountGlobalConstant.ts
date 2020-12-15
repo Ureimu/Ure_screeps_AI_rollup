@@ -7,9 +7,12 @@ export function globalConstantRegister(): void {
     global.workRate = {
         manageTask: global.testMode ? 15 : 300,
         construction: global.testMode ? 100 : 1500,
-        spawn: global.testMode ? 20 : 40
+        spawn: global.testMode ? 40 : 70
     };
     global.spawnTaskList = spawnTaskList();
     global.GUI = GUIfun();
     global.creepMemory = {};
+    global.monitor = {
+        upgradeSpeed: []
+    };
 }

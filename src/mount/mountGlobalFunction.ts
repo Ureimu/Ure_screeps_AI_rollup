@@ -62,6 +62,10 @@ export function globalFunctionRegister(): void {
         logger: ""
     };
 
+    global.testError = () => {
+        throw new Error("TestError");
+    };
+
     profiler.registerObject(global.stateLoop, "stateLoop");
 }
 // test.runGridLayout(Game.rooms["W8N3"])

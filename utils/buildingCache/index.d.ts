@@ -8,10 +8,10 @@ interface Room {
     mineral?: Mineral;
     my: boolean;
     level: number;
-    readonly [ResourceConstant: string]: number | undefined;
-    readonly [id: string]: AnyStructure | undefined;
-    readonly [multipleStructure: string]: multipleStructure[] | undefined;
-    readonly [singleStructure: string]: singleStructure | undefined;
+    // readonly [ResourceConstant: string]: number | undefined;
+    // readonly [id: string]: AnyStructure | undefined;
+    // readonly [multipleStructure: string]: multipleStructure[] | undefined;
+    // readonly [singleStructure: string]: singleStructure | undefined;
 }
 
 type ResourceConstantNum = Record<ResourceConstant, number | undefined>;

@@ -1,30 +1,19 @@
 import { allocatingSpawnTask } from "task/utils/allocateAndPushTask";
-import { globalFunctionRegister } from "mount/mountGlobalFunction";
-import { mountPrototypeExtension } from "mount/mountPrototypeExtension";
 import actionMonitor from "utils/actionMonitor";
 import creepWork from "./work/creep/index";
 import "../utils/bypass/index";
 import { errorStackVisualize } from "visual/roomVisual/GUIsetting";
 import manageCreep from "task/manager/manageCreep";
-import { globalConstantRegister } from "mount/mountGlobalConstant";
 import * as profiler from "../utils/profiler";
+import { ErrorMapper } from "utils/ErrorMapper";
+import { mountGlobal } from "mount/mountGlobal";
 
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
-mountPrototypeExtension();
-// mountCreepEnergyMonitor();
-globalConstantRegister();
-globalFunctionRegister();
-if (!Memory.errors) {
-    Memory.errors = {
-        errorCount: [],
-        errorList: [],
-        errorIntervals: []
-    };
-}
-profiler.enable();
-// export const loop = ErrorMapper.wrapLoop(() => {
-export const loop = (): void => {
+export const loop = ErrorMapper.wrapLoop(() => {
+    mountGlobal();
+    // if (global.time % 100 === 0) throw new Error("100");
+    // export const loop = (): void => {
     profiler.wrap(function () {
         try {
             actionMonitor.getEnergyAction();
@@ -33,7 +22,7 @@ export const loop = (): void => {
                 global.stateLoop[stateCut]();
             }
             // actionCounter.init();
-            if (Game.cpu.bucket > 9000) {
+            if (Game.cpu.bucket === 10000) {
                 if (Game.cpu.generatePixel) {
                     Game.cpu.generatePixel();
                 }
@@ -52,13 +41,17 @@ export const loop = (): void => {
                 }
             });
 
+            for (const roomName in Memory.rooms) {
+                if (Object.keys(Memory.rooms[roomName]).length === 0) {
+                    delete Memory.rooms[roomName];
+                }
+            }
+
             allocatingSpawnTask("spawnQueue");
             manageCreep();
 
             for (const spawnName in Game.spawns) {
-                if (!Game.spawns[spawnName].spawning) {
-                    Game.spawns[spawnName].spawnTask();
-                }
+                Game.spawns[spawnName].spawnTask();
             }
 
             for (const creepName in Game.creeps) {
@@ -70,4 +63,5 @@ export const loop = (): void => {
             errorStackVisualize((err as { stack: string }).stack);
         }
     });
-}; // );
+    // };
+});

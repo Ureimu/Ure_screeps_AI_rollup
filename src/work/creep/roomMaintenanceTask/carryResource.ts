@@ -2,12 +2,12 @@ import { lookForStructure } from "utils/findEx";
 import { stateCut } from "work/creep/utils/utils";
 import taskPool from "task/utils/taskPool";
 
-function isRoledCreepMemory(target: CreepMemory): target is RoledCreepMemory<"carryResource"> {
+function isRoleCreepMemory(target: CreepMemory): target is RoleCreepMemory<"carryResource"> {
     return target.task.taskType === "carryResource";
 }
 
 export function carryResource(creep: Creep): void {
-    if (isRoledCreepMemory(creep.memory)) {
+    if (isRoleCreepMemory(creep.memory)) {
         const task = creep.memory.task;
         if (task?.taskInf) {
             const resourceType = task.taskInf.resourceType;

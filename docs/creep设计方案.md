@@ -2,4 +2,6 @@
 
 全局一个taskPool,各个房间一个taskPool
 
-由建筑创建并发布任务到taskPool -- 由creep在执行完手上的任务后自动拿取房间/全局任务 -- creep自动执行任务。
+由建筑创建并发布任务到taskPool -- 由creep在执行完手上的任务后自动拿取房间/全局任务
+
+-- creep自动执行任务。

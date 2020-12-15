@@ -1,7 +1,7 @@
 export function roleListx(room: Room): roleSettingList {
     const level = room.controller?.level as number;
     const roleListX: roleSettingList = {
-        // roomMaintance
+        // roomMaintenance
         harvestSource: {
             bodysetting: [{ move: 1, work: 2 }, { carry: level >= 4 ? 4 : 0 }],
             numberSetting: 2,

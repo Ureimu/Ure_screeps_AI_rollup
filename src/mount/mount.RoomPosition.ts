@@ -55,12 +55,4 @@ export class RoomPositionExtension extends RoomPosition {
     public toStr(): string {
         return `x${this.x}y${this.y}r${this.roomName}`;
     }
-    // 填充所有 spawn 和 extension
-    public fillSpawnEngry(): void {
-        // 代码实现...
-    }
-    // 填充所有 tower
-    public fillTower(): void {
-        // 代码实现...
-    }
 }

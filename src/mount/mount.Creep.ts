@@ -4,7 +4,7 @@ import { getBpNum } from "utils/bodypartsGenerator";
 // 自定义的 Creep 的拓展
 export class CreepExtension extends Creep {
     // 其他更多自定义拓展
-    public getEnergy(lowerLimit: { [name: string]: number }[] = [{}]): string {
+    public getEnergy(lowerLimit: { [name: string]: { num: number; takeAll?: boolean } }[] = [{}]): string {
         if (!this.memory.task.taskInf) return "";
         const structureList: { [name: string]: AnyStoreStructure[] }[] = getStructureFromArray(this.room, lowerLimit);
         const containersL = [];
@@ -14,7 +14,10 @@ export class CreepExtension extends Creep {
                 const containers = _.filter(
                     st1[st2],
                     (k: { store: { [x: string]: number } }) =>
-                        k.store[RESOURCE_ENERGY] > 50 * getBpNum(this.memory.bodyparts, "carry") + lowerLimit[i][st2]
+                        k.store[RESOURCE_ENERGY] >=
+                        (lowerLimit[i][st2].takeAll
+                            ? 1
+                            : 50 * getBpNum(this.memory.bodyparts, "carry") + lowerLimit[i][st2].num)
                 );
                 // console.log(this.name+" "+st2+" "+containers.length+" "+lowerLimit[i][st2]+" "+String(50 * getBpNum(this.memory.bodyparts, "carry") + lowerLimit[i][st2]));
                 if (containers.length > 0) {
@@ -33,27 +36,43 @@ export class CreepExtension extends Creep {
 
         const target = this.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {
             filter: resource => {
+                return resource.resourceType === RESOURCE_ENERGY && resource.amount >= 50;
+            }
+        });
+        const targetC = this.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {
+            filter: resource => {
                 return (
                     resource.resourceType === RESOURCE_ENERGY &&
-                    resource.amount > 50 * getBpNum(this.memory.bodyparts, "carry")
+                    resource.amount > 100 &&
+                    resource.pos.getRangeTo(this) < 3
                 );
             }
         });
         const target2 = this.pos.findClosestByRange(FIND_RUINS, {
             filter: resource => {
-                return resource.store.energy > 50 * getBpNum(this.memory.bodyparts, "carry");
+                return resource.store.energy >= 50 * getBpNum(this.memory.bodyparts, "carry");
             }
         });
 
         if (containersEnergy) {
-            if (this.withdraw(containersEnergy, "energy") === ERR_NOT_IN_RANGE) {
-                this.moveTo(containersEnergy, {
-                    visualizePathStyle: {
-                        stroke: "#ffffff"
-                    }
-                });
+            if (targetC) {
+                if (this.pickup(targetC) === ERR_NOT_IN_RANGE) {
+                    this.moveTo(containersEnergy, {
+                        visualizePathStyle: {
+                            stroke: "#ffffff"
+                        }
+                    });
+                }
+            } else {
+                if (this.withdraw(containersEnergy, "energy") === ERR_NOT_IN_RANGE) {
+                    this.moveTo(containersEnergy, {
+                        visualizePathStyle: {
+                            stroke: "#ffffff"
+                        }
+                    });
+                }
+                this.memory.task.taskInf.lastSource = containersName;
             }
-            this.memory.task.taskInf.lastSource = containersName;
             return containersName;
         } else if (target2) {
             this.moveTo(target2, {

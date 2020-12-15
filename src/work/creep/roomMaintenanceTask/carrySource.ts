@@ -9,24 +9,54 @@ export function carrySource(creep: Creep): void {
         0
     );
 
-    if (ifHarvesting) {
-        creep.getEnergy([{ centerLink: 0 }, { sourceContainer: 0 }, { spawnSourceContainer: 0 }, { storage: 0 }]);
-    } else {
-        const targets = findSpawnOrExtensionNotFull(creep);
-        if (targets.length > 0) {
-            let go = true;
-            while (go) {
-                if (!creep.transportResource(creep.pos.findClosestByRange(targets) as AnyStructure, RESOURCE_ENERGY)) {
-                    targets.pop();
+    const getWork = stateCut(
+        creep,
+        [
+            () => {
+                if (creep.room.energyAvailable < creep.room.energyCapacityAvailable) {
+                    return 0;
                 } else {
-                    go = false;
+                    return 1;
+                }
+            },
+            () => {
+                if (creep.room.energyAvailable < creep.room.energyCapacityAvailable) {
+                    return 0;
+                } else {
+                    return 1;
+                }
+            }
+        ],
+        1
+    );
+
+    if (ifHarvesting) {
+        if (getWork) {
+            creep.getEnergy([{ centerLink: { num: 0 } }, { sourceContainer: { num: 0 } }]);
+        } else {
+            creep.getEnergy([{ centerLink: { num: 0 } }, { storage: { num: 0 } }, { sourceContainer: { num: 0 } }]);
+        }
+    } else {
+        if (!getWork) {
+            const targets = findSpawnOrExtensionNotFull(creep);
+            if (targets.length > 0) {
+                let go = true;
+                while (go) {
+                    if (
+                        !creep.transportResource(creep.pos.findClosestByRange(targets) as AnyStructure, RESOURCE_ENERGY)
+                    ) {
+                        targets.pop();
+                    } else {
+                        go = false;
+                    }
                 }
             }
         } else {
             const gList = [
-                { controllerSourceContainer: { isStorable: true, upperLimit: 1500 } },
+                { centerLink: { isStorable: true, upperLimit: 800 } },
+                { storage: { isStorable: true, upperLimit: 100000 } },
+                { controllerContainer: { isStorable: true, upperLimit: 1500 } }
                 // { spawnSourceContainer: { isStorable: true, upperLimit: 1500 } },
-                { storage: { isStorable: true, upperLimit: 1000000 } }
                 // { tower: { isStorable: true, upperLimit: 400 } }
             ];
             doStuff(creep, gList);
@@ -61,6 +91,7 @@ function doStuff(
     // console.log(JSON.stringify(gList))
     const sList = getStructureFromArray(creep.room, gList);
     // console.log(JSON.stringify(gList[0]["controllerSourceContainer"]?.upperLimit))
+    let getStructure = false;
     for (let i = 0, j = sList.length; i < j; i++) {
         const structuresL = sList[i];
         for (const structuresName in structuresL) {
@@ -73,10 +104,11 @@ function doStuff(
                     typeof structures?.[0]?.store["energy"] == "undefined"
                 ) {
                     if (!creep.transportResource(structures[0], RESOURCE_ENERGY)) {
-                        // console.log(`${structuresName}+${structures[0]?.structureType} same as last one gotten energy, not transfering!!`)
+                        // console.log(`${structuresName}+${structures[0]?.structureType} same as last one gotten energy, not transferring!!`)
                         structures.shift();
                     } else {
-                        // console.log(`${structuresName}+${structures[0]?.structureType} transfering!!`)
+                        getStructure = true;
+                        // console.log(`${structuresName}+${structures[0]?.structureType} transferring!!`)
                         go = false;
                     }
                 } else {
@@ -87,6 +119,12 @@ function doStuff(
                     go = false;
                 }
             }
+            if (getStructure === true) {
+                break;
+            }
+        }
+        if (getStructure === true) {
+            break;
         }
     }
 }

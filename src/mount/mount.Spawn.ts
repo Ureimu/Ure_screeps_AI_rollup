@@ -4,7 +4,10 @@ import taskPool from "../task/utils/taskPool";
 // 自定义的 Spawn 的拓展
 export class SpawnExtension extends StructureSpawn {
     public runSpawnTask(): boolean {
-        if (this.spawning) {
+        if (!this.memory.lastFinishSpawnTime) {
+            this.memory.lastFinishSpawnTime = Game.time;
+        }
+        if (typeof this.spawning?.name === "string") {
             if (!this.memory.isSpawning) {
                 this.memory.isSpawning = true;
             }
@@ -14,18 +17,18 @@ export class SpawnExtension extends StructureSpawn {
                 this.memory.lastFinishSpawnTime = Game.time;
                 this.memory.isSpawning = false;
             }
+            this.memory.recorder =
+                (Game.time - this.memory.lastFinishSpawnTime) *
+                    Math.max(Math.log1p(this.memory.taskPool.spawnQueue.length + 1), 1) -
+                global.workRate.spawn *
+                    Math.floor((this.room.energyCapacityAvailable - this.room.energyAvailable) / 200 + 1);
             if (
-                (Game.time -
-                    this.memory.lastFinishSpawnTime -
-                    global.workRate.spawn *
-                        Math.floor((this.room.energyCapacityAvailable - this.room.energyAvailable) / 200 + 1) >
-                    0 ||
-                    this.room.energyAvailable < 300) &&
-                this.room.energyAvailable !== this.room.energyCapacityAvailable
+                (this.memory.recorder > 0 && this.room.energyAvailable >= 300) ||
+                (this.room.energyAvailable === this.room.energyCapacityAvailable && this.room.energyAvailable >= 300)
             ) {
-                return false;
-            } else {
                 return true;
+            } else {
+                return false;
             }
         }
     }

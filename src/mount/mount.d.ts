@@ -18,6 +18,22 @@ interface StructureSpawn {
     spawnTask(): void;
 }
 
+interface SpawnMemory {
+    stack?: [string, unknown, (...args: unknown[]) => unknown][];
+}
+
+interface RoomMemory {
+    stack?: [string, unknown, (...args: unknown[]) => unknown][];
+}
+
+interface PowerCreepMemory {
+    stack?: [string, unknown, (...args: unknown[]) => unknown][];
+}
+
+interface FlagMemory {
+    stack?: [string, unknown, (...args: unknown[]) => unknown][];
+}
+
 interface Source {
     /**
      * 返回周围正方形区域的不是wall的地形数量
@@ -51,13 +67,18 @@ interface Source {
 }
 
 interface Creep {
-    getEnergy(lowerLimit: { [name: string]: number }[]): string;
+    getEnergy(lowerLimit: { [name: string]: { num: number; takeAll?: boolean } }[]): string;
     transportResource(target: AnyStructure, resourceType: ResourceConstant): boolean;
     getResourceFromStructure(structure: AnyStoreStructure, resourceType: ResourceConstant): void;
 }
 
+interface CreepMemory {
+    stack?: [string, unknown, (...args: unknown[]) => unknown][];
+}
+
 declare namespace NodeJS {
     interface Global {
+        time: number;
         testMode: boolean;
         workRate: { [name: string]: number | string; manageTask: number; construction: number; spawn: number };
         log: any;
@@ -88,5 +109,9 @@ declare namespace NodeJS {
             gridLayout?: string;
             gridLayoutRoom?: string;
         };
+        monitor: {
+            upgradeSpeed: number[];
+        };
+        testError: () => Error;
     }
 }

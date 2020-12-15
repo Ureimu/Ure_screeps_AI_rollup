@@ -13,12 +13,18 @@ export function runLayout(room: Room, layoutName: string, layoutFunc: (room: Roo
         const construction = (room.memory.constructionSchedule[layoutName].layout as formedLayout)[
             constructionName as BuildableStructureConstant
         ];
-        const buildNumberLimit =
-            CONTROLLER_STRUCTURES[constructionName as BuildableStructureConstant][
-                (room.controller as StructureController).level
-            ];
         for (const buildingMemName in construction) {
-            const posStrList = construction[buildingMemName];
+            let levelToBuild = 0;
+            if (typeof construction[buildingMemName].levelToBuild !== "undefined") {
+                levelToBuild = construction[buildingMemName].levelToBuild as number;
+            }
+            const buildNumberLimit =
+                levelToBuild <= (room.controller as StructureController).level
+                    ? CONTROLLER_STRUCTURES[constructionName as BuildableStructureConstant][
+                          (room.controller as StructureController).level
+                      ]
+                    : 0;
+            const posStrList = construction[buildingMemName].posStrList;
             totalSitesNum += putConstructionSites(
                 room,
                 posStrList,
@@ -43,6 +49,7 @@ function putConstructionSites(
     totalSitesNum: number
 ): number {
     if (room.memory.construction[name]?.constructionSitesCompleted === true) return 0;
+    if (buildNumberLimit === 0) return 0;
     const listC = [];
     const posList: RoomPosition[] = [];
     posStrList.forEach(posStr => {
@@ -50,11 +57,11 @@ function putConstructionSites(
     });
     initConstructionMemory(room, name, structureType);
     for (let i = 0; i < posList.length; i++) {
-        const countx = [0, 0];
+        const countX = [0, 0];
         let structures: {
             structureType: string;
             pos: RoomPosition;
-            destory?: () => number;
+            destroy?: () => number;
             remove?: () => number;
         }[] = room.find(FIND_STRUCTURES, {
             filter: structure => {
@@ -72,19 +79,19 @@ function putConstructionSites(
                 for (const x of room.memory.construction[name].pos) {
                     const pos = getPosFromStr(x);
                     if (pos.isEqualTo(posList[i])) {
-                        countx[1] = 1;
+                        countX[1] = 1;
                         break;
                     }
                 }
-                if (countx[1] === 1) {
+                if (countX[1] === 1) {
                     break;
                 }
                 room.memory.construction[name].pos.push(setPosToStr(posList[i]));
-                countx[0] = 1;
+                countX[0] = 1;
                 break;
             }
         }
-        if (countx[0] === 0) {
+        if (countX[0] === 0) {
             listC[i] = room.createConstructionSite(posList[i], structureType);
             if (listC[i] === OK) {
                 totalSitesNum++;

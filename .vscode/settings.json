@@ -26,9 +26,22 @@
     "typescript.tsdk": "./node_modules/typescript/lib",
     "eslint.enable": true,
     "cSpell.words": [
+        "Buildable",
         "Coord",
         "Iclass",
+        "Ifun",
+        "Inte",
+        "Parens",
+        "Scorpior",
+        "Unlicense",
+        "bodyparts",
+        "buble",
+        "dont",
+        "estree",
         "mincut",
-        "nuker"
+        "nodent",
+        "nuker",
+        "pserver",
+        "toolbelt"
     ]
 }

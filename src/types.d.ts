@@ -38,7 +38,8 @@ interface RoomMemory {
 }
 
 interface SpawnMemory {
+    recorder?: number;
     taskPool: TaskPool;
-    lastFinishSpawnTime: number;
+    lastFinishSpawnTime?: number;
     isSpawning: boolean;
 }

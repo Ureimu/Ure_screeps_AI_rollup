@@ -1,7 +1,7 @@
 import {
     genePosStr,
     getDiagPosStr,
-    getPosCoordFromStr,
+    ParseCoord,
     getPosStrInRange,
     getPosFromStr,
     getQuadPosStr,
@@ -23,6 +23,29 @@ import { getCutTiles } from "../../../utils/mincut/minCut";
  */
 const keepTime = 200; // 预览的持续时间
 const xUp = 0.25;
+const buildNumberLimit = CONTROLLER_STRUCTURES;
+buildNumberLimit.constructedWall = {
+    0: 0,
+    1: 0,
+    2: 0,
+    3: 0,
+    4: 0,
+    5: 2500,
+    6: 2500,
+    7: 2500,
+    8: 2500
+};
+buildNumberLimit.rampart = {
+    0: 0,
+    1: 0,
+    2: 0,
+    3: 0,
+    4: 0,
+    5: 2500,
+    6: 2500,
+    7: 2500,
+    8: 2500
+};
 
 export function getGridLayout(room: Room): void {
     const startCpu = Game.cpu.getUsed();
@@ -90,12 +113,12 @@ export function getGridLayout(room: Room): void {
 
                             // 在这里遍历所有建筑，并将cost设置为最高
                             buildingExpand.forEach(posStr => {
-                                const coord = getPosCoordFromStr(posStr);
+                                const coord = ParseCoord(posStr);
                                 costs.set(coord.x, coord.y, 0xff);
                             });
                             // 在这里遍历所有路，并将cost设置为1
                             roadExpand.forEach(posStr => {
-                                const coord = getPosCoordFromStr(posStr);
+                                const coord = ParseCoord(posStr);
                                 costs.set(coord.x, coord.y, 1);
                             });
 
@@ -149,12 +172,12 @@ export function getGridLayout(room: Room): void {
 
                         // 在这里遍历所有建筑，并将cost设置为最高
                         buildingExpand.forEach(posStr => {
-                            const coord = getPosCoordFromStr(posStr);
+                            const coord = ParseCoord(posStr);
                             costs.set(coord.x, coord.y, 0xff);
                         });
                         // 在这里遍历所有路，并将cost设置为1
                         roadExpand.forEach(posStr => {
-                            const coord = getPosCoordFromStr(posStr);
+                            const coord = ParseCoord(posStr);
                             costs.set(coord.x, coord.y, 1);
                         });
 
@@ -236,12 +259,12 @@ export function getGridLayout(room: Room): void {
 
                         // 在这里遍历所有建筑，并将cost设置为最高
                         buildingExpand.forEach(posStr => {
-                            const coord = getPosCoordFromStr(posStr);
+                            const coord = ParseCoord(posStr);
                             costs.set(coord.x, coord.y, 0xff);
                         });
                         // 在这里遍历所有路，并将cost设置为1
                         roadExpand.forEach(posStr => {
-                            const coord = getPosCoordFromStr(posStr);
+                            const coord = ParseCoord(posStr);
                             costs.set(coord.x, coord.y, 1);
                         });
 
@@ -443,59 +466,115 @@ export function getGridLayout(room: Room): void {
             initConstructionScheduleMemory(room, "gridLayout");
             room.memory.constructionSchedule.gridLayout.layout = {
                 road: {
-                    baseRoad: Array.from(fullRoadExpand.keys()),
-                    sourceAndControllerRoad: Array.from(sourceAndControllerRoadPosSet.keys()),
-                    mineralRoad: Array.from(mineralRoadPosSet.keys()),
-                    outwardsRoad: Array.from(outwardsRoadPosSet.keys())
+                    baseRoad: { posStrList: Array.from(fullRoadExpand.keys()), levelToBuild: 8 },
+                    sourceAndControllerRoad: {
+                        posStrList: Array.from(sourceAndControllerRoadPosSet.keys()),
+                        levelToBuild: 2
+                    },
+                    mineralRoad: {
+                        posStrList: Array.from(mineralRoadPosSet.keys()),
+                        levelToBuild: 8
+                    },
+                    outwardsRoad: {
+                        posStrList: Array.from(outwardsRoadPosSet.keys()),
+                        levelToBuild: 5
+                    }
                 },
                 extension: {
-                    extension: Array.from(extensionPosSet.keys())
+                    extension: {
+                        posStrList: Array.from(extensionPosSet.keys()),
+                        levelToBuild: 1
+                    }
                 },
                 tower: {
-                    tower: Array.from(towerSet.keys())
+                    tower: {
+                        posStrList: Array.from(towerSet.keys())
+                    }
                 },
                 container: {
-                    sourceContainer: Array.from(sourceContainerPosSet.keys()),
-                    controllerContainer: Array.from(controllerContainerPosSet.keys()),
-                    mineralContainer: Array.from(mineralContainerPosSet.keys())
+                    sourceContainer: {
+                        posStrList: Array.from(sourceContainerPosSet.keys()),
+                        levelToBuild: 1
+                    },
+                    controllerContainer: {
+                        posStrList: Array.from(controllerContainerPosSet.keys()),
+                        levelToBuild: 1
+                    },
+                    mineralContainer: {
+                        posStrList: Array.from(mineralContainerPosSet.keys()),
+                        levelToBuild: 8
+                    }
                 },
                 link: {
-                    sourceLink: Array.from(sourceLinkPosSet.keys()),
-                    controllerLink: Array.from(controllerLinkPosSet.keys()),
-                    centerLink: [Array.from(getDiagPosStr(center).keys())[0]]
+                    sourceLink: {
+                        posStrList: Array.from(sourceLinkPosSet.keys()),
+                        levelToBuild: 6
+                    },
+                    controllerLink: {
+                        posStrList: Array.from(controllerLinkPosSet.keys()),
+                        levelToBuild: 5
+                    },
+                    centerLink: {
+                        posStrList: [Array.from(getDiagPosStr(center).keys())[0]],
+                        levelToBuild: 5
+                    }
                 },
                 constructedWall: {
-                    wall: Array.from(wallPosSet.keys())
+                    wall: {
+                        posStrList: Array.from(wallPosSet.keys()),
+                        levelToBuild: 5
+                    }
                 },
                 rampart: {
-                    rampart: Array.from(rampartPosSet.keys())
+                    rampart: {
+                        posStrList: Array.from(rampartPosSet.keys()),
+                        levelToBuild: 5
+                    }
                 },
                 spawn: {
-                    spawn: Array.from(spawnSet.keys())
+                    spawn: {
+                        posStrList: Array.from(spawnSet.keys())
+                    }
                 },
                 storage: {
-                    storage: [Array.from(getDiagPosStr(center).keys())[1]]
+                    storage: {
+                        posStrList: [Array.from(getDiagPosStr(center).keys())[1]]
+                    }
                 },
                 terminal: {
-                    terminal: [Array.from(getDiagPosStr(center).keys())[2]]
+                    terminal: {
+                        posStrList: [Array.from(getDiagPosStr(center).keys())[2]]
+                    }
                 },
                 factory: {
-                    factory: [Array.from(getDiagPosStr(center).keys())[3]]
+                    factory: {
+                        posStrList: [Array.from(getDiagPosStr(center).keys())[3]]
+                    }
                 },
                 lab: {
-                    lab: Array.from(labSet.keys())
+                    lab: {
+                        posStrList: Array.from(labSet.keys())
+                    }
                 },
                 powerSpawn: {
-                    powerSpawn: Array.from(powerSpawnSet.keys())
+                    powerSpawn: {
+                        posStrList: Array.from(powerSpawnSet.keys())
+                    }
                 },
                 observer: {
-                    observer: Array.from(obSet.keys())
+                    observer: {
+                        posStrList: Array.from(obSet.keys())
+                    }
                 },
                 nuker: {
-                    nuker: Array.from(nukerSet.keys())
+                    nuker: {
+                        posStrList: Array.from(nukerSet.keys())
+                    }
                 },
                 extractor: {
-                    extractor: [setPosToStr(room.find(FIND_MINERALS)[0].pos)]
+                    extractor: {
+                        posStrList: [setPosToStr(room.find(FIND_MINERALS)[0].pos)]
+                    }
                 }
             };
             // 运行渲染函数。用数字搭配不同的颜色表示建筑，运行(keepTime)tick并把缓存挂在global上，告知用户自行查看。
@@ -651,7 +730,7 @@ function pushLayout(
     color: string[]
 ): void {
     exp.forEach(posStr => {
-        const coord = getPosCoordFromStr(posStr);
+        const coord = ParseCoord(posStr);
         layout.push({
             type: "Text",
             layout: {
@@ -674,7 +753,7 @@ function getMinCut(preferCloserBarriers = true, fullBuildingExpand: Set<string>,
     const padding = 3;
     for (const building of fullBuildingExpand) {
         if (building) {
-            const { x, y } = getPosCoordFromStr(building);
+            const { x, y } = ParseCoord(building);
             const [x1, y1] = [Math.max(x - padding, 0), Math.max(y - padding, 0)];
             const [x2, y2] = [Math.min(x + padding, 49), Math.min(y + padding, 49)];
             rectArray.push({ x1, y1, x2, y2 });

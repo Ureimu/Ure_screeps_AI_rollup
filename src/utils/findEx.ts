@@ -3,32 +3,32 @@ import { getPosFromStr } from "construction/utils/strToRoomPosition";
 export function lookForStructure(
     room: Room,
     structureName: string,
-    storeable = false
+    storable = false
 ): AnyStructure[] | AnyStoreStructure[] | undefined {
-    const pos = lookForStructurePos(room, structureName);
-    if (typeof pos === "undefined") return;
-    const stlist = [];
-    if (storeable) {
-        for (const npos of pos) {
-            for (const i of npos.lookFor(LOOK_STRUCTURES)) {
+    const posList = lookForStructurePos(room, structureName);
+    if (typeof posList === "undefined") return;
+    const structureList = [];
+    if (storable) {
+        for (const pos of posList) {
+            for (const i of pos.lookFor(LOOK_STRUCTURES)) {
                 if (i.structureType === room.memory.construction[structureName].structureType) {
                     const x = Game.getObjectById(i.id) as AnyStoreStructure;
                     if (x.store) {
-                        stlist.push(x);
+                        structureList.push(x);
                     }
                 }
             }
         }
-        return stlist;
+        return structureList;
     } else {
-        for (const npos of pos) {
-            for (const i of npos.lookFor(LOOK_STRUCTURES)) {
+        for (const pos of posList) {
+            for (const i of pos.lookFor(LOOK_STRUCTURES)) {
                 if (i.structureType === room.memory.construction[structureName].structureType) {
-                    stlist.push(Game.getObjectById(i.id) as AnyStructure);
+                    structureList.push(Game.getObjectById(i.id) as AnyStructure);
                 }
             }
         }
-        return stlist;
+        return structureList;
     }
 }
 
@@ -50,9 +50,8 @@ export function lookForStructurePos(room: Room, structureName: string): RoomPosi
     if (!!room.memory.construction[structureName] && !!room.memory.construction[structureName].pos[0]) {
         const posList = [];
         for (const posStr of room.memory.construction[structureName].pos) {
-            const npos = getPosFromStr(posStr);
-            const Pos = new RoomPosition(npos.x, npos.y, npos.roomName);
-            posList.push(Pos);
+            const pos = getPosFromStr(posStr);
+            posList.push(pos);
         }
         return posList;
     } else {
@@ -108,7 +107,7 @@ export function getStructureFromArray(
     return structureList;
 }
 
-export function isStructureinPos(
+export function isStructureInPos(
     structures: Structure<StructureConstant>[],
     structureType: StructureConstant
 ): boolean {
