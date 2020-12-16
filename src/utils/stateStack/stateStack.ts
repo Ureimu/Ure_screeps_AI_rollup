@@ -1,5 +1,3 @@
-/* eslint-disable max-classes-per-file */
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export class StateStack {
     public memory: { stack?: [string, unknown, (...args: unknown[]) => unknown][] } = {};
     public invokeState(): boolean {
@@ -41,13 +39,3 @@ export class StateStack {
         this.memory.stack = undefined;
     }
 }
-
-export class CreepStateStack extends Creep {}
-
-export class StructureSpawnStateStack extends StructureSpawn {}
-
-export class RoomStateStack extends Room {}
-
-export class PowerCreepStateStack extends PowerCreep {}
-
-export class FlagStateStack extends Flag {}

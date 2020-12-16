@@ -5,7 +5,7 @@ import { RoomExtension } from "./mount.Room";
 import { RoomPositionExtension } from "./mount.RoomPosition";
 import { SourceExtension } from "./mount.Source";
 import { SpawnExtension } from "./mount.Spawn";
-import { StateStack } from "./stateStack";
+import { StateStack } from "../utils/stateStack/stateStack";
 
 // 挂载所有的额外属性和方法
 const assignPrototype = function (obj1: { [key: string]: any }, obj2: { [key: string]: any }) {

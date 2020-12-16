@@ -6,16 +6,22 @@
   "//": "If you add or change the names of destinations in screeps.json, make sure you update these scripts to reflect the changes",
   "scripts": {
     "lint": "eslint \"src/**/*.ts\"",
+    "lint-report": "nyc --reporter=lcov --reporter=text-summary eslint \"src/**/*.ts\"",
     "build": "rollup -c",
+    "build-report": "nyc --reporter=lcov --reporter=text-summary rollup -c",
     "ma": "rollup -c --environment DEST:main",
     "ps": "rollup -c --environment DEST:pserver",
     "sim": "rollup -c --environment DEST:sim",
-    "test": "npm run test-unit",
+    "test": "nyc npm run test && nyc npm run test-integration",
+    "test-integration-nyc": "nyc npm run test-integration",
     "test-unit": "rollup -c rollup.test-unit-config.js && mocha dist/test-unit.bundle.js",
+    "test-integration-build": "npm run build && rollup -c rollup.test-integration-config.js",
     "test-integration": "npm run build && rollup -c rollup.test-integration-config.js && mocha dist/test-integration.bundle.js",
+    "test-integration-report": "nyc --reporter=lcov --reporter=text-summary npm run test-unit",
     "watch-main": "rollup -cw --environment DEST:main",
     "watch-pserver": "rollup -cw --environment DEST:pserver",
-    "watch-sim": "rollup -cw --environment DEST:sim"
+    "watch-sim": "rollup -cw --environment DEST:sim",
+    "mocha": "mocha dist/test-unit.bundle.js"
   },
   "repository": {
     "type": "git",
@@ -68,6 +74,7 @@
   },
   "dependencies": {
     "@screeps/common": "^2.15.0",
+    "nyc": "^15.1.0",
     "react": "^17.0.1",
     "screeps-profiler": "^2.0.1",
     "screeps-server-mockup": "^1.5.1",

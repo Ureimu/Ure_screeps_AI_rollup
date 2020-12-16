@@ -12,6 +12,8 @@
 /_book
 /build/*
 /test/data/*
+/coverage
+/.nyc_output
 
 # TypeScript definitions installed by Typings
 /typings

@@ -21,7 +21,9 @@
         ".rpt2_cache/**": true,
         "dist/**": true,
         "node_modules/**": true,
-        "typings/**": true
+        "typings/**": true,
+        "**/.nyc_output": true,
+        "**/coverage": true,
     },
     "typescript.tsdk": "./node_modules/typescript/lib",
     "eslint.enable": true,
@@ -35,13 +37,21 @@
         "Scorpior",
         "Unlicense",
         "bodyparts",
+        "bodysetting",
         "buble",
+        "crzytrane",
         "dont",
         "estree",
+        "lcov",
         "mincut",
         "nodent",
         "nuker",
         "pserver",
         "toolbelt"
-    ]
+    ],
+    "mochaExplorer.files": "dist/test-integration.bundle.js",
+    "mochaExplorer.require": [
+        "ts-node/register",
+        "test/setup-node.js"
+    ],
 }
