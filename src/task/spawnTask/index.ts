@@ -17,7 +17,7 @@ export function spawnTaskList(): {
     };
 } {
     return {
-        roomMaintance: {
+        roomMaintenance: {
             harvestSource,
             carrySource,
             upgradeController,

@@ -3,6 +3,7 @@ declare namespace NodeJS {
         creepMemory: {
             [name: string]: {
                 bundledPos?: RoomPosition;
+                bundledUpgradePos?: RoomPosition;
                 bundledStoragePos?: RoomPosition;
                 bundledLinkPos?: RoomPosition;
             };

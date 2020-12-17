@@ -1,4 +1,5 @@
 import { getBpByRole } from "task/spawnTask/utils/bodypartsSetting";
+import { RoomTask } from "task/utils/RoomTask";
 import { bpg, getBpEnergy } from "utils/bodypartsGenerator";
 import taskPool from "../task/utils/taskPool";
 // 自定义的 Spawn 的拓展
@@ -56,6 +57,8 @@ export class SpawnExtension extends StructureSpawn {
                         taskList.push(task);
                         errorList.push(ifOK);
                     } else {
+                        const roomTask = new RoomTask(task.spawnInf.roomName, task.taskType);
+                        roomTask.hasPushedToSpawn = false;
                         // 确认已经在生成creep时执行的任务
                         // global.creepMemory[inf.creepName]={};
                         if (Game.getObjectById(task.sponsor as Sponsor)) {

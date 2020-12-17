@@ -157,7 +157,7 @@ export class CreepExtension extends Creep {
             }
             case "upgradeController": {
                 if ((global.rooms[this.room.name].controller?.blankSpace.length as number) > 0) {
-                    global.creepMemory[this.name].bundledPos = getPosFromStr(
+                    global.creepMemory[this.name].bundledUpgradePos = getPosFromStr(
                         (global.rooms[this.room.name].controller?.blankSpace as string[]).pop() as string
                     );
                 }
@@ -165,7 +165,7 @@ export class CreepExtension extends Creep {
             }
             case "buildAndRepair": {
                 if ((global.rooms[this.room.name].controller?.blankSpace.length as number) > 0) {
-                    global.creepMemory[this.name].bundledPos = getPosFromStr(
+                    global.creepMemory[this.name].bundledUpgradePos = getPosFromStr(
                         (global.rooms[this.room.name].controller?.blankSpace as string[]).pop() as string
                     );
                 }
