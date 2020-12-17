@@ -12,7 +12,7 @@ export function manageTask(room: Room): void {
     const roomName = room.name;
     for (const taskKindName in global.spawnTaskList) {
         let ifPush = false;
-        if (taskKindName !== "roomMaintance") ifPush = true;
+        if (taskKindName !== "roomMaintenance") ifPush = true;
         for (const taskName in global.spawnTaskList[taskKindName]) {
             let iftaskPush = false;
             if (taskName === "centerCarry") iftaskPush = true;

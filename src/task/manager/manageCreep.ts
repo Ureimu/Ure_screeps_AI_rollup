@@ -8,7 +8,7 @@ const manageCreep = function (): void {
         if (!(name in Game.creeps)) {
             for (const taskKindName in global.spawnTaskList) {
                 switch (taskKindName) {
-                    case "roomMaintance":
+                    case "roomMaintenance":
                         if (Memory.creeps[name].task.taskType in global.spawnTaskList[taskKindName]) {
                             const task = Memory.creeps[name].task as SpawnTaskInf;
                             const roomTask = new RoomTask(task.spawnInf.roomName, task.taskType);
