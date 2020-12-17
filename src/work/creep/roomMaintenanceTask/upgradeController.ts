@@ -27,11 +27,14 @@ export function upgradeController(creep: Creep): void {
         ]);
     } else {
         if (creep.upgradeController(creep.room.controller as StructureController) === ERR_NOT_IN_RANGE) {
-            creep.moveTo(global.creepMemory[creep.name].bundledPos || (creep.room.controller as StructureController), {
-                visualizePathStyle: {
-                    stroke: "#ffffff"
+            creep.moveTo(
+                global.creepMemory[creep.name].bundledUpgradePos || (creep.room.controller as StructureController),
+                {
+                    visualizePathStyle: {
+                        stroke: "#ffffff"
+                    }
                 }
-            });
+            );
         }
     }
 }
