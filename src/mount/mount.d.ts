@@ -88,6 +88,7 @@ declare namespace NodeJS {
         testMode: boolean;
         workRate: { [name: string]: number | string; manageTask: number; construction: number; spawn: number };
         log: any;
+        clearError(): void;
         detail: () => void;
         bpg: (arg0: bpgGene[]) => BodyPartConstant[];
         rooms: {

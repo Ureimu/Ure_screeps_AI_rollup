@@ -24,6 +24,12 @@ export function globalFunctionRegister(): void {
         RawMemory.set("");
     };
 
+    global.clearError = function (): void {
+        Memory.errors.errorCount = [];
+        Memory.errors.errorIntervals = [];
+        Memory.errors.errorList = [];
+    };
+
     global.newTask = function (roomName: string, taskName: string): void {
         Memory.rooms[roomName].innerRoomTaskSet[taskName].hasPushed = false;
     };
