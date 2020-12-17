@@ -1,5 +1,6 @@
 import { getStructureFromArray, lookForStructureName } from "utils/findEx";
 import { getBpNum } from "utils/bodypartsGenerator";
+import { getPosFromStr } from "construction/utils/strToRoomPosition";
 
 // 自定义的 Creep 的拓展
 export class CreepExtension extends Creep {
@@ -123,6 +124,52 @@ export class CreepExtension extends Creep {
                         stroke: "#ffffff"
                     }
                 });
+            }
+        }
+    }
+
+    public getGlobalMemory(): void {
+        if (!global.creepMemory[this.name]) {
+            global.creepMemory[this.name] = {};
+            this.setBundledPos();
+        }
+    }
+
+    private setBundledPos() {
+        switch (this.memory.task.taskType) {
+            case "harvestSource": {
+                const source = Game.getObjectById<Source>(this.memory.task.sponsor as Id<Source>) as Source;
+                global.creepMemory[this.name].bundledPos = source.pos
+                    .findInRange(FIND_STRUCTURES, 1, {
+                        filter: structure => {
+                            return structure.structureType === STRUCTURE_CONTAINER;
+                        }
+                    })
+                    .pop()?.pos;
+                global.creepMemory[this.name].bundledLinkPos = source.pos
+                    .findInRange(FIND_STRUCTURES, 2, {
+                        filter: structure => {
+                            return structure.structureType === STRUCTURE_LINK;
+                        }
+                    })
+                    .pop()?.pos;
+                break;
+            }
+            case "upgradeController": {
+                if ((global.rooms[this.room.name].controller?.blankSpace.length as number) > 0) {
+                    global.creepMemory[this.name].bundledPos = getPosFromStr(
+                        (global.rooms[this.room.name].controller?.blankSpace as string[]).pop() as string
+                    );
+                }
+                break;
+            }
+            case "buildAndRepair": {
+                if ((global.rooms[this.room.name].controller?.blankSpace.length as number) > 0) {
+                    global.creepMemory[this.name].bundledPos = getPosFromStr(
+                        (global.rooms[this.room.name].controller?.blankSpace as string[]).pop() as string
+                    );
+                }
+                break;
             }
         }
     }

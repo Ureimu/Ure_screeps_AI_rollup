@@ -4,7 +4,7 @@ import { stateCut } from "../utils/utils";
 
 export function harvestSource(creep: Creep): void {
     if (!creep.memory.dontPullMe) creep.memory.dontPullMe = true;
-    getGlobalMemory(creep);
+    creep.getGlobalMemory();
     const source = Game.getObjectById(creep.memory.task.sponsor as Id<Source>) as Source;
     ifMove();
     if (!global.creepMemory[creep.name].bundledLinkPos) {
@@ -70,29 +70,4 @@ export function harvestSource(creep: Creep): void {
             });
         }
     }
-}
-
-function getGlobalMemory(creep: Creep) {
-    if (!global.creepMemory[creep.name]) {
-        global.creepMemory[creep.name] = {};
-        setBundledPos(creep);
-    }
-}
-
-function setBundledPos(creep: Creep) {
-    const source = Game.getObjectById<Source>(creep.memory.task.sponsor as Id<Source>) as Source;
-    global.creepMemory[creep.name].bundledPos = source.pos
-        .findInRange(FIND_STRUCTURES, 1, {
-            filter: structure => {
-                return structure.structureType === STRUCTURE_CONTAINER;
-            }
-        })
-        .pop()?.pos;
-    global.creepMemory[creep.name].bundledLinkPos = source.pos
-        .findInRange(FIND_STRUCTURES, 2, {
-            filter: structure => {
-                return structure.structureType === STRUCTURE_LINK;
-            }
-        })
-        .pop()?.pos;
 }

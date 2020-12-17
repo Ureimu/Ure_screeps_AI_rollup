@@ -15,4 +15,11 @@ export function globalConstantRegister(): void {
     global.monitor = {
         upgradeSpeed: []
     };
+    global.rooms = {};
+    _.forEach(Game.rooms, room => {
+        if (room.controller?.my) {
+            global.rooms[room.name] = {};
+            room.controller.initsGlobalMemory();
+        }
+    });
 }

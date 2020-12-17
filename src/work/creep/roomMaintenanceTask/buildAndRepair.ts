@@ -5,6 +5,7 @@ function isRoleCreepMemory(target: CreepMemory): target is RoleCreepMemory<"buil
 }
 
 export function buildAndRepair(creep: Creep): void {
+    creep.getGlobalMemory();
     const ifHarvesting = stateCut(
         creep,
         [() => Number(creep.store[RESOURCE_ENERGY] === 0), () => Number(creep.store.getFreeCapacity() !== 0)],
@@ -73,11 +74,14 @@ export function buildAndRepair(creep: Creep): void {
 
             case "upgrade":
                 if (creep.upgradeController(creep.room.controller as StructureController) === ERR_NOT_IN_RANGE) {
-                    creep.moveTo(creep.room.controller as StructureController, {
-                        visualizePathStyle: {
-                            stroke: "#ffffff"
+                    creep.moveTo(
+                        global.creepMemory[creep.name].bundledPos || (creep.room.controller as StructureController),
+                        {
+                            visualizePathStyle: {
+                                stroke: "#ffffff"
+                            }
                         }
-                    });
+                    );
                 }
                 break;
             default:

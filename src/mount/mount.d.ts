@@ -18,6 +18,11 @@ interface StructureSpawn {
     spawnTask(): void;
 }
 
+interface StructureController {
+    checkBlankSpace(): RoomPositionStr[];
+    initsGlobalMemory(): void;
+}
+
 interface SpawnMemory {
     stack?: [string, unknown, (...args: unknown[]) => unknown][];
 }
@@ -70,6 +75,7 @@ interface Creep {
     getEnergy(lowerLimit: { [name: string]: { num: number; takeAll?: boolean } }[]): string;
     transportResource(target: AnyStructure, resourceType: ResourceConstant): boolean;
     getResourceFromStructure(structure: AnyStoreStructure, resourceType: ResourceConstant): void;
+    getGlobalMemory(): void;
 }
 
 interface CreepMemory {
@@ -84,6 +90,11 @@ declare namespace NodeJS {
         log: any;
         detail: () => void;
         bpg: (arg0: bpgGene[]) => BodyPartConstant[];
+        rooms: {
+            [name: string]: {
+                controller?: { blankSpace: string[] };
+            };
+        };
         GenedGetBodyparts: bpgGene[];
         GenedGetBodypartsNum: bpgGene[];
         GenedBodypartsList: BodyPartConstant[];
