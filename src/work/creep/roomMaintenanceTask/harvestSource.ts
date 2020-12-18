@@ -29,7 +29,7 @@ export function harvestSource(creep: Creep): void {
                     }
                 },
                 () => {
-                    if (link.store.energy === 800) {
+                    if (link.store.energy === 800 || container.store.energy === 0) {
                         return 0;
                     } else {
                         return 1;

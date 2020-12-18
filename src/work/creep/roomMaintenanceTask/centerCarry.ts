@@ -1,24 +1,16 @@
-import { ParseCoord, getPosFromStr } from "construction/utils/strToRoomPosition";
+import { getPosFromStr } from "construction/utils/strToRoomPosition";
 import { getBpNum } from "utils/bodypartsGenerator";
 import { lookForStructureByPos } from "utils/findEx";
 
 export function centerCarry(creep: Creep): void {
     if (!creep.memory.dontPullMe) creep.memory.dontPullMe = true;
     if (!global.creepMemory[creep.name]) global.creepMemory[creep.name] = {};
-    if (!global.creepMemory[creep.name].bundledPos)
-        global.creepMemory[creep.name].bundledPos = new RoomPosition(
-            (ParseCoord(creep.room.memory.construction.centerLink.pos[0]).x +
-                ParseCoord(creep.room.memory.construction.factory.pos[0]).x +
-                ParseCoord(creep.room.memory.construction.terminal.pos[0]).x +
-                ParseCoord(creep.room.memory.construction.storage.pos[0]).x) /
-                4,
-            (ParseCoord(creep.room.memory.construction.centerLink.pos[0]).y +
-                ParseCoord(creep.room.memory.construction.factory.pos[0]).y +
-                ParseCoord(creep.room.memory.construction.terminal.pos[0]).y +
-                ParseCoord(creep.room.memory.construction.storage.pos[0]).y) /
-                4,
-            creep.room.name
+    if (!global.creepMemory[creep.name].bundledPos) {
+        const center = getPosFromStr(
+            (creep.room.memory.constructionSchedule.gridLayout.creepWorkPos?.centerPos as string[])[0]
         );
+        global.creepMemory[creep.name].bundledPos = center;
+    }
     if (!global.creepMemory[creep.name].bundledLinkPos) {
         global.creepMemory[creep.name].bundledLinkPos = getPosFromStr(creep.room.memory.construction.centerLink.pos[0]);
     }

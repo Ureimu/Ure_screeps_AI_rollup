@@ -1,6 +1,6 @@
 import { autoConstruction } from "construction";
+import manageTask from "task/manager/manageTask";
 import { initNewRoomSetting } from "updateMemory";
-import { manageTask } from "task";
 import { roomVisualize } from "visual/roomVisual/GUIsetting";
 import { runStructure } from "work/structure";
 

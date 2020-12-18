@@ -464,6 +464,9 @@ export function getGridLayout(room: Room): void {
 
             // 初始化memory
             initConstructionScheduleMemory(room, "gridLayout");
+            room.memory.constructionSchedule.gridLayout.creepWorkPos = {
+                centerPos: [center]
+            };
             room.memory.constructionSchedule.gridLayout.layout = {
                 road: {
                     baseRoad: { posStrList: Array.from(fullRoadExpand.keys()), levelToBuild: 8 },

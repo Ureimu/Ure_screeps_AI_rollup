@@ -31,6 +31,10 @@ export const loop = (): void => {
 
             _.forEach(Game.rooms, room => {
                 if (room.controller?.my) {
+                    if (!room.memory.initialize) {
+                        room.initMemory(false);
+                        room.memory.initialize = true;
+                    }
                     room.autoSafeMode();
                     room.initMemory(false);
                     room.autoPlanConstruction();
@@ -38,7 +42,10 @@ export const loop = (): void => {
                     room.runStructure();
                     room.manageTask();
                 } else {
-                    room.initMemory(true);
+                    if (!room.memory.initialize) {
+                        room.initMemory(true);
+                        room.memory.initialize = true;
+                    }
                 }
             });
 

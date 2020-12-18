@@ -88,4 +88,5 @@ interface RoomTaskInte {
     ifAllocateNewSpawnTaskToSpawn: boolean;
     hasPushed: boolean;
     hasPushedToSpawn: boolean;
+    runningNumber: number;
 }

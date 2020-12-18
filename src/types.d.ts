@@ -35,6 +35,7 @@ interface Memory {
 interface RoomMemory {
     taskPool: TaskPool;
     innerRoomTaskSet: { [name: string]: RoomTaskInte };
+    initialize?: boolean;
 }
 
 interface SpawnMemory {

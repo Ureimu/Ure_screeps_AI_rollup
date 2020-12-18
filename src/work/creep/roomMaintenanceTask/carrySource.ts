@@ -54,7 +54,7 @@ export function carrySource(creep: Creep): void {
         } else {
             const gList = [
                 { centerLink: { isStorable: true, upperLimit: 800 } },
-                { storage: { isStorable: true, upperLimit: 100000 } },
+                { storage: { isStorable: true, upperLimit: 35000 } },
                 { controllerContainer: { isStorable: true, upperLimit: 1500 } }
                 // { spawnSourceContainer: { isStorable: true, upperLimit: 1500 } },
                 // { tower: { isStorable: true, upperLimit: 400 } }
