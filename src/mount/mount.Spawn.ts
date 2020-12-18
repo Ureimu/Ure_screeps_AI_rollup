@@ -1,4 +1,4 @@
-import { getBpByRole } from "task/spawnTask/utils/bodypartsSetting";
+import { getBpByRole } from "task/spawnTask/utils/getBpByRole";
 import { RoomTask } from "task/utils/RoomTask";
 import { bpg, getBpEnergy } from "utils/bodypartsGenerator";
 import taskPool from "../task/utils/taskPool";

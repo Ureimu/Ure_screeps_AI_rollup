@@ -1,0 +1,1 @@
+给每一个creep分配了controller旁边的位置，避免乱对穿。

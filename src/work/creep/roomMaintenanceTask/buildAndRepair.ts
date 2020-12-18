@@ -73,7 +73,12 @@ export function buildAndRepair(creep: Creep): void {
                 break;
 
             case "upgrade":
-                if (creep.upgradeController(creep.room.controller as StructureController) === ERR_NOT_IN_RANGE) {
+                if (
+                    !creep.pos.isEqualTo(
+                        global.creepMemory[creep.name].bundledUpgradePos ||
+                            (creep.room.controller as StructureController)
+                    )
+                ) {
                     creep.moveTo(
                         global.creepMemory[creep.name].bundledUpgradePos ||
                             (creep.room.controller as StructureController),
@@ -84,6 +89,7 @@ export function buildAndRepair(creep: Creep): void {
                         }
                     );
                 }
+                creep.upgradeController(creep.room.controller as StructureController);
                 break;
             default:
                 break;

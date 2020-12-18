@@ -18,24 +18,14 @@ export class RoomTask {
         this.roomName = roomName;
         this.roomTaskName = roomTaskName;
         if (typeof Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName] == "undefined") {
-            Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName] = {
-                isMyRoom: false,
-                // interval: 1500,
-                runNow: true,
-                ifPushNewSpawnTask: true,
-                NewSpawnTaskQueue: [],
-                ifAllocateNewSpawnTaskToSpawn: true,
-                // nextPushTimePoint: Game.time + 1500,
-                hasPushed: pushAtBeginning,
-                hasPushedToSpawn: false
-            };
+            this.inits(pushAtBeginning);
         }
     }
 
     /**
      *
      * 初始化一个房间任务对象。
-     * @param {boolean} ismyRoom 是否判断该房间为已经拥有的房间，如果判断为没有拥有的房间，则到时间也不会执行任务
+     * @param {boolean} isMyRoom 是否判断该房间为已经拥有的房间，如果判断为没有拥有的房间，则到时间也不会执行任务
      * @param {boolean} runNow 是否立即执行，nextPushTimePoint的值会因此立即重置。
      * @param {boolean} ifPushNewSpawnTask 传入值被用来判断是否在interval到了的时候进行新的生成creep任务推送。
      * @param {TaskQueue} NewSpawnTaskQueue 新的spawn任务对象。会被用来推送。
@@ -44,17 +34,16 @@ export class RoomTask {
      *
      * @memberof RoomTask
      */
-    public inits(): void {
+    public inits(pushAtBeginning = false): void {
         Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName] = {
             isMyRoom: false,
-            // interval: 1500,
             runNow: true,
             ifPushNewSpawnTask: true,
             NewSpawnTaskQueue: [],
             ifAllocateNewSpawnTaskToSpawn: true,
-            // nextPushTimePoint: Game.time + 1500,
-            hasPushed: false,
-            hasPushedToSpawn: false
+            hasPushed: !pushAtBeginning,
+            hasPushedToSpawn: false,
+            runningNumber: 0
         };
     }
 
@@ -70,28 +59,29 @@ export class RoomTask {
      * @memberof RoomTask
      */
     public run(dryRun = false): number {
-        if (/* Game.time!=this.nextPushTimePoint &&*/ this.runNow !== true) {
+        if (this.runNow !== true) {
             return -1;
         }
 
-        if (this.isMyRoom) {
-            if (
-                !!Game.rooms[this.roomName] &&
-                Game.rooms[this.roomName].controller &&
-                Game.rooms[this.roomName].controller?.my
-            ) {
+        if (!this.isMyRoom) {
+            if (Game.rooms[this.roomName]?.controller?.my) {
+                this.isMyRoom = true;
+            } else {
                 return -2;
             }
         }
 
         // this.runNow=false;
         if (this.ifPushNewSpawnTask && !dryRun) {
+            const num = this.NewSpawnTaskQueue.length;
             const roomSpawnQueue = taskPool.initQueue("spawnQueue", Memory.rooms[this.roomName].taskPool);
             const NewSpawnTaskQueue = taskPool.initQueueFromTaskQueue(this.NewSpawnTaskQueue);
             while (taskPool.transTask(NewSpawnTaskQueue, roomSpawnQueue));
             taskPool.setQueue(roomSpawnQueue, "spawnQueue", Memory.rooms[this.roomName].taskPool);
             taskPool.setQueueFromTaskQueue(NewSpawnTaskQueue, this.NewSpawnTaskQueue);
             this.hasPushed = true;
+            this.hasPushedToSpawn = true;
+            this.runningNumber += num;
             return 0;
         }
         if (dryRun) {
@@ -103,19 +93,15 @@ export class RoomTask {
     public pushTask(task: SpawnTaskInf): void {
         this.NewSpawnTaskQueue.push(task);
     }
-    /*
-    get interval() {
-        return Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].interval;
-    }
-    set interval(number: number) {
-        Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].interval = number;
-    }
-*/
 
     public pushTaskToSpawn(task: SpawnTaskInf): void {
         this.pushTask(task);
         this.hasPushedToSpawn = false;
         this.run();
+    }
+
+    public deleteTask(): void {
+        this.runningNumber -= 1;
     }
 
     public get isMyRoom(): boolean {
@@ -153,15 +139,6 @@ export class RoomTask {
         Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].ifAllocateNewSpawnTaskToSpawn = bool;
     }
 
-    /*
-    get nextPushTimePoint() {
-        return Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].nextPushTimePoint;
-    }
-    set nextPushTimePoint(number: number) {
-        Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].nextPushTimePoint = number;
-    }
-*/
-
     public get hasPushed(): boolean {
         return Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].hasPushed;
     }
@@ -174,5 +151,12 @@ export class RoomTask {
     }
     public set hasPushedToSpawn(bool: boolean) {
         Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].hasPushedToSpawn = bool;
+    }
+
+    public get runningNumber(): number {
+        return Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].runningNumber;
+    }
+    public set runningNumber(runningNumber: number) {
+        Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].runningNumber = runningNumber;
     }
 }

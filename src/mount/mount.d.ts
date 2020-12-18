@@ -108,7 +108,7 @@ declare namespace NodeJS {
         getNum(arg0: number): number;
         CreepEnergyMonitorprototypeMounted: boolean;
         memoryReset(): void;
-        spawnTaskList: { [name: string]: { [name: string]: (roomName: string) => BaseTaskInf[] } };
+        spawnTaskList: { [name: string]: roleSettingList };
         newTask(roomName: string, taskName: string): void;
         deleteTask(creepName: string): void;
         war: any;

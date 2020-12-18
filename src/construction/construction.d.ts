@@ -10,6 +10,12 @@ interface RoomMemory {
             layout?: formedLayout;
             [name: string]: any;
             centerPos?: any;
+            creepWorkPos?: {
+                [name: string]: string[] | undefined;
+                harvestSource?: string[];
+                upgradeController?: string[];
+                centerPos?: string[];
+            };
         };
     };
     firstSpawnName: string;

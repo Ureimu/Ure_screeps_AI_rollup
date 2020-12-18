@@ -1,5 +1,7 @@
 // 每次占领新房间时会执行的模块。
 
+import { runSpawnTask } from "task";
+
 /**
  * 查找属于自己房间的source名称并初始化没有memory记录的source的memory。
  *
@@ -61,4 +63,5 @@ export function initNewRoomSetting(room: Room, ifFarming: boolean): void {
     getNewSource(room);
     initRoomMemory(room);
     initSpawnMemory(room);
+    runSpawnTask(room);
 }
