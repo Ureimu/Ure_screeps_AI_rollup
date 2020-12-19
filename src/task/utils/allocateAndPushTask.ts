@@ -1,5 +1,5 @@
 import PriorityQueue from "../../../utils/PriorityQueue";
-import { RoomTask } from "./RoomTask";
+import { TaskSetting } from "../taskClass/TaskSetting";
 import taskPool from "./taskPool";
 
 /**
@@ -63,7 +63,7 @@ export function allocatingSpawnTask(QueueName: string): void {
     }
 }
 
-export function autoPush(roomTask: RoomTask, spawnTaskObjList: PriorityQueue): void {
+export function autoPush(roomTask: TaskSetting, spawnTaskObjList: PriorityQueue): void {
     if (typeof spawnTaskObjList != "undefined") {
         for (let i = 0, j = spawnTaskObjList.size(); i < j; i++) {
             roomTask.pushTask(spawnTaskObjList.pop() as SpawnTaskInf);

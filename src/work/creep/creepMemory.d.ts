@@ -11,12 +11,14 @@ declare namespace NodeJS {
     }
 }
 
-type creepRoleConstant = "buildAndRepair" | "carryResource";
+type creepRoleConstant = "buildAndRepair" | "carryResource" | "sourceScout";
 
 type concreteCreepRoleMemory<T extends creepRoleConstant> = T extends "buildAndRepair"
     ? buildAndRepair
     : T extends "carryResource"
     ? carryResource
+    : T extends "sourceScout"
+    ? sourceScout
     : never;
 
 interface CreepMemory {
@@ -48,4 +50,8 @@ interface carryResource extends BaseMemoryTaskInf {
     structureCarryFrom: string;
     structureCarryTo: string;
     resourceNumber: number;
+}
+
+interface sourceScout extends BaseMemoryTaskInf {
+    scoutRoomName: string;
 }

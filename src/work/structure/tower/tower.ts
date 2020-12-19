@@ -16,7 +16,8 @@ export function runTower(tower: StructureTower): void {
                 resourceNumber: 600,
                 state: []
             },
-            taskType: ""
+            taskName: "",
+            taskKindName: ""
         };
         const task = new CarryTask(taskInf);
         task.pushTask(tower.room);

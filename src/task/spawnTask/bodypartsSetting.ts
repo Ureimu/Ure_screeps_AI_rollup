@@ -36,6 +36,16 @@ export function getRoleBodyList(room: Room): roleBodySettingList {
                 bodysetting: [{ move: 2, ranged_attack: 1, heal: 1 }],
                 maxBodyParts: 50
             }
+        },
+        outwardsSource: {
+            sourceScout: {
+                bodysetting: [{ move: 1 }],
+                maxBodyParts: 1
+            },
+            oHarvestSource: {
+                bodysetting: [{ move: 1, work: 2 }],
+                maxBodyParts: 50
+            }
         }
     };
     return roleListX;

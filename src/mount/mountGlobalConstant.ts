@@ -1,4 +1,3 @@
-import { getRoleList } from "task/spawnTask/indexRoleSetting";
 import { GUIfun } from "visual/roomVisual/GUI";
 export function globalConstantRegister(): void {
     // 在global上写入全局常量对象
@@ -19,7 +18,6 @@ export function globalConstantRegister(): void {
         if (room.controller?.my) {
             global.rooms[room.name] = {};
             room.controller.initsGlobalMemory();
-            global.spawnTaskList[room.name] = getRoleList(room);
         }
     });
 }

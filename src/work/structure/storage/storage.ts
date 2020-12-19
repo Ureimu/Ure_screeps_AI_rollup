@@ -16,7 +16,8 @@ export function runStorage(storage: StructureStorage): void {
                 resourceNumber: 50000,
                 state: []
             },
-            taskType: ""
+            taskName: "",
+            taskKindName: ""
         };
         const task = new CarryTask(taskInf);
         task.pushTask(storage.room);

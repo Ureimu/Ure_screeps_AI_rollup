@@ -1,7 +1,7 @@
 export function manageSpawn(roleName: string, roomName: string): number {
     const carrier = Game.rooms[roomName].find(FIND_CREEPS, {
         filter: i => {
-            return i.memory.task.taskType === "carrySource" && !!i.ticksToLive && i.ticksToLive > 100;
+            return i.memory.task.taskName === "carrySource" && !!i.ticksToLive && i.ticksToLive > 100;
         }
     });
     if (carrier.length > 0) {

@@ -12,14 +12,6 @@ export function globalFunctionRegister(): void {
         return u;
     };
 
-    global.repushTask = function (): void {
-        for (const roomName in Memory.rooms) {
-            for (const taskName in Memory.rooms[roomName].innerRoomTaskSet) {
-                Memory.rooms[roomName].innerRoomTaskSet[taskName].hasPushed = false;
-            }
-        }
-    };
-
     global.memoryReset = function (): void {
         RawMemory.set("");
     };
@@ -28,10 +20,6 @@ export function globalFunctionRegister(): void {
         Memory.errors.errorCount = [];
         Memory.errors.errorIntervals = [];
         Memory.errors.errorList = [];
-    };
-
-    global.newTask = function (roomName: string, taskName: string): void {
-        Memory.rooms[roomName].innerRoomTaskSet[taskName].hasPushed = false;
     };
 
     global.deleteTask = function (creepName: string): void {

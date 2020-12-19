@@ -7,6 +7,7 @@ import manageCreep from "task/manager/manageCreep";
 import * as profiler from "../utils/profiler";
 // import { ErrorMapper } from "utils/ErrorMapper";
 import { mountGlobal } from "mount/mountGlobal";
+import manageOutwardsSource from "task/manager/manageOutwardsSource";
 
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
@@ -34,6 +35,7 @@ export const loop = (): void => {
                     if (!room.memory.initialize) {
                         room.initMemory(false);
                         room.memory.initialize = true;
+                        manageOutwardsSource(room);
                     }
                     room.autoSafeMode();
                     room.initMemory(false);

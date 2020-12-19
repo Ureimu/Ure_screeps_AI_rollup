@@ -1,5 +1,5 @@
 import { getBpByRole } from "task/spawnTask/utils/getBpByRole";
-import { RoomTask } from "task/utils/RoomTask";
+import { TaskSetting } from "task/taskClass/TaskSetting";
 import { bpg, getBpEnergy } from "utils/bodypartsGenerator";
 import taskPool from "../task/utils/taskPool";
 // 自定义的 Spawn 的拓展
@@ -49,7 +49,7 @@ export class SpawnExtension extends StructureSpawn {
                 if (typeof inf === "undefined") {
                     console.log("未定义spawn任务");
                 } else {
-                    inf.bodyparts = getBpByRole(task.taskType, task.spawnInf.roomName);
+                    inf.bodyparts = getBpByRole(task.taskName, task.taskKindName, task.spawnInf.roomName);
                     ifOK = this.spawnCreep(bpg(inf.bodyparts), inf.creepName, {
                         memory: { task, taskPool: {}, bodyparts: inf.bodyparts }
                     });
@@ -57,7 +57,7 @@ export class SpawnExtension extends StructureSpawn {
                         taskList.push(task);
                         errorList.push(ifOK);
                     } else {
-                        const roomTask = new RoomTask(task.spawnInf.roomName, task.taskType);
+                        const roomTask = new TaskSetting(task.spawnInf.roomName, task.taskKindName, task.taskName);
                         roomTask.hasPushedToSpawn = false;
                         // 确认已经在生成creep时执行的任务
                         // global.creepMemory[inf.creepName]={};

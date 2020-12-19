@@ -13,7 +13,8 @@ export function sourceLink(link: StructureLink): void {
             resourceNumber: 50000,
             state: []
         },
-        taskType: ""
+        taskName: "",
+        taskKindName: ""
     };
     checkLinkTask(taskInf);
 }

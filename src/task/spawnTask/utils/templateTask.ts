@@ -4,13 +4,14 @@ import { getBpByRole } from "./getBpByRole";
 export function templateSpawnTaskList(
     roomName: string,
     taskName: string,
+    taskKindName: string,
     num: number,
     priority?: number,
     needTaskInf = true
 ): SpawnTaskInf[] {
     const t: SpawnTaskInf[] = [];
     for (let i = 0; i < num; i++) {
-        const chooseBodyParts = getBpByRole(taskName, roomName);
+        const chooseBodyParts = getBpByRole(taskName, taskKindName, roomName);
         t.push(
             new SpawnTask({
                 priority: priority ? priority : 10,
@@ -20,7 +21,8 @@ export function templateSpawnTaskList(
                     roomName
                 },
                 isRunning: false,
-                taskType: taskName,
+                taskName,
+                taskKindName,
                 taskInf: needTaskInf ? { state: [] } : undefined
             }).task
         );

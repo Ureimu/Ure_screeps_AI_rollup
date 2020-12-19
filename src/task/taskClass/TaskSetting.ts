@@ -1,4 +1,4 @@
-import taskPool from "./taskPool";
+import taskPool from "../utils/taskPool";
 
 /**
  * 房间任务对象。
@@ -8,16 +8,21 @@ import taskPool from "./taskPool";
  * 3.将任务创建逻辑和任务推送逻辑分离，该模块只负责任务储存和推送。
  *
  * @export
- * @class RoomTask
+ * @class TaskSetting
  */
-export class RoomTask {
+export class TaskSetting {
     public roomName: string;
     public roomTaskName: string;
+    public roomTaskKindName: string;
 
-    public constructor(roomName: string, roomTaskName: string, pushAtBeginning = false) {
+    public constructor(roomName: string, taskKindName: string, roomTaskName: string, pushAtBeginning = false) {
         this.roomName = roomName;
         this.roomTaskName = roomTaskName;
-        if (typeof Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName] == "undefined") {
+        this.roomTaskKindName = taskKindName;
+        if (typeof Memory.rooms[this.roomName].taskSetting[this.roomTaskKindName] == "undefined") {
+            Memory.rooms[this.roomName].taskSetting[this.roomTaskKindName] = {};
+        }
+        if (typeof Memory.rooms[this.roomName].taskSetting[this.roomTaskKindName][this.roomTaskName] == "undefined") {
             this.inits(pushAtBeginning);
         }
     }
@@ -32,10 +37,10 @@ export class RoomTask {
      * @param {boolean} ifAllocateNewSpawnTaskToSpawn 是否在到时间后分配任务到spawn,如果现在不分配，会在下一次一起分配。
      * @param {boolean} hasPushed 是否已经完成推送任务到NewSpawnTaskQueue。
      *
-     * @memberof RoomTask
+     * @memberof TaskSetting
      */
     public inits(pushAtBeginning = false): void {
-        Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName] = {
+        Memory.rooms[this.roomName].taskSetting[this.roomTaskKindName][this.roomTaskName] = {
             isMyRoom: false,
             runNow: true,
             ifPushNewSpawnTask: true,
@@ -47,6 +52,10 @@ export class RoomTask {
         };
     }
 
+    public delete(): void {
+        delete Memory.rooms[this.roomName].taskSetting[this.roomTaskKindName][this.roomTaskName];
+    }
+
     /**
      * 运行函数来自动分配任务。
      *
@@ -56,7 +65,7 @@ export class RoomTask {
      * 1：this.ifPushNewSpawnTask为false.
      * -2:该房间不属于你.
      * -3:dryRun执行成功。
-     * @memberof RoomTask
+     * @memberof TaskSetting
      */
     public run(dryRun = false): number {
         if (this.runNow !== true) {
@@ -105,58 +114,61 @@ export class RoomTask {
     }
 
     public get isMyRoom(): boolean {
-        return Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].isMyRoom;
+        return Memory.rooms[this.roomName].taskSetting[this.roomTaskKindName][this.roomTaskName].isMyRoom;
     }
     public set isMyRoom(bool: boolean) {
-        Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].isMyRoom = bool;
+        Memory.rooms[this.roomName].taskSetting[this.roomTaskKindName][this.roomTaskName].isMyRoom = bool;
     }
 
     public get runNow(): boolean {
-        return Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].runNow;
+        return Memory.rooms[this.roomName].taskSetting[this.roomTaskKindName][this.roomTaskName].runNow;
     }
     public set runNow(bool: boolean) {
-        Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].runNow = bool;
+        Memory.rooms[this.roomName].taskSetting[this.roomTaskKindName][this.roomTaskName].runNow = bool;
     }
 
     public get ifPushNewSpawnTask(): boolean {
-        return Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].ifPushNewSpawnTask;
+        return Memory.rooms[this.roomName].taskSetting[this.roomTaskKindName][this.roomTaskName].ifPushNewSpawnTask;
     }
     public set ifPushNewSpawnTask(bool: boolean) {
-        Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].ifPushNewSpawnTask = bool;
+        Memory.rooms[this.roomName].taskSetting[this.roomTaskKindName][this.roomTaskName].ifPushNewSpawnTask = bool;
     }
 
     public get NewSpawnTaskQueue(): SpawnTaskInf[] {
-        return Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].NewSpawnTaskQueue;
+        return Memory.rooms[this.roomName].taskSetting[this.roomTaskKindName][this.roomTaskName].NewSpawnTaskQueue;
     }
     public set NewSpawnTaskQueue(Queue: SpawnTaskInf[]) {
-        Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].NewSpawnTaskQueue = Queue;
+        Memory.rooms[this.roomName].taskSetting[this.roomTaskKindName][this.roomTaskName].NewSpawnTaskQueue = Queue;
     }
 
     public get ifAllocateNewSpawnTaskToSpawn(): boolean {
-        return Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].ifAllocateNewSpawnTaskToSpawn;
+        return Memory.rooms[this.roomName].taskSetting[this.roomTaskKindName][this.roomTaskName]
+            .ifAllocateNewSpawnTaskToSpawn;
     }
     public set ifAllocateNewSpawnTaskToSpawn(bool: boolean) {
-        Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].ifAllocateNewSpawnTaskToSpawn = bool;
+        Memory.rooms[this.roomName].taskSetting[this.roomTaskKindName][
+            this.roomTaskName
+        ].ifAllocateNewSpawnTaskToSpawn = bool;
     }
 
     public get hasPushed(): boolean {
-        return Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].hasPushed;
+        return Memory.rooms[this.roomName].taskSetting[this.roomTaskKindName][this.roomTaskName].hasPushed;
     }
     public set hasPushed(bool: boolean) {
-        Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].hasPushed = bool;
+        Memory.rooms[this.roomName].taskSetting[this.roomTaskKindName][this.roomTaskName].hasPushed = bool;
     }
 
     public get hasPushedToSpawn(): boolean {
-        return Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].hasPushedToSpawn;
+        return Memory.rooms[this.roomName].taskSetting[this.roomTaskKindName][this.roomTaskName].hasPushedToSpawn;
     }
     public set hasPushedToSpawn(bool: boolean) {
-        Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].hasPushedToSpawn = bool;
+        Memory.rooms[this.roomName].taskSetting[this.roomTaskKindName][this.roomTaskName].hasPushedToSpawn = bool;
     }
 
     public get runningNumber(): number {
-        return Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].runningNumber;
+        return Memory.rooms[this.roomName].taskSetting[this.roomTaskKindName][this.roomTaskName].runningNumber;
     }
     public set runningNumber(runningNumber: number) {
-        Memory.rooms[this.roomName].innerRoomTaskSet[this.roomTaskName].runningNumber = runningNumber;
+        Memory.rooms[this.roomName].taskSetting[this.roomTaskKindName][this.roomTaskName].runningNumber = runningNumber;
     }
 }
