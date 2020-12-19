@@ -9,8 +9,7 @@ type Sponsor = Id<StructureSpawn | Creep | Source>;
 
 interface SourceMemory {
     id: Id<Source>;
-    blankSpace: RoomPosition[];
-    taskPool: TaskPool;
+    pos: string;
 }
 
 interface CheckStatus {
@@ -34,10 +33,10 @@ interface Memory {
 
 interface RoomMemory {
     taskPool: TaskPool;
-    innerRoomTaskSet: { [name: string]: RoomTaskInte };
+    taskSetting: { [taskKindName: string]: { [taskName: string]: RoomTaskInte } };
     initialize?: boolean;
+    taskKindList: string[];
 }
-
 interface SpawnMemory {
     recorder?: number;
     taskPool: TaskPool;

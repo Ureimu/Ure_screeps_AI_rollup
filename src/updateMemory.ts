@@ -28,12 +28,13 @@ function initRoomMemory(room: Room): void {
                     spawnQueue: [],
                     carryQueue: []
                 },
-                innerRoomTaskSet: {},
+                taskSetting: {},
                 construction: {},
                 constructionSchedule: {},
                 constructionStartTime: Game.time,
                 roomControlStatus: [1],
-                firstSpawnName: room.find(FIND_MY_SPAWNS)[0].name
+                firstSpawnName: room.find(FIND_MY_SPAWNS)[0].name,
+                taskKindList: ["roomMaintenance"]
             };
         }
     }

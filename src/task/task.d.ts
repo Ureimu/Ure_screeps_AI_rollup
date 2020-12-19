@@ -27,7 +27,9 @@ interface BaseTaskInf {
      */
     isRunning: boolean;
 
-    taskType: string;
+    taskName: string;
+
+    taskKindName: string;
 }
 
 interface SpawnTaskInf extends BaseTaskInf {
@@ -37,6 +39,7 @@ interface SpawnTaskInf extends BaseTaskInf {
         roomName: string;
     };
     taskInf?: {
+        [name: string]: any;
         state: number[];
     };
 }

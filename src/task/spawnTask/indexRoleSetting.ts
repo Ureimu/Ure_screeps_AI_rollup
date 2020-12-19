@@ -1,8 +1,16 @@
+import { createOHarvestSourceTask } from "./outwardsSource/oHarvestSource";
+import { createSourceScoutTask } from "./outwardsSource/sourceScout";
 import { createHarvestSourceTask } from "./roomMaintenanceTask/harvestSource";
 import { templateSpawnTaskList } from "./utils/templateTask";
 
-function defaultGetSpawnTaskInf(room: Room, taskName: string, num: number, priority: number): SpawnTaskInf[] {
-    return templateSpawnTaskList(room.name, taskName, num, priority);
+function defaultGetSpawnTaskInf(
+    room: Room,
+    taskName: string,
+    taskKindName: string,
+    num: number,
+    priority: number
+): SpawnTaskInf[] {
+    return templateSpawnTaskList(room.name, taskName, taskKindName, num, priority);
 }
 
 export function getRoleList(room: Room): roleSettingList {
@@ -50,6 +58,18 @@ export function getRoleList(room: Room): roleSettingList {
                 numberSetting: 2,
                 priority: 5,
                 getSpawnTaskInf: defaultGetSpawnTaskInf
+            }
+        },
+        outwardsSource: {
+            sourceScout: {
+                numberSetting: 1,
+                priority: 5,
+                getSpawnTaskInf: createSourceScoutTask
+            },
+            oHarvestSource: {
+                numberSetting: 0,
+                priority: 5,
+                getSpawnTaskInf: createOHarvestSourceTask
             }
         }
     };

@@ -1,4 +1,4 @@
-import { RoomTask } from "../utils/RoomTask";
+import { TaskSetting } from "../taskClass/TaskSetting";
 import * as profiler from "../../../utils/profiler";
 import { setPosToStr } from "construction/utils/strToRoomPosition";
 
@@ -11,11 +11,11 @@ const manageCreep = function (): void {
             for (const taskKindName in global.spawnTaskList[creepRoomName]) {
                 switch (taskKindName) {
                     case "roomMaintenance":
-                        if (Memory.creeps[name].task.taskType in global.spawnTaskList[creepRoomName][taskKindName]) {
+                        if (Memory.creeps[name].task.taskName in global.spawnTaskList[creepRoomName][taskKindName]) {
                             const roleTaskInf =
-                                global.spawnTaskList[creepRoomName][taskKindName][Memory.creeps[name].task.taskType];
+                                global.spawnTaskList[creepRoomName][taskKindName][Memory.creeps[name].task.taskName];
                             const task = Memory.creeps[name].task as SpawnTaskInf;
-                            const roomTask = new RoomTask(task.spawnInf.roomName, task.taskType);
+                            const roomTask = new TaskSetting(task.spawnInf.roomName, taskKindName, task.taskName);
                             if (roomTask.hasPushedToSpawn === true) break;
                             if (typeof Memory.creeps[name].task.taskInf !== "undefined") {
                                 Memory.creeps[name].task.taskInf?.state.splice(0);

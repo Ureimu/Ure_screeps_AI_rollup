@@ -21,7 +21,7 @@ import { getCutTiles } from "../../../utils/mincut/minCut";
         global.stateLoop[stateCut]();
     }
  */
-const keepTime = 200; // 预览的持续时间
+const keepTime = 20; // 预览的持续时间
 const xUp = 0.25;
 const buildNumberLimit = CONTROLLER_STRUCTURES;
 buildNumberLimit.constructedWall = {

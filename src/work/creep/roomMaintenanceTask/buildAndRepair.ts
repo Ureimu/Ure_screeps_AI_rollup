@@ -1,7 +1,7 @@
 import { stateCut } from "../utils/utils";
 
 function isRoleCreepMemory(target: CreepMemory): target is RoleCreepMemory<"buildAndRepair"> {
-    return target.task.taskType === "buildAndRepair";
+    return target.task.taskName === "buildAndRepair";
 }
 
 export function buildAndRepair(creep: Creep): void {

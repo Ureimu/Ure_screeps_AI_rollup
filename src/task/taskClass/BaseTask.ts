@@ -4,7 +4,8 @@ export class BaseTask {
         this.task = {
             priority,
             isRunning,
-            taskType: ""
+            taskName: "",
+            taskKindName: ""
         };
     }
 
@@ -13,7 +14,11 @@ export class BaseTask {
         return this.task.sponsor;
     }
 
-    public taskType(taskType: string): void {
-        this.task.taskType = taskType;
+    public taskName(taskName: string): void {
+        this.task.taskName = taskName;
+    }
+
+    public taskKindName(taskKindName: string): void {
+        this.task.taskKindName = taskKindName;
     }
 }

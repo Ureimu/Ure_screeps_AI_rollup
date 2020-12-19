@@ -7,6 +7,8 @@ import { harvestSource } from "./roomMaintenanceTask/harvestSource";
 import { sledge } from "./outwardsTask/war/sledge";
 import { upgradeController } from "./roomMaintenanceTask/upgradeController";
 import * as profiler from "../../../utils/profiler";
+import { sourceScout } from "./outwardsTask/outwardsSource/sourceScout";
+import { oHarvestSource } from "./outwardsTask/outwardsSource/oHarvestSource";
 
 const creepWork = {
     TaskReg(): {
@@ -21,14 +23,17 @@ const creepWork = {
             centerCarry,
             // war
             sledge,
-            aio
+            aio,
+            // oHarvest
+            sourceScout,
+            oHarvestSource
         };
         profiler.registerObject(workFunctionList, "creepWork.role");
         return workFunctionList;
     },
 
-    compareTaskType(creep: Creep, workFunction: { (creep: Creep): void }, taskType: string): void {
-        if (creep.memory.task.taskType === taskType) {
+    compareTaskType(creep: Creep, workFunction: { (creep: Creep): void }, taskName: string): void {
+        if (creep.memory.task.taskName === taskName) {
             workFunction(creep);
         }
     },
@@ -36,8 +41,8 @@ const creepWork = {
     run(creep: Creep): void {
         const workFunctionList = this.TaskReg();
 
-        for (const taskType in workFunctionList) {
-            this.compareTaskType(creep, workFunctionList[taskType], taskType);
+        for (const taskName in workFunctionList) {
+            this.compareTaskType(creep, workFunctionList[taskName], taskName);
         }
     }
 };

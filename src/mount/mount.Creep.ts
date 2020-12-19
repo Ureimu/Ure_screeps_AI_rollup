@@ -136,7 +136,7 @@ export class CreepExtension extends Creep {
     }
 
     private setBundledPos() {
-        switch (this.memory.task.taskType) {
+        switch (this.memory.task.taskName) {
             case "harvestSource": {
                 const source = Game.getObjectById<Source>(this.memory.task.sponsor as Id<Source>) as Source;
                 global.creepMemory[this.name].bundledPos = source.pos

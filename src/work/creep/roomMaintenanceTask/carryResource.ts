@@ -3,7 +3,7 @@ import { stateCut } from "work/creep/utils/utils";
 import taskPool from "task/utils/taskPool";
 
 function isRoleCreepMemory(target: CreepMemory): target is RoleCreepMemory<"carryResource"> {
-    return target.task.taskType === "carryResource";
+    return target.task.taskName === "carryResource";
 }
 
 export function carryResource(creep: Creep): void {
