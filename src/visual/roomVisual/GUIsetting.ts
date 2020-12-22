@@ -1,4 +1,4 @@
-import { getBpSum, getCreepNum } from "./roomInf/creeps";
+import { getCreepNum, getBpSum } from "./roomInf/creeps";
 import { getUpgradeSpeed } from "./roomInf/upgradeSpeed";
 import { printMulText } from "./utils";
 
