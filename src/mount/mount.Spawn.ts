@@ -1,11 +1,16 @@
 import { getBpByRole } from "task/spawnTask/utils/getBpByRole";
-import { TaskSetting } from "task/taskClass/TaskSetting";
 import { bpg, getBpEnergy } from "utils/bodypartsGenerator";
 import taskPool from "../task/utils/taskPool";
 // 自定义的 Spawn 的拓展
 export class SpawnExtension extends StructureSpawn {
     public runSpawnTask(): boolean {
         if (!this.memory.lastFinishSpawnTime) {
+            this.memory = {
+                taskPool: {
+                    spawnQueue: []
+                },
+                isSpawning: false
+            };
             this.memory.lastFinishSpawnTime = Game.time;
         }
         if (typeof this.spawning?.name === "string") {
@@ -51,14 +56,13 @@ export class SpawnExtension extends StructureSpawn {
                 } else {
                     inf.bodyparts = getBpByRole(task.taskName, task.taskKindName, task.spawnInf.roomName);
                     ifOK = this.spawnCreep(bpg(inf.bodyparts), inf.creepName, {
-                        memory: { task, taskPool: {}, bodyparts: inf.bodyparts }
+                        memory: { task }
                     });
                     if (ifOK !== OK) {
                         taskList.push(task);
                         errorList.push(ifOK);
                     } else {
-                        const roomTask = new TaskSetting(task.spawnInf.roomName, task.taskKindName, task.taskName);
-                        roomTask.hasPushedToSpawn = false;
+                        Memory.creeps[inf.creepName].task.spawnInf.isRunning = false;
                         // 确认已经在生成creep时执行的任务
                         // global.creepMemory[inf.creepName]={};
                         if (Game.getObjectById(task.sponsor as Sponsor)) {
@@ -73,6 +77,7 @@ export class SpawnExtension extends StructureSpawn {
         for (const task of taskList) {
             spawnQueue.push(task);
         }
+        let nameRepeatCount = 0;
         for (let i = 0, j = taskList.length; i < j; i++) {
             // 返回任务错误信息
             const task = taskList[i];
@@ -83,7 +88,9 @@ export class SpawnExtension extends StructureSpawn {
                     errorText = "你不是该母巢 (spawn) 的所有者。";
                     break;
                 case -3:
-                    errorText = `已经有一个叫这个名字的 creep 了。名称：${task.spawnInf.creepName}`;
+                    errorText = `已经有一个叫这个名字的 creep 了。重复次数：${nameRepeatCount++}，名称：${
+                        task.spawnInf.creepName
+                    }`;
                     break;
                 case -4:
                     errorText = "这个母巢 (spawn) 已经在孵化另一个 creep 了。";
@@ -103,7 +110,7 @@ export class SpawnExtension extends StructureSpawn {
                     break;
             }
             console.log(
-                `<span style='color:#FFCCCC'>[spawn] ${this.name}执行spawn任务失败,返回错误：${errorText}</span>`
+                `<span style='color:#ffbfbf'>[spawn] ${this.name}执行spawn任务失败,返回错误：${errorText}</span>`
             );
         }
         if (taskList.length > 18) {
