@@ -9,9 +9,7 @@ export function globalConstantRegister(): void {
     };
     global.GUI = GUIfun();
     global.creepMemory = {};
-    global.monitor = {
-        upgradeSpeed: []
-    };
+    global.monitor = {};
     global.rooms = {};
     global.spawnTaskList = {};
     _.forEach(Game.rooms, room => {

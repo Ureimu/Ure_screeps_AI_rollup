@@ -18,7 +18,7 @@ export class CreepExtension extends Creep {
                         k.store[RESOURCE_ENERGY] >=
                         (lowerLimit[i][st2].takeAll
                             ? 1
-                            : 50 * getBpNum(this.memory.bodyparts, "carry") + lowerLimit[i][st2].num)
+                            : 50 * getBpNum(this.memory.task.spawnInf.bodyparts, "carry") + lowerLimit[i][st2].num)
                 );
                 // console.log(this.name+" "+st2+" "+containers.length+" "+lowerLimit[i][st2]+" "+String(50 * getBpNum(this.memory.bodyparts, "carry") + lowerLimit[i][st2]));
                 if (containers.length > 0) {
@@ -51,7 +51,7 @@ export class CreepExtension extends Creep {
         });
         const target2 = this.pos.findClosestByRange(FIND_RUINS, {
             filter: resource => {
-                return resource.store.energy >= 50 * getBpNum(this.memory.bodyparts, "carry");
+                return resource.store.energy >= 50 * getBpNum(this.memory.task.spawnInf.bodyparts, "carry");
             }
         });
 
@@ -164,6 +164,14 @@ export class CreepExtension extends Creep {
                 break;
             }
             case "buildAndRepair": {
+                if ((global.rooms[this.room.name].controller?.blankSpace.length as number) > 0) {
+                    global.creepMemory[this.name].bundledUpgradePos = getPosFromStr(
+                        (global.rooms[this.room.name].controller?.blankSpace as string[]).pop() as string
+                    );
+                }
+                break;
+            }
+            case "oUpgradeController": {
                 if ((global.rooms[this.room.name].controller?.blankSpace.length as number) > 0) {
                     global.creepMemory[this.name].bundledUpgradePos = getPosFromStr(
                         (global.rooms[this.room.name].controller?.blankSpace as string[]).pop() as string

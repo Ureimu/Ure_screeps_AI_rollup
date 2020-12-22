@@ -37,6 +37,7 @@ interface SpawnTaskInf extends BaseTaskInf {
         bodyparts: bpgGene[];
         creepName: string;
         roomName: string;
+        isRunning: boolean;
     };
     taskInf?: {
         [name: string]: any;

@@ -1,9 +1,15 @@
-import { getBpSum } from "./roomInf/creeps";
+import { getBpSum, getCreepNum } from "./roomInf/creeps";
 import { getUpgradeSpeed } from "./roomInf/upgradeSpeed";
 import { printMulText } from "./utils";
 
 export function roomVisualize(room: Room): void {
-    const upgradeSpeed: string = getUpgradeSpeed(room.name);
+    const upgradeSpeed = getUpgradeSpeed(room.name);
+    room.memory.stats = {
+        upgradeSpeed: upgradeSpeed[0],
+        creepNum: getCreepNum(room.name),
+        creepBodySize: getBpSum(room.name),
+        ticksToUpgrade: upgradeSpeed[1]
+    };
     global.GUI.draw(new RoomVisual(room.name), [
         {
             type: "Div",
@@ -16,12 +22,7 @@ export function roomVisualize(room: Room): void {
                 opacity: 0.5
             },
             child: printMulText({
-                content: `现在的游戏时间是${Game.time}tick\n该房间spawn在维持的creep的部件总数为${getBpSum(
-                    room.name
-                )}\n能量值：\n工地数：\n升级速度：${upgradeSpeed}/tick,还有${(
-                    ((room.controller?.progressTotal as number) - (room.controller as StructureController).progress) /
-                    Number(upgradeSpeed)
-                ).toFixed(0)}ticks升到下一级`,
+                content: `现在的游戏时间是${Game.time}tick\n该房间spawn在维持的creep的部件总数为${room.memory.stats.creepBodySize}\n能量值：\n工地数：\n升级速度：${room.memory.stats.upgradeSpeed}/tick,还有${room.memory.stats.ticksToUpgrade}ticks升到下一级`,
                 x: 0,
                 y: 0,
                 align: "left"

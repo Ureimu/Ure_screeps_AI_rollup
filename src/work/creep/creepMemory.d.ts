@@ -11,7 +11,7 @@ declare namespace NodeJS {
     }
 }
 
-type creepRoleConstant = "buildAndRepair" | "carryResource" | "sourceScout";
+type creepRoleConstant = "buildAndRepair" | "carryResource" | "sourceScout" | "oUpgradeController" | "oClaim";
 
 type concreteCreepRoleMemory<T extends creepRoleConstant> = T extends "buildAndRepair"
     ? buildAndRepair
@@ -19,19 +19,18 @@ type concreteCreepRoleMemory<T extends creepRoleConstant> = T extends "buildAndR
     ? carryResource
     : T extends "sourceScout"
     ? sourceScout
+    : T extends "oUpgradeController"
+    ? oUpgradeController
+    : T extends "oClaim"
+    ? oClaim
     : never;
-
 interface CreepMemory {
     task: SpawnTaskInf & { taskInf?: BaseMemoryTaskInf };
-    taskPool?: TaskPool;
-    bodyparts: bpgGene[];
     dontPullMe?: boolean;
 }
 
 interface RoleCreepMemory<T extends creepRoleConstant> {
     task: SpawnTaskInf & { taskInf?: concreteCreepRoleMemory<T> };
-    taskPool?: TaskPool;
-    bodyparts: bpgGene[];
     dontPullMe?: boolean;
 }
 
@@ -53,5 +52,13 @@ interface carryResource extends BaseMemoryTaskInf {
 }
 
 interface sourceScout extends BaseMemoryTaskInf {
+    scoutRoomName: string;
+}
+
+interface oUpgradeController extends BaseMemoryTaskInf {
+    scoutRoomName: string;
+}
+
+interface oClaim extends BaseMemoryTaskInf {
     scoutRoomName: string;
 }

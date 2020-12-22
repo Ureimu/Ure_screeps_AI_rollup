@@ -9,6 +9,8 @@ import { upgradeController } from "./roomMaintenanceTask/upgradeController";
 import * as profiler from "../../../utils/profiler";
 import { sourceScout } from "./outwardsTask/outwardsSource/sourceScout";
 import { oHarvestSource } from "./outwardsTask/outwardsSource/oHarvestSource";
+import { oUpgradeController } from "./outwardsTask/outwardsSource/oUpgradeController";
+import { oClaim } from "./outwardsTask/outwardsSource/oClaim";
 
 const creepWork = {
     TaskReg(): {
@@ -26,24 +28,18 @@ const creepWork = {
             aio,
             // oHarvest
             sourceScout,
-            oHarvestSource
+            oHarvestSource,
+            oUpgradeController,
+            oClaim
         };
         profiler.registerObject(workFunctionList, "creepWork.role");
         return workFunctionList;
     },
 
-    compareTaskType(creep: Creep, workFunction: { (creep: Creep): void }, taskName: string): void {
-        if (creep.memory.task.taskName === taskName) {
-            workFunction(creep);
-        }
-    },
-
     run(creep: Creep): void {
-        const workFunctionList = this.TaskReg();
-
-        for (const taskName in workFunctionList) {
-            this.compareTaskType(creep, workFunctionList[taskName], taskName);
-        }
+        if (creep.spawning) return;
+        if (!global.creepWorkFunctionList) global.creepWorkFunctionList = this.TaskReg();
+        global.creepWorkFunctionList[creep.memory.task.taskName](creep);
     }
 };
 profiler.registerObject(creepWork, "creepWork");

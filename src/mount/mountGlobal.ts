@@ -7,6 +7,7 @@ export function mountGlobal(): void {
     if (!global.time) global.time = 0;
     global.time++;
     if (global.time === 1) {
+        profiler.enable();
         mountPrototypeExtension();
         // mountCreepEnergyMonitor();
         globalConstantRegister();
@@ -18,6 +19,5 @@ export function mountGlobal(): void {
                 errorIntervals: []
             };
         }
-        profiler.enable();
     }
 }

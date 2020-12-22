@@ -30,7 +30,7 @@ export function centerCarry(creep: Creep): void {
             STRUCTURE_LINK
         ) as StructureLink;
         let whatToDo = "harvest";
-        const carryMax = getBpNum(creep.memory.bodyparts, "carry") * 50;
+        const carryMax = getBpNum(creep.memory.task.spawnInf.bodyparts, "carry") * 50;
         if (link.store.energy > 0) whatToDo = "carryEnergyToLink";
         switch (whatToDo) {
             case "carryEnergyToLink":

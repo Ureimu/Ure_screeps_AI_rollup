@@ -8,7 +8,6 @@ export class SpawnTask extends BaseTask {
     }
 
     public addTaskInf(taskInf: Record<string, unknown>): void {
-        const PropertyDescriptorMap: PropertyDescriptorMap = {};
         for (const name in taskInf) {
             Object.defineProperty(this.task.taskInf, name, {
                 value: taskInf[name],

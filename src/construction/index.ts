@@ -11,5 +11,6 @@ export function autoConstruction(room: Room): void {
     room.memory.roomControlStatus[0] = room.controller?.level as number;
     room.memory.roomControlStatus[1] = room.controller?.progress as number;
     room.memory.roomControlStatus[2] = room.controller?.progressTotal as number;
-    if (Game.time % global.workRate.construction === 0) runLayout(room, "gridLayout", getGridLayout);
+    if ((Game.time - room.memory.startTime) % global.workRate.construction === 0)
+        runLayout(room, "gridLayout", getGridLayout);
 }

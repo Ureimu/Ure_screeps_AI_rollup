@@ -48,7 +48,10 @@
         "pserver",
         "toolbelt"
     ],
-    "mochaExplorer.files": "dist/test-integration.bundle.js",
+    "mochaExplorer.files": [
+        "dist/test-integration.bundle.js",
+        "dist/test-unit.bundle.js"
+    ],
     "mochaExplorer.require": [
         "ts-node/register",
         "test/setup-node.js"

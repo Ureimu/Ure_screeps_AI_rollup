@@ -8,8 +8,8 @@ export function createSourceScoutTask(
     priority: number
 ): SpawnTaskInf[] {
     const taskList: SpawnTaskInf[] = [];
-    const t = templateSpawnTask(room.name, taskName, taskKindName, i, priority);
     const targetRoomName = taskKindName.slice(taskKindName.indexOf("-") + 1);
+    const t = templateSpawnTask(room.name, taskName, taskKindName, i, priority, targetRoomName);
     t.addTaskInf({
         scoutRoomName: targetRoomName
     });

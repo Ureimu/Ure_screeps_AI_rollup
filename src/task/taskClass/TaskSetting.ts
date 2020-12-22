@@ -48,7 +48,8 @@ export class TaskSetting {
             ifAllocateNewSpawnTaskToSpawn: true,
             hasPushed: !pushAtBeginning,
             hasPushedToSpawn: false,
-            runningNumber: 0
+            runningNumber: 0,
+            memory: {}
         };
     }
 

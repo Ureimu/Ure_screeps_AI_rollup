@@ -18,7 +18,8 @@ export function templateSpawnTaskList(
                 spawnInf: {
                     bodyparts: chooseBodyParts,
                     creepName: `${roomName}-${taskName}-${Game.time}-${i}`,
-                    roomName
+                    roomName,
+                    isRunning: false
                 },
                 isRunning: false,
                 taskName,

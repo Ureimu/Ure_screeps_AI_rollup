@@ -7,6 +7,7 @@ export function templateSpawnTask(
     taskKindName: string,
     num: number,
     priority: number,
+    targetRoomName?: string,
     needTaskInf = true
 ): SpawnTask {
     const chooseBodyParts = getBpByRole(taskName, taskKindName, roomName);
@@ -14,8 +15,11 @@ export function templateSpawnTask(
         priority,
         spawnInf: {
             bodyparts: chooseBodyParts,
-            creepName: `${roomName}-${taskName}-${Game.time}-${num}`,
-            roomName
+            creepName: targetRoomName
+                ? `${roomName}-${taskName}-${targetRoomName}-${Game.time}-${num}`
+                : `${roomName}-${taskName}-${Game.time}-${num}`,
+            roomName,
+            isRunning: false
         },
         isRunning: false,
         taskName,

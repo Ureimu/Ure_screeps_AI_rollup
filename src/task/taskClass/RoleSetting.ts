@@ -29,12 +29,14 @@ export class RoleSetting {
         Memory.rooms[this.roomName].taskKindList = taskKindList;
     }
 
-    public get roleSettingList(): roleSettingList {
-        const list: roleSettingList = {};
+    public get roleSettingList(): returnedRoleSettingList {
+        const list: returnedRoleSettingList = {};
         for (const defaultTaskKindName in this.defaultRoleSettingList) {
             if (defaultTaskKindName === "roomMaintenance") {
                 Object.defineProperty(list, defaultTaskKindName, {
-                    value: this.defaultRoleSettingList[defaultTaskKindName],
+                    value: this.defaultRoleSettingList[defaultTaskKindName](
+                        Memory.rooms[this.roomName].taskSetting[defaultTaskKindName]
+                    ),
                     writable: true,
                     enumerable: true,
                     configurable: true
@@ -47,7 +49,9 @@ export class RoleSetting {
                     );
                     if (taskKindName === defaultTaskKindName) {
                         Object.defineProperty(list, taskKindNameWithTargetRoomName, {
-                            value: this.defaultRoleSettingList[defaultTaskKindName],
+                            value: this.defaultRoleSettingList[defaultTaskKindName](
+                                Memory.rooms[this.roomName].taskSetting[taskKindNameWithTargetRoomName]
+                            ),
                             writable: true,
                             enumerable: true,
                             configurable: true

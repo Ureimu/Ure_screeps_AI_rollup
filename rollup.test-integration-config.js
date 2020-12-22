@@ -1,4 +1,5 @@
 "use strict";
+/* eslint-disable */
 
 import clear from 'rollup-plugin-clear';
 import resolve from '@rollup/plugin-node-resolve';
@@ -23,7 +24,7 @@ export default {
   },
   external: ['chai', 'it', 'describe'],
   plugins: [
-    clear({ targets: ["dist/test.bundle.js"] }),
+    clear({ targets: ["dist/test-integration.bundle.js"] }),
     resolve(),
     commonjs(),
     typescript({tsconfig: "./tsconfig.test-integration.json"}),

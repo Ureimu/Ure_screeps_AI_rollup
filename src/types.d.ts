@@ -29,6 +29,7 @@ interface Memory {
         errorCount: number[];
         errorIntervals: number[][];
     };
+    time: number;
 }
 
 interface RoomMemory {
@@ -36,6 +37,10 @@ interface RoomMemory {
     taskSetting: { [taskKindName: string]: { [taskName: string]: RoomTaskInte } };
     initialize?: boolean;
     taskKindList: string[];
+}
+
+interface taskKindMemory {
+    [taskName: string]: RoomTaskInte;
 }
 interface SpawnMemory {
     recorder?: number;

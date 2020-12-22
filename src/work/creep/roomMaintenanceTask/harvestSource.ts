@@ -39,7 +39,7 @@ export function harvestSource(creep: Creep): void {
             0,
             ["harvest", "carryEnergyToLink"]
         );
-        const carryMax = getBpNum(creep.memory.bodyparts, "carry") * 50;
+        const carryMax = getBpNum(creep.memory.task.spawnInf.bodyparts, "carry") * 50;
         switch (state) {
             case 0:
                 creep.harvest(source);

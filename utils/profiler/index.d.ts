@@ -1,4 +1,9 @@
 /**
+ * 该模块的消耗大概在0.65cpu左右。
+ *
+ */
+
+/**
  * 包装主函数以方便后续操作。
  *
  * @export
@@ -42,7 +47,7 @@ export function callgrind(): string;
  *         | undefined)}
  */
 export function registerObject(
-    object: Record<string, (...args: any[]) => any>,
+    object: any,
     label: string
 ):
     | {
@@ -89,7 +94,7 @@ export function registerFN(
  *     | undefined)}
  */
 export function registerClass(
-    object: Record<string, (...args: any[]) => any>,
+    object: any,
     label: string
 ):
     | {

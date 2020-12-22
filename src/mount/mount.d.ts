@@ -2,6 +2,7 @@ interface RoomPosition {
     getSquare(): RoomPosition[];
     getDiagSquare(): RoomPosition[];
     getQuadSquare(): RoomPosition[];
+    findClosestPlain(): RoomPosition | undefined;
 }
 
 interface Room {
@@ -108,7 +109,7 @@ declare namespace NodeJS {
         getNum(arg0: number): number;
         CreepEnergyMonitorprototypeMounted: boolean;
         memoryReset(): void;
-        spawnTaskList: { [name: string]: roleSettingList };
+        spawnTaskList: { [roomName: string]: returnedRoleSettingList };
         newTask(roomName: string, taskName: string): void;
         deleteTask(creepName: string): void;
         war: any;
@@ -122,8 +123,14 @@ declare namespace NodeJS {
             gridLayoutRoom?: string;
         };
         monitor: {
-            upgradeSpeed: number[];
+            [roomName: string]: {
+                upgradeSpeed: number[];
+                level: number;
+            };
         };
         testError: () => Error;
+        creepWorkFunctionList: {
+            [name: string]: (creep: Creep) => void;
+        };
     }
 }

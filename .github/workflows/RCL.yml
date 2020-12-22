@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         node-version: [10.x]
-        RCL: ["RCL1ToRCL2", "RCL2ToRCL3", "RCL3ToRCL4", "RCL4ToRCL5", "RCL5ToRCL6", "RCL6ToRCL7", "RCL7ToRCL8"]
+        RCL: ["RCL"]
 
     steps:
       - uses: actions/checkout@v2
@@ -31,7 +31,6 @@ jobs:
             ${{ runner.os }}-node-
 
       - run: npm install
-      - run: npm run build
       - run: npx rollup -c rollup.test-integration-config.js -i test/integration/${{ matrix.RCL }}.test.ts
       - run: npx mocha dist/test-integration.bundle.js
 

@@ -14,7 +14,7 @@ export function createOHarvestSourceTask(
         const sourceRoomName = sourceName.slice(0, sourceName.indexOf("Source"));
         if (sourceRoomName === targetRoomName) {
             k += 10;
-            const t = templateSpawnTask(room.name, taskName, taskKindName, i + k, priority);
+            const t = templateSpawnTask(room.name, taskName, taskKindName, i + k, priority, targetRoomName);
             const source = Game.getObjectById<Source>(Memory.sources[sourceName].id) as Source;
             t.sponsor(source);
             taskList.push(t.task);

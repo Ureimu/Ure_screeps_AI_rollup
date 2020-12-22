@@ -1,5 +1,5 @@
 interface RoomMemory {
-    constructionStartTime: number;
+    startTime: number;
     roomControlStatus: number[]; // 用来与上一次建造时做比较，在每次升级时会重新建造一次
     construction: {
         [name: string]: constructionSitesInf;

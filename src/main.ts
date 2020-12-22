@@ -9,11 +9,12 @@ import * as profiler from "../utils/profiler";
 import { mountGlobal } from "mount/mountGlobal";
 import manageOutwardsSource from "task/manager/manageOutwardsSource";
 
+mountGlobal();
+if (!Memory.time) Memory.time = Game.time;
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 // export const loop = ErrorMapper.wrapLoop(() => {
 export const loop = (): void => {
-    mountGlobal();
     // if (global.time % 100 === 0) throw new Error("100");
     // export const loop = (): void => {
     profiler.wrap(function () {
@@ -37,12 +38,15 @@ export const loop = (): void => {
                         room.memory.initialize = true;
                         manageOutwardsSource(room);
                     }
+                    switch ((Game.time - Memory.time) % global.workRate.spawn) {
+                        case 3:
+                            room.manageTask();
+                            break;
+                    }
                     room.autoSafeMode();
-                    room.initMemory(false);
                     room.autoPlanConstruction();
                     room.roomVisualize();
                     room.runStructure();
-                    room.manageTask();
                 } else {
                     if (!room.memory.initialize) {
                         room.initMemory(true);
@@ -57,8 +61,14 @@ export const loop = (): void => {
                 }
             }
 
-            allocatingSpawnTask("spawnQueue");
-            manageCreep();
+            switch ((Game.time - Memory.time) % global.workRate.spawn) {
+                case 2:
+                    manageCreep();
+                    break;
+                case 3:
+                    allocatingSpawnTask("spawnQueue");
+                    break;
+            }
 
             for (const spawnName in Game.spawns) {
                 Game.spawns[spawnName].spawnTask();

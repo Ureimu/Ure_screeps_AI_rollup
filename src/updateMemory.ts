@@ -31,27 +31,17 @@ function initRoomMemory(room: Room): void {
                 taskSetting: {},
                 construction: {},
                 constructionSchedule: {},
-                constructionStartTime: Game.time,
+                startTime: Game.time,
                 roomControlStatus: [1],
                 firstSpawnName: room.find(FIND_MY_SPAWNS)[0].name,
-                taskKindList: ["roomMaintenance"]
+                taskKindList: ["roomMaintenance"],
+                stats: {
+                    upgradeSpeed: "",
+                    creepBodySize: 0,
+                    creepNum: 0,
+                    ticksToUpgrade: ""
+                }
             };
-        }
-    }
-}
-
-function initSpawnMemory(room: Room): void {
-    const controller = room.controller as StructureController;
-    if (controller.my) {
-        for (const spawn of room.find(FIND_MY_SPAWNS)) {
-            if (Object.keys(spawn.memory).length === 0) {
-                spawn.memory = {
-                    taskPool: {
-                        spawnQueue: []
-                    },
-                    isSpawning: false
-                };
-            }
         }
     }
 }
@@ -63,6 +53,5 @@ export function initNewRoomSetting(room: Room, ifFarming: boolean): void {
     }
     getNewSource(room);
     initRoomMemory(room);
-    initSpawnMemory(room);
     runSpawnTask(room);
 }

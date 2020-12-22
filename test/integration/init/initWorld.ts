@@ -5,24 +5,23 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import { IntegrationTestHelper } from "../helper";
-import { getRectWall } from "../utils/getRectWall";
 import moduleSetting from "../utils/moduleSetting";
 const { TerrainMatrix } = require("screeps-server-mockup");
 
-export async function initWorld(helper: IntegrationTestHelper, RCL: number, spawnRoom: string): Promise<void> {
+export async function initWorld(helper: IntegrationTestHelper, spawnRoom: string): Promise<void> {
     const { db } = helper.server.common.storage;
     const C = helper.server.constants;
     const terrain: MockedTerrainMatrix = new TerrainMatrix();
-    const walls = getRectWall([0, 49], [49, 0]).concat([
+    const walls = [
         [10, 10],
         [10, 40],
         [40, 10],
         [40, 40]
-    ]);
+    ];
     _.each(walls, ([x, y]) => terrain.set(x, y, "wall"));
 
-    for (let i = 0; i < 3; i++) {
-        for (let j = 0; j < 3; j++) {
+    for (let i = 1; i < 4; i++) {
+        for (let j = 1; j < 4; j++) {
             const roomName = `W${i}N${j}`;
             await helper.server.world.addRoom(roomName);
             await helper.server.world.setTerrain(roomName, terrain);
@@ -54,7 +53,8 @@ export async function initWorld(helper: IntegrationTestHelper, RCL: number, spaw
     await Promise.all([
         db["rooms.objects"].update(
             { _id: controller._id },
-            { $set: { level: RCL, progress: C.CONTROLLER_LEVELS[RCL] - 100 - ((RCL - 8) ** 3 + 243) * 50 } }
+            { $set: { level: 1, progress: C.CONTROLLER_LEVELS[1] - 100 - ((1 - 8) ** 3 + 243) * 50 } }
         )
     ]);
+    return controller._id;
 }
