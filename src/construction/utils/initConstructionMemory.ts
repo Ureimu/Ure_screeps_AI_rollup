@@ -4,7 +4,8 @@ export function initConstructionMemory(room: Room, name: string, structureType: 
             constructionSitesCompleted: false,
             pos: [],
             structureType,
-            memory: {}
+            memory: {},
+            id: []
         };
     }
 }

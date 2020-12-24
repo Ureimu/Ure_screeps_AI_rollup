@@ -8,20 +8,96 @@ import { helper } from "../helper";
 import { initRCLTestRoom } from "../init/initRCLTestRoom";
 import { printDebugInfo } from "../utils/printDebugInfo";
 import { storeOutputFile } from "../utils/manageProfilerCallgrindData";
+import { analyseEventLog } from "../utils/getEventLog";
 
 export async function runRCLTest(tickNum: number): Promise<void> {
     const spawnRoom = "W2N2";
     const controllerId = await initRCLTestRoom(helper, spawnRoom);
     let RCL = 1;
+    let analyseData: analyseData = [];
+    const idData: nameToId = {};
+    const controllerData: controllerData = {};
 
     for (let gameTime = 1; gameTime < tickNum; gameTime += 1) {
         await helper.server.tick();
+        const { db, env } = helper.server.common.storage;
+        const rawEventLog = await env.get(env.keys.ROOM_EVENT_LOG);
+        const memory: Memory = JSON.parse(await helper.user.memory);
+        await Promise.all([
+            db["rooms.objects"].find({}).then((resp: objData<string>[]) => {
+                resp.forEach(obj => {
+                    if (obj.type === "creep") {
+                        if (!idData[obj._id]) {
+                            idData[obj._id] = {
+                                type: {
+                                    baseType: obj.type,
+                                    idType: obj._id,
+                                    namedType: (obj as objData<"creep">).name
+                                        .slice((obj as objData<"creep">).name.indexOf("-") + 1)
+                                        .slice(
+                                            0,
+                                            (obj as objData<"creep">).name
+                                                .slice((obj as objData<"creep">).name.indexOf("-") + 1)
+                                                .indexOf("-")
+                                        )
+                                },
+                                room: [{ room: obj.room, gameTime }],
+                                id: obj._id
+                            };
+                        } else {
+                            const lastIndex =
+                                (idData[obj._id].room as {
+                                    gameTime: number;
+                                    room: string;
+                                }[]).length - 1;
+                            if (
+                                (idData[obj._id].room as {
+                                    gameTime: number;
+                                    room: string;
+                                }[])[lastIndex].room !== obj.room
+                            ) {
+                                (idData[obj._id].room as {
+                                    gameTime: number;
+                                    room: string;
+                                }[]).push({ room: obj.room, gameTime });
+                            }
+                        }
+                    } else if (obj.type === "controller") {
+                        controllerData[obj.room] = obj._id;
+                        if (!idData[obj._id]) {
+                            idData[obj._id] = {
+                                type: {
+                                    baseType: obj.type,
+                                    idType: obj._id,
+                                    namedType: obj.type
+                                },
+                                room: obj.room,
+                                id: obj._id
+                            };
+                        }
+                    } else {
+                        if (!idData[obj._id]) {
+                            idData[obj._id] = {
+                                type: {
+                                    baseType: obj.type,
+                                    idType: obj._id,
+                                    namedType: obj.type
+                                },
+                                room: obj.room,
+                                id: obj._id
+                            };
+                        }
+                    }
+                });
+            })
+        ]);
+        const analysed = analyseEventLog(rawEventLog, gameTime, controllerData);
+        if (analysed !== []) {
+            analyseData = analyseData.concat(analysed);
+        }
         _.each(await helper.user.newNotifications, ({ message }) => console.log("[notification]", message));
         if (gameTime % 100) continue;
-        const { db } = helper.server.common.storage;
-        const memory: Memory = JSON.parse(await helper.user.memory);
         printDebugInfo(memory, gameTime, spawnRoom);
-
         const controllerLevel = memory.rooms?.[spawnRoom].roomControlStatus[0];
         if (controllerLevel !== undefined && controllerLevel >= RCL + 1) {
             console.log(
@@ -42,7 +118,7 @@ export async function runRCLTest(tickNum: number): Promise<void> {
             const lastMemory: Memory & { callgrind: string; profiler: Record<string, unknown> } = JSON.parse(
                 await helper.user.memory
             );
-            storeOutputFile(lastMemory, RCL);
+            storeOutputFile(lastMemory, RCL, analyseData, idData);
             assert.equal(
                 lastMemory.errors?.errorList.length,
                 0,

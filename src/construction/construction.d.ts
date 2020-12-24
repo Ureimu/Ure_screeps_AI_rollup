@@ -45,6 +45,7 @@ type RoomPositionStr = string;
 interface constructionSitesInf {
     constructionSitesCompleted: boolean;
     pos: RoomPositionStr[];
+    id: string[];
     structureType: StructureConstant;
     memory: {
         [name: string]: {

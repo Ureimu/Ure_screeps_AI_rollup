@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 interface MockServerOptions {
     path: string;
     logdir: string;
@@ -194,4 +195,6 @@ declare class MockedUser {
      Initialise console events
      */
     public init(): Promise<this>;
+
+    public on(name: string, func: (logs: string[], results: any, userid: string, username: string) => void): void;
 }
