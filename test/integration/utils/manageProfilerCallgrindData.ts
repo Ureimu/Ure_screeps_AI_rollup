@@ -1,12 +1,20 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-var-requires */
+
+import { getDirectedGraph } from "./directedGraph";
+
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 const { mkdirSync, writeFile } = require("fs");
 
 const DIST = "./test/data/";
 
-export function storeOutputFile(data: Memory & { callgrind: string; profiler: Record<string, unknown> }, RCL: number) {
+export function storeOutputFile(
+    data: Memory & { callgrind: string; profiler: Record<string, unknown> },
+    RCL: number,
+    analyseData: analyseData,
+    idData: nameToId
+) {
     const fileName = "memory.json";
     const now = new Date();
     const path = `${DIST}${now.toLocaleDateString()}/${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}/`;
@@ -26,6 +34,14 @@ export function storeOutputFile(data: Memory & { callgrind: string; profiler: Re
             console.log("写入文件出错！具体错误：" + err);
         } else {
             console.log("创建memory.json数据文件成功");
+        }
+    });
+    console.log(analyseData.length, Object.keys(idData).length);
+    writeFile(path + "eventLog.html", getDirectedGraph(analyseData, idData), "utf8", (err: string) => {
+        if (err) {
+            console.log("写入文件出错！具体错误：" + err);
+        } else {
+            console.log("创建eventLog数据文件成功");
         }
     });
 }

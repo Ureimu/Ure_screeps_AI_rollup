@@ -49,6 +49,9 @@ export async function initWorld(helper: IntegrationTestHelper, spawnRoom: string
 
     const modules = moduleSetting.modules;
     helper.user = await helper.server.world.addBot({ username: "Ureium", room: spawnRoom, x: 21, y: 26, modules });
+    helper.user.on("console", (logs, results, userid, username) => {
+        _.each(logs, line => console.log(`[console|${username}]`, line));
+    });
     await helper.user.console(`Game.profiler.reset();Game.profiler.background()`);
     await Promise.all([
         db["rooms.objects"].update(
