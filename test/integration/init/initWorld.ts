@@ -8,7 +8,7 @@ import { IntegrationTestHelper } from "../helper";
 import moduleSetting from "../utils/moduleSetting";
 const { TerrainMatrix } = require("screeps-server-mockup");
 
-export async function initWorld(helper: IntegrationTestHelper, spawnRoom: string): Promise<void> {
+export async function initWorld(helper: IntegrationTestHelper, spawnRoom: string): Promise<string> {
     const { db } = helper.server.common.storage;
     const C = helper.server.constants;
     const terrain: MockedTerrainMatrix = new TerrainMatrix();

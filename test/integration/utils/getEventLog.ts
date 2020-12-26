@@ -37,7 +37,7 @@ function getAction(
                         const log: [string, string, string | number, number] = [
                             event.objectId,
                             event.data.targetId,
-                            event.data.energySpent,
+                            event.data.amount,
                             gameTime
                         ];
                         logger.push(log);

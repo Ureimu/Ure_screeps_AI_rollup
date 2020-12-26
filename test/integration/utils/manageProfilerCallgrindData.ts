@@ -37,7 +37,7 @@ export function storeOutputFile(
         }
     });
     console.log(analyseData.length, Object.keys(idData).length);
-    writeFile(path + "eventLog.html", getDirectedGraph(analyseData, idData), "utf8", (err: string) => {
+    writeFile(path + "eventLog.json", getDirectedGraph(analyseData, idData), "utf8", (err: string) => {
         if (err) {
             console.log("写入文件出错！具体错误：" + err);
         } else {
