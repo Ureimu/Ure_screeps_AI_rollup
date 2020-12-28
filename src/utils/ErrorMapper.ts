@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 
-import { SourceMapConsumer } from "../../utils/source-map/source-map";
+import { SourceMapConsumer } from "source-map";
 
 export class ErrorMapper {
     // Cache consumer
