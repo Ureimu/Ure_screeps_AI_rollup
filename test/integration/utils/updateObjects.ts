@@ -12,7 +12,7 @@ export async function updateSpawnRoomObj(db: any, spawnRoom:string): Promise<voi
                         .then((csDetail: { progressTotal: number }) =>
                             db["rooms.objects"].update(
                                 { _id: cs._id },
-                                { $set: { progress: csDetail.progressTotal - 1 } }
+                                { $set: { progress: csDetail.progressTotal - 10 } }
                             )
                         )
                 )

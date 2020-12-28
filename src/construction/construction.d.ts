@@ -2,7 +2,7 @@ interface RoomMemory {
     startTime: number;
     roomControlStatus: number[]; // 用来与上一次建造时做比较，在每次升级时会重新建造一次
     construction: {
-        [name: string]: constructionSitesInf;
+        [name: string]: constructionSitesInf<AnyStructure>;
     };
     constructionSchedule: {
         [name: string]: {
@@ -42,11 +42,11 @@ interface RoomPositionMem {
  */
 type RoomPositionStr = string;
 
-interface constructionSitesInf {
+interface constructionSitesInf<T extends AnyStructure> {
     constructionSitesCompleted: boolean;
     pos: RoomPositionStr[];
-    id: string[];
-    structureType: StructureConstant;
+    id: Id<T>[];
+    structureType: T extends Structure<StructureConstant> ? StructureConstant : never;
     memory: {
         [name: string]: {
             hasPushed?: boolean;

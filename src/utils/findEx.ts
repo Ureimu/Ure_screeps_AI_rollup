@@ -64,7 +64,7 @@ export function lookForStructureName(structure?: AnyStructure | null): string {
         return "";
     }
     for (const con in structure.room.memory.construction) {
-        const m: { [name: string]: constructionSitesInf } = structure.room.memory.construction;
+        const m: { [name: string]: constructionSitesInf<AnyStructure> } = structure.room.memory.construction;
         if (m[con].structureType === structure.structureType) {
             for (const nStr of m[con].pos) {
                 const n = getPosFromStr(nStr);
