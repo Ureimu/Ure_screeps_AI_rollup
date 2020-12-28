@@ -20,6 +20,7 @@ export function storeOutputFile(
     const path = `${DIST}${now.toLocaleDateString()}/${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}/`;
     mkdirSync(path, { recursive: true });
     const callgrindFileName = `callgrind.RCL${RCL}.dat`;
+    // 读取下面数据的软件可以在群里下载，叫qcachegrind。
     writeFile(path + callgrindFileName, data.callgrind, "utf8", (err: string) => {
         if (err) {
             console.log("写入文件出错！具体错误：" + err);
@@ -29,6 +30,7 @@ export function storeOutputFile(
     });
     data.callgrind = "";
     data.profiler = {};
+    // memory数据。
     writeFile(path + fileName, JSON.stringify(data), "utf8", (err: string) => {
         if (err) {
             console.log("写入文件出错！具体错误：" + err);
@@ -37,6 +39,7 @@ export function storeOutputFile(
         }
     });
     console.log(`analyseData.length:${analyseData.length},Object.keys(idData).length:${Object.keys(idData).length}}`);
+    // 读取下面数据的软件可以在这个库下载：https://github.com/Ureimu/screepsGraphs
     writeFile(path + "eventLog.json", getDirectedGraph(analyseData, idData), "utf8", (err: string) => {
         if (err) {
             console.log("写入文件出错！具体错误：" + err);

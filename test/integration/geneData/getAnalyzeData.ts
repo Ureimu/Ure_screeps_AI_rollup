@@ -9,6 +9,7 @@ export async function getAnalyzeData(db:any,idData:nameToId,gameTime:number,cont
                             type: {
                                 baseType: obj.type,
                                 idType: obj._id,
+                                // 我这里是直接解析自己creep的名字中自带的类型作为有向图的节点名称。
                                 namedType: (obj as objData<"creep">).name
                                     .slice((obj as objData<"creep">).name.indexOf("-") + 1)
                                     .slice(
