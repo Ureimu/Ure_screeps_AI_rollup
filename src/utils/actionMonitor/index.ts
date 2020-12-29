@@ -1,4 +1,4 @@
-import { lookForStructureName } from "utils/findEx";
+import findEx from "utils/findEx";
 import * as profiler from "../../../utils/profiler";
 
 const fun = {
@@ -38,7 +38,7 @@ function getName(target: AnyStructure | Creep, roomName: string): string {
     if (isCreep(target)) {
         name = target.name;
     } else {
-        if ((name = lookForStructureName(target)) === "") {
+        if ((name = findEx.lookForStructureName(target)) === "") {
             name = roomName + "-" + target?.structureType; // 可能上一个tick对象还存在，这个tick对象就不存在了，考虑缓存上一个tick的对象。
         } else {
             name = roomName + "-" + name;

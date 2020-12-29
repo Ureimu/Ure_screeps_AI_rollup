@@ -1,10 +1,15 @@
 {
-  "extension": [
-    ".ts"
-  ],
-  "exclude": [
-    "rollup.**.ts",
-    "test/**",
-    "coverage/**"
-  ]
+    "extension": [
+        ".ts"
+    ],
+    "include": [
+        "src/**",
+        "utils/**"
+    ],
+    "exclude": [
+        "rollup.**.ts",
+        "test/**",
+        "coverage/**",
+        ".history/**"
+    ]
 }

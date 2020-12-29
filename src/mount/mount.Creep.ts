@@ -1,4 +1,4 @@
-import { getStructureFromArray, lookForStructureName } from "utils/findEx";
+import findEx from "utils/findEx";
 import { getBpNum } from "utils/bodypartsGenerator";
 import { getPosFromStr } from "construction/utils/strToRoomPosition";
 
@@ -7,7 +7,10 @@ export class CreepExtension extends Creep {
     // 其他更多自定义拓展
     public getEnergy(lowerLimit: { [name: string]: { num: number; takeAll?: boolean } }[] = [{}]): string {
         if (!this.memory.task.taskInf) return "";
-        const structureList: { [name: string]: AnyStoreStructure[] }[] = getStructureFromArray(this.room, lowerLimit);
+        const structureList: { [name: string]: AnyStoreStructure[] }[] = findEx.getStructureFromArray(
+            this.room,
+            lowerLimit
+        );
         const containersL = [];
         for (let i = 0, j = structureList.length; i < j; i++) {
             const st1 = structureList[i];
@@ -32,7 +35,7 @@ export class CreepExtension extends Creep {
         }
 
         const containersEnergy = this.pos.findClosestByRange(containersL);
-        const containersName = lookForStructureName(containersEnergy);
+        const containersName = findEx.lookForStructureName(containersEnergy);
         // console.log(this.name+" "+containersEnergy?.structureType+containersName);
 
         const target = this.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {
@@ -100,7 +103,7 @@ export class CreepExtension extends Creep {
 
     public transportResource(target: AnyStructure, resourceType: ResourceConstant, resourceNumber?: number): boolean {
         if (!this.memory.task.taskInf) return false;
-        if (this.memory.task.taskInf.lastSource === lookForStructureName(target)) return false;
+        if (this.memory.task.taskInf.lastSource === findEx.lookForStructureName(target)) return false;
         if (!target) return false;
         if (this.transfer(target, resourceType, resourceNumber) === ERR_NOT_IN_RANGE) {
             this.moveTo(target, {

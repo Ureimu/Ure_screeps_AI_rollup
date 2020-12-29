@@ -1,5 +1,5 @@
 import { getBpNum } from "utils/bodypartsGenerator";
-import { lookForStructureByPos } from "utils/findEx";
+import findEx from "utils/findEx";
 import { stateCut } from "../utils/utils";
 
 export function harvestSource(creep: Creep): void {
@@ -10,11 +10,11 @@ export function harvestSource(creep: Creep): void {
     if (!global.creepMemory[creep.name].bundledLinkPos) {
         creep.harvest(source);
     } else {
-        const container: StructureContainer = lookForStructureByPos(
+        const container: StructureContainer = findEx.lookForStructureByPos(
             global.creepMemory[creep.name].bundledPos,
             STRUCTURE_CONTAINER
         ) as StructureContainer;
-        const link: StructureLink = lookForStructureByPos(
+        const link: StructureLink = findEx.lookForStructureByPos(
             global.creepMemory[creep.name].bundledLinkPos,
             STRUCTURE_LINK
         ) as StructureLink;

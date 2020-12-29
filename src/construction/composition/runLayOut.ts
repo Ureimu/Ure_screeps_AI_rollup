@@ -1,6 +1,6 @@
 import { getPosFromStr, setPosToStr } from "construction/utils/strToRoomPosition";
 import { initConstructionMemory } from "construction/utils/initConstructionMemory";
-import { isPosEqual } from "utils/findEx";
+import findEx from "utils/findEx";
 
 export function runLayout(room: Room, layoutName: string, layoutFunc: (room: Room) => void): void {
     if (!room.memory.constructionSchedule[layoutName]?.layout) {
@@ -75,7 +75,7 @@ function putConstructionSites(
         });
         structures = structures.concat(constructionSites);
         for (const structure of structures) {
-            if (isPosEqual(structure.pos, posList[i])) {
+            if (findEx.isPosEqual(structure.pos, posList[i])) {
                 for (const x of room.memory.construction[name].pos) {
                     const pos = getPosFromStr(x);
                     if (pos.isEqualTo(posList[i])) {

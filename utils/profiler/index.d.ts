@@ -46,18 +46,12 @@ export function callgrind(): string;
  *           }
  *         | undefined)}
  */
-export function registerObject(
-    object: any,
+export function registerObject<T extends { [name in string]: (...args: any[]) => any }>(
+    object: T,
     label: string
-):
-    | {
-          [name in string]: {
-              (...args: any[]): any;
-              profilerWrapped: boolean;
-              toString(): string;
-          };
-      }
-    | undefined;
+): {
+    [P in keyof T]: T[P] & { profilerWrapped: boolean; toString(): string };
+};
 /**
  * 注册函数到调试模块。
  *
@@ -70,14 +64,10 @@ export function registerObject(
  *     toString(): string;
  * }}
  */
-export function registerFN(
-    fn: (...args: any[]) => any,
+export function registerFN<T extends (...args: any[]) => any>(
+    fn: T,
     functionName: string
-): {
-    (...args: any[]): any;
-    profilerWrapped: boolean;
-    toString(): string;
-};
+): T & { profilerWrapped: boolean; toString(): string };
 /**
  * 注册类到调试模块。
  *
@@ -93,15 +83,9 @@ export function registerFN(
  *       }
  *     | undefined)}
  */
-export function registerClass(
-    object: any,
+export function registerClass<T extends { [name in string]: (...args: any[]) => any }>(
+    object: T,
     label: string
-):
-    | {
-          [name in string]: {
-              (...args: any[]): any;
-              profilerWrapped: boolean;
-              toString(): string;
-          };
-      }
-    | undefined;
+): {
+    [P in keyof T]: T[P] & { profilerWrapped: boolean; toString(): string };
+};

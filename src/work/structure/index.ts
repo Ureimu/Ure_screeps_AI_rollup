@@ -1,11 +1,11 @@
 import { centerLink } from "./link/centerLink";
 import { controllerLink } from "./link/controllerLink";
 import { linkRunTask } from "./link/linkRunTask";
-import { lookForStructureName } from "utils/findEx";
 import { sourceLink } from "./link/sourceLink";
 import { runStorage } from "./storage/storage";
 import { towerR } from "./tower/towerRoom";
 import { runTower } from "./tower/tower";
+import findEx from "utils/findEx";
 
 export function runStructure(room: Room): void {
     const myStructures = room.find(FIND_MY_STRUCTURES);
@@ -18,7 +18,7 @@ export function runStructure(room: Room): void {
                 runStorage(myStructure);
                 break;
             case "link":
-                switch (lookForStructureName(myStructure)) {
+                switch (findEx.lookForStructureName(myStructure)) {
                     case "centerLink":
                         centerLink(myStructure);
                         break;

@@ -1,5 +1,5 @@
+import findEx from "utils/findEx";
 import { findSpawnOrExtensionNotFull } from "../utils/find";
-import { getStructureFromArray } from "utils/findEx";
 import { stateCut } from "work/creep/utils/utils";
 
 export function carrySource(creep: Creep): void {
@@ -89,7 +89,7 @@ function doStuff(
     }[]
 ) {
     // console.log(JSON.stringify(gList))
-    const sList = getStructureFromArray(creep.room, gList);
+    const sList = findEx.getStructureFromArray(creep.room, gList);
     // console.log(JSON.stringify(gList[0]["controllerSourceContainer"]?.upperLimit))
     let getStructure = false;
     for (let i = 0, j = sList.length; i < j; i++) {

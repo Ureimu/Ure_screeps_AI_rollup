@@ -1,6 +1,6 @@
 import { getPosFromStr } from "construction/utils/strToRoomPosition";
 import { getBpNum } from "utils/bodypartsGenerator";
-import { lookForStructureByPos } from "utils/findEx";
+import findEx from "utils/findEx";
 
 export function centerCarry(creep: Creep): void {
     if (!creep.memory.dontPullMe) creep.memory.dontPullMe = true;
@@ -21,11 +21,11 @@ export function centerCarry(creep: Creep): void {
         global.creepMemory[creep.name].bundledLinkPos = getPosFromStr(creep.room.memory.construction.centerLink.pos[0]);
     } else {
         ifMove(creep);
-        const storage: StructureStorage = lookForStructureByPos(
+        const storage: StructureStorage = findEx.lookForStructureByPos(
             global.creepMemory[creep.name].bundledStoragePos,
             STRUCTURE_STORAGE
         ) as StructureStorage;
-        const link: StructureLink = lookForStructureByPos(
+        const link: StructureLink = findEx.lookForStructureByPos(
             global.creepMemory[creep.name].bundledLinkPos,
             STRUCTURE_LINK
         ) as StructureLink;

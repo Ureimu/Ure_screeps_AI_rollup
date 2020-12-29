@@ -1,4 +1,4 @@
-import { lookForStructure } from "utils/findEx";
+import findEx from "utils/findEx";
 import { stateCut } from "work/creep/utils/utils";
 import taskPool from "task/utils/taskPool";
 
@@ -23,12 +23,12 @@ export function carryResource(creep: Creep): void {
             const ifFinishTask = stateCut(creep, [() => 0, () => 0], 1);
 
             if (ifHarvesting) {
-                const structureCarryFrom = lookForStructure(creep.room, carryFrom, true) as AnyStoreStructure[];
+                const structureCarryFrom = findEx.lookForStructure(creep.room, carryFrom, true) as AnyStoreStructure[];
                 if (structureCarryFrom) {
                     creep.getResourceFromStructure(structureCarryFrom[0], resourceType);
                 }
             } else {
-                const structureCarryTo = lookForStructure(creep.room, carryTo, true) as AnyStoreStructure[];
+                const structureCarryTo = findEx.lookForStructure(creep.room, carryTo, true) as AnyStoreStructure[];
                 if (structureCarryTo) {
                     creep.transportResource(structureCarryTo[0], resourceType);
                 }
