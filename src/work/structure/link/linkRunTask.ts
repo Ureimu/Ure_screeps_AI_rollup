@@ -1,9 +1,11 @@
-import taskPool from "task/utils/taskPool";
+import { LinkTaskInf } from "task/taskClass/extends/LinkTask";
+import { TaskPool } from "task/utils/taskPool";
 
 export function linkRunTask(room: Room): void {
     if (Game.time % 5 !== 0) {
         return;
     }
+    const taskPool = new TaskPool<LinkTaskInf>();
     const linkTaskQueue = taskPool.initQueue("linkTask", room.memory.taskPool);
     const taskList: LinkTaskInf[] = [];
     let ifOK = 2;

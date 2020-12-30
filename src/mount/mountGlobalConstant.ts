@@ -1,4 +1,18 @@
+import { returnedRoleSettingList } from "task/taskClass/RoleSetting";
 import { GUIfun } from "visual/roomVisual/GUI";
+
+declare global {
+    // Types defined in a global block are available globally
+
+    namespace NodeJS {
+        interface Global {
+            spawnTaskList: {
+                [roomName: string]: returnedRoleSettingList;
+            };
+        }
+    }
+}
+
 export function globalConstantRegister(): void {
     // 在global上写入全局常量对象
     global.testMode = true;

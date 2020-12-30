@@ -1,3 +1,5 @@
+import { RoomPositionStr } from "construction";
+
 export function getPosFromStr(str: RoomPositionStr): RoomPosition {
     const matched = regMatch(str);
     if (matched) {

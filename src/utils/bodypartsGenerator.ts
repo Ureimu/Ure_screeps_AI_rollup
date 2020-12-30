@@ -1,3 +1,10 @@
+/**
+ * 生成身体部件列表的简化输入类型，属性名代表部件名，属性值代表生成部件数量。repeat属性指定重复次数。
+ */
+export type bpgGene = {
+    [bodypartsName in BodyPartConstant | "repeat"]?: number;
+};
+
 export function bpg(bodyparts: bpgGene[]): BodyPartConstant[] {
     /**
      *一个bodyparts生成器。
@@ -37,8 +44,6 @@ export function bpg(bodyparts: bpgGene[]): BodyPartConstant[] {
             }
         }
     }
-    global.GenedGetBodyparts = bodyparts;
-    global.GenedBodypartsList = bodypartsList;
     return bodypartsList;
 }
 
@@ -70,13 +75,11 @@ export function getBpNum(bodyparts: bpgGene[], bodypartName?: BodyPartConstant):
             }
         }
     }
-    global.GenedGetBodypartsNum = bodyparts;
-    global.GenedBodypartsNum = bodypartNumber;
     return bodypartNumber;
 }
 
 export function getBpEnergy(bodyparts: bpgGene[]): number {
-    let enengyNum = 0;
+    let energyNum = 0;
     const bodypartCost = {
         move: 50,
         work: 100,
@@ -96,7 +99,7 @@ export function getBpEnergy(bodyparts: bpgGene[]): number {
             for (const key in bodyparts[i]) {
                 if (BODYPARTS_ALL.includes(key as BodyPartConstant)) {
                     for (let i1 = 0, j1 = bodyparts[i][key as BodyPartConstant] as number; i1 < j1; i1++) {
-                        enengyNum += bodypartCost[key as BodyPartConstant];
+                        energyNum += bodypartCost[key as BodyPartConstant];
                     }
                 }
             }
@@ -109,10 +112,8 @@ export function getBpEnergy(bodyparts: bpgGene[]): number {
                     }
                 }
             }
-            enengyNum += nowEnergy * repeatNum;
+            energyNum += nowEnergy * repeatNum;
         }
     }
-    global.GenedgetBpEnergyBodyparts = bodyparts;
-    global.GenedgetBpEnergyBodypartsCost = enengyNum;
-    return enengyNum;
+    return energyNum;
 }

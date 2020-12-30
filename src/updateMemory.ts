@@ -1,6 +1,42 @@
 // 每次占领新房间时会执行的模块。
 
 import { runSpawnTask } from "task";
+import { BaseTaskInf } from "task/taskClass/BaseTask";
+import { CarryTaskInf } from "task/taskClass/extends/CarryTask";
+import { LinkTaskInf } from "task/taskClass/extends/LinkTask";
+import { SpawnTaskInf } from "task/taskClass/extends/SpawnTask";
+import { taskPool } from "task/utils/taskPool";
+
+declare global {
+    interface Memory {
+        sources: { [name: string]: SourceMemory };
+        taskPools: taskPool<BaseTaskInf>;
+        errors: {
+            errorList: string[];
+            errorCount: number[];
+            errorIntervals: number[][];
+        };
+        time: number;
+    }
+
+    interface RoomMemory {
+        taskPool: taskPool<BaseTaskInf & LinkTaskInf & CarryTaskInf & SpawnTaskInf>;
+        initialize?: boolean;
+        taskKindList: string[];
+    }
+
+    interface SpawnMemory {
+        recorder?: number;
+        taskPool: taskPool<SpawnTaskInf>;
+        lastFinishSpawnTime?: number;
+        isSpawning: boolean;
+    }
+}
+
+interface SourceMemory {
+    id: Id<Source>;
+    pos: string;
+}
 
 /**
  * 查找属于自己房间的source名称并初始化没有memory记录的source的memory。

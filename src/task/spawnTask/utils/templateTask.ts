@@ -1,4 +1,4 @@
-import { SpawnTask } from "task/taskClass/extends/SpawnTask";
+import { SpawnTask, SpawnTaskInf } from "task/taskClass/extends/SpawnTask";
 import { getBpByRole } from "./getBpByRole";
 
 export function templateSpawnTaskList(

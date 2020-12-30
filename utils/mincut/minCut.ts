@@ -640,7 +640,7 @@ export function coordToRoomPosition(coordList: Coord[], roomName: string) {
  * @param roomName - the name of the room to use for the test, must be visible
  */
 export function testMinCutSubset(colonyName: string) {
-    const colony = global.minCut.colonies[colonyName];
+    const colony = Game.rooms[colonyName];
     if (!colony) {
         return `No colony: ${colonyName}`;
     }
@@ -648,12 +648,12 @@ export function testMinCutSubset(colonyName: string) {
     // Rectangle Array, the Rectangles will be protected by the returned tiles
     const rectArray = [];
     const padding = 3;
-    if (colony.hatchery) {
-        const { x, y } = colony.hatchery.pos;
+    if (colony.source) {
+        const { x, y } = colony.source[0].pos;
         rectArray.push({ x1: x - 5 - padding, y1: y - 4 - padding, x2: x + 5 + padding, y2: y + 6 + padding });
     }
-    if (colony.commandCenter) {
-        const { x, y } = colony.commandCenter.pos;
+    if (colony.controller) {
+        const { x, y } = colony.controller.pos;
         rectArray.push({ x1: x - 3 - padding, y1: y - 0 - padding, x2: x + 0 + padding, y2: y + 5 + padding });
     }
     // Get Min cut, returns the positions where ramparts/walls need to be

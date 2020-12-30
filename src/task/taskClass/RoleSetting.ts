@@ -1,4 +1,39 @@
 import { getRoleList } from "task/spawnTask/indexRoleSetting";
+import { SpawnTaskInf } from "./extends/SpawnTask";
+
+interface taskKindMemory {
+    [taskName: string]: RoomTaskInte;
+}
+
+interface RoomTaskInte {
+    memory: Partial<Omit<roleSetting, "getSpawnTaskInf">>;
+}
+
+export interface roleSettingList {
+    [taskKindName: string]: (
+        taskKindMemory: taskKindMemory
+    ) => {
+        [taskName: string]: roleSetting;
+    };
+}
+
+export type returnedRoleSettingList = {
+    [T in keyof roleSettingList]: {
+        [P in keyof ReturnType<roleSettingList[T]>]: roleSetting;
+    };
+};
+
+interface roleSetting {
+    numberSetting: number;
+    priority: number;
+    getSpawnTaskInf: (
+        room: Room,
+        taskName: string,
+        taskKindName: string,
+        num: number,
+        priority: number
+    ) => SpawnTaskInf[];
+}
 
 export class RoleSetting {
     public roomName: string;

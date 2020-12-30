@@ -20,7 +20,7 @@ interface StructureSpawn {
 }
 
 interface StructureController {
-    checkBlankSpace(): RoomPositionStr[];
+    checkBlankSpace(): string[];
     initsGlobalMemory(): void;
 }
 
@@ -62,14 +62,6 @@ interface Source {
      * @memberof Source
      */
     initsMemory(): void;
-
-    /**
-     * 任务管理函数。用来检测是否需要推送任务。
-     *
-     * @param {()=>bpgGene[]} manage_bodyParts 一个函数，返回bpgGene对象。
-     * @memberof Source
-     */
-    check(): CheckStatus;
 }
 
 interface Creep {
@@ -77,10 +69,6 @@ interface Creep {
     transportResource(target: AnyStructure, resourceType: ResourceConstant): boolean;
     getResourceFromStructure(structure: AnyStoreStructure, resourceType: ResourceConstant): void;
     getGlobalMemory(): void;
-}
-
-interface CreepMemory {
-    stack?: [string, unknown, (...args: unknown[]) => unknown][];
 }
 
 declare namespace NodeJS {
@@ -91,25 +79,17 @@ declare namespace NodeJS {
         log: any;
         clearError(): void;
         detail: () => void;
-        bpg: (arg0: bpgGene[]) => BodyPartConstant[];
         rooms: {
             [name: string]: {
                 controller?: { blankSpace: string[] };
             };
         };
-        GenedGetBodyparts: bpgGene[];
-        GenedGetBodypartsNum: bpgGene[];
-        GenedBodypartsList: BodyPartConstant[];
-        GenedBodypartsNum: number;
-        GenedgetBpEnergyBodyparts: bpgGene[];
-        GenedgetBpEnergyBodypartsCost: number;
         prototypeMounted: boolean;
         getNewSource(): void;
         repushTask(): void;
         getNum(arg0: number): number;
         CreepEnergyMonitorprototypeMounted: boolean;
         memoryReset(): void;
-        spawnTaskList: { [roomName: string]: returnedRoleSettingList };
         newTask(roomName: string, taskName: string): void;
         deleteTask(creepName: string): void;
         war: any;

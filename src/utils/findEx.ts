@@ -1,9 +1,21 @@
+import { constructionSitesInf } from "construction";
 import { getPosFromStr } from "construction/utils/strToRoomPosition";
 import * as profiler from "../../utils/profiler";
 
 type structureInfoList = {
     [name: string]: any;
 }[];
+
+/**
+ * 这个是为了和RoomPosition区分开的接口。只需要有x,y,roomName三个属性。
+ *
+ * @interface RoomPositionMem
+ */
+interface RoomPositionMem {
+    x: number;
+    y: number;
+    roomName: string;
+}
 
 const findEx = {
     lookForStructure(

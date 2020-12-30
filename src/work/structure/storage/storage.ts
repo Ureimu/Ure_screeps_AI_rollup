@@ -1,4 +1,4 @@
-import { CarryTask } from "task/taskClass/extends/CarryTask";
+import { CarryTask, CarryTaskInf } from "task/taskClass/extends/CarryTask";
 
 export function runStorage(storage: StructureStorage): void {
     if (!storage.room.memory.construction.storage.memory[storage.id])

@@ -76,6 +76,8 @@ module.exports = {
         hoist: "all"
       }
     ],
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["off"],
     "no-throw-literal": "error",
     "no-trailing-spaces": "off",
     "no-undef-init": "error",
@@ -87,5 +89,7 @@ module.exports = {
     radix: "error",
     "sort-imports": "off",
     "spaced-comment": "error",
+    "@typescript-eslint/no-namespace":"off",
+    "@typescript-eslint/prefer-namespace-keyword":"off"
   }
 };

@@ -1,6 +1,8 @@
+import { BaseTaskInf } from "task/taskClass/BaseTask";
+import { SpawnTaskInf } from "task/taskClass/extends/SpawnTask";
 import PriorityQueue from "../../../utils/PriorityQueue";
 import { TaskSetting } from "../taskClass/TaskSetting";
-import taskPool from "./taskPool";
+import { TaskPool } from "./taskPool";
 
 /**
  * 分配给定的room的spawnTask中的任务到相应房间内的spawn中，平均分配。
@@ -8,6 +10,7 @@ import taskPool from "./taskPool";
  * @param {object} roomListToAllocate 给定的room对象
  */
 export function allocatingSpawnTask(QueueName: string): void {
+    const taskPool = new TaskPool<BaseTaskInf>();
     const roomListToAllocate: { [roomName: string]: number } = {};
     for (const roomName in Memory.rooms) {
         if (Memory.rooms[roomName]?.taskPool?.[QueueName].length > 0) {
@@ -17,8 +20,8 @@ export function allocatingSpawnTask(QueueName: string): void {
     if (Object.keys(roomListToAllocate).length === 0) return;
     let ifAllOK = false;
     const roomList: { [name: string]: { finished: boolean; minLength: number } } = {};
-    const roomSpawnQueueList: { [name: string]: { PriorityQueue: PriorityQueue; length: number } } = {};
-    const spawnQueueList: { [name: string]: { PriorityQueue: PriorityQueue; length: number } } = {};
+    const roomSpawnQueueList: { [name: string]: { PriorityQueue: PriorityQueue<BaseTaskInf>; length: number } } = {};
+    const spawnQueueList: { [name: string]: { PriorityQueue: PriorityQueue<BaseTaskInf>; length: number } } = {};
     const spawnList: { [name: string]: string } = {};
     for (const roomName in roomListToAllocate) {
         // 添加相关room和spawn到表中
@@ -83,7 +86,7 @@ export function allocatingSpawnTask(QueueName: string): void {
     }
 }
 
-export function autoPush(roomTask: TaskSetting, spawnTaskObjList: PriorityQueue): void {
+export function autoPush(roomTask: TaskSetting, spawnTaskObjList: PriorityQueue<BaseTaskInf>): void {
     if (typeof spawnTaskObjList != "undefined") {
         for (let i = 0, j = spawnTaskObjList.size(); i < j; i++) {
             roomTask.pushTask(spawnTaskObjList.pop() as SpawnTaskInf);

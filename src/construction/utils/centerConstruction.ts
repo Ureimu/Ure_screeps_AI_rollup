@@ -1,5 +1,6 @@
 import { getPosFromStr, setPosToStr } from "./strToRoomPosition";
 import { initConstructionScheduleMemory } from "./initConstructionMemory";
+import { RoomPositionStr } from "construction";
 
 export function getCenterConstruction(room: Room): string[] {
     initConstructionScheduleMemory(room, "center");

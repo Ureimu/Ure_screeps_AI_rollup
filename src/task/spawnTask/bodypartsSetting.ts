@@ -1,3 +1,5 @@
+import { roleBodySettingList } from "task/taskClass/RoleBodySetting";
+
 export function getRoleBodyList(room: Room): roleBodySettingList {
     const level = room.controller?.level as number;
     const roleListX: roleBodySettingList = {
@@ -41,7 +43,7 @@ export function getRoleBodyList(room: Room): roleBodySettingList {
                 }
             };
         },
-        outwardsSource: (taskKindMemory: taskKindMemory) => {
+        outwardsSource: () => {
             return {
                 sourceScout: {
                     bodysetting: [{ move: 1 }],

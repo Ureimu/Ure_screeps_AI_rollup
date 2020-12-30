@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-namespace */
+/* eslint-disable @typescript-eslint/prefer-namespace-keyword */
 import {
     genePosStr,
     getDiagPosStr,
@@ -11,6 +13,7 @@ import {
 } from "construction/utils/strToRoomPosition";
 import { initConstructionScheduleMemory } from "construction/utils/initConstructionMemory";
 import { getCutTiles } from "../../../utils/mincut/minCut";
+import { RoomPositionStr } from "construction";
 
 /** 网格建筑布局。
  * 该函数为静态函数，即只要输入相同，则输出必定相同，所以一个房间只需要执行一次。

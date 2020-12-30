@@ -1,6 +1,8 @@
+import { CarryTaskInf } from "task/taskClass/extends/CarryTask";
+import { TaskPool } from "task/utils/taskPool";
 import findEx from "utils/findEx";
 import { stateCut } from "work/creep/utils/utils";
-import taskPool from "task/utils/taskPool";
+import { RoleCreepMemory } from "../creepMemory";
 
 function isRoleCreepMemory(target: CreepMemory): target is RoleCreepMemory<"carryResource"> {
     return target.task.taskName === "carryResource";
@@ -38,6 +40,7 @@ export function carryResource(creep: Creep): void {
                 delete creep.memory.task.taskInf;
             }
         } else {
+            const taskPool = new TaskPool<CarryTaskInf>();
             if (Game.time % 5 !== 0) return;
             const m = taskPool.initQueue("carryTask", Memory.rooms[creep.room.name].taskPool);
             if (m.isEmpty()) {

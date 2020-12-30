@@ -1,3 +1,4 @@
+import { RoleCreepMemory } from "../creepMemory";
 import { stateCut } from "../utils/utils";
 
 function isRoleCreepMemory(target: CreepMemory): target is RoleCreepMemory<"buildAndRepair"> {

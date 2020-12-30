@@ -1,3 +1,5 @@
+import { SpawnTaskInf } from "task/taskClass/extends/SpawnTask";
+import { roleSettingList } from "task/taskClass/RoleSetting";
 import { createOHarvestSourceTask } from "./outwardsSource/oHarvestSource";
 import { createSourceScoutTask } from "./outwardsSource/sourceScout";
 import { createHarvestSourceTask } from "./roomMaintenanceTask/harvestSource";
@@ -16,7 +18,7 @@ function defaultGetSpawnTaskInf(
 export function getRoleList(room: Room): roleSettingList {
     const level = room.controller?.level as number;
     const roleListX: roleSettingList = {
-        roomMaintenance: (taskKindMemory: taskKindMemory) => {
+        roomMaintenance: () => {
             return {
                 harvestSource: {
                     numberSetting: 2,
@@ -50,7 +52,7 @@ export function getRoleList(room: Room): roleSettingList {
                 }
             };
         },
-        war: (taskKindMemory: taskKindMemory) => {
+        war: () => {
             return {
                 sledge: {
                     numberSetting: 2,
@@ -64,7 +66,7 @@ export function getRoleList(room: Room): roleSettingList {
                 }
             };
         },
-        outwardsSource: (taskKindMemory: taskKindMemory) => {
+        outwardsSource: taskKindMemory => {
             return {
                 sourceScout: {
                     numberSetting: 1,

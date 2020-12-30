@@ -1,3 +1,4 @@
+import { RoleCreepMemory } from "work/creep/creepMemory";
 import { stateCut } from "work/creep/utils/utils";
 
 function isRoleCreepMemory(target: CreepMemory): target is RoleCreepMemory<"oUpgradeController"> {

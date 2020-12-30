@@ -1,4 +1,4 @@
-import { CarryTask } from "task/taskClass/extends/CarryTask";
+import { CarryTask, CarryTaskInf } from "task/taskClass/extends/CarryTask";
 
 export function runTower(tower: StructureTower): void {
     if (!tower.room.memory.construction.tower.memory[tower.id])

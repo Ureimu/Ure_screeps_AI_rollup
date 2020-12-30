@@ -1,3 +1,4 @@
+import { RoomPositionStr } from "construction";
 import { getPosStrInRange, setPosToStr, getPosFromStr } from "construction/utils/strToRoomPosition";
 
 // 自定义的 StructureController 的拓展

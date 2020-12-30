@@ -1,35 +1,10 @@
-// Type definitions for [~THE LIBRARY NAME~] [~OPTIONAL VERSION NUMBER~]
-// Project: [~THE PROJECT NAME~]
-// Definitions by: [~YOUR NAME~] <[~A URL FOR YOU~]>
+// Type definitions for PriorityQueue v1.1.0 by Scorpior
+// Project: PriorityQueue
+// Definitions by: Ureimu <https://github.com/Ureimu>
 
-/* ~ This is the module template file for class modules.
- *~ You should rename it to index.d.ts and place it in a folder with the same name as the module.
- *~ For example, if you were writing a file for "super-greeter", this
- *~ file should be 'super-greeter/index.d.ts'
- */
-
-/* ~ Note that ES6 modules cannot directly export class objects.
- *~ This file should be imported using the CommonJS-style:
- *~   import x = require('someLibrary');
- *~
- *~ Refer to the documentation to understand common
- *~ workarounds for this limitation of ES6 modules.
- */
-
-/* ~ If this module is a UMD module that exposes a global variable 'myClassLib' when
- *~ loaded outside a module loader environment, declare that global here.
- *~ Otherwise, delete this declaration.
- */
-
-/* ~ This declaration specifies that the class constructor function
- *~ is the exported object from the file
- */
-
-/* ~ Write your module's methods and properties in this class */
-
-declare class PriorityQueue {
+declare class PriorityQueue<T extends PriorityQueue.node> {
     /**
-     *Creates an instance of PriorityQueue.
+     * 创建一个PriorityQueue实例.
      * @param {boolean} isMinRoot 优先级方向，true则pop()时得到数字最小的，否则pop()出最大的。
      * @memberof PriorityQueue
      */
@@ -38,25 +13,25 @@ declare class PriorityQueue {
     /**
      * 把节点插入队列
      *
-     * @param {PriorityQueue.node} node 待插入对象，至少含有priority属性
-     * @returns {PriorityQueue.node}
+     * @param T node 待插入对象，至少含有priority属性
+     * @returns T
      * @memberof PriorityQueue
      */
-    public push(node: PriorityQueueElement.node): PriorityQueueElement.node;
+    public push(node: T): T;
     /**
      * 查看顶端节点，空队列返回undefined
      *
-     * @returns {(PriorityQueue.node | undefined)}
+     * @returns {(T | undefined)}
      * @memberof PriorityQueue
      */
-    public top(): PriorityQueueElement.node | undefined;
+    public top(): T | undefined;
     /**
      * 取出顶端节点，空队列返回undefined
      *
-     * @returns {(PriorityQueue.node | undefined)}
+     * @returns {(T | undefined)}
      * @memberof PriorityQueue
      */
-    public pop(): PriorityQueueElement.node | undefined;
+    public pop(): T | undefined;
     /**
      * 队列元素个数
      *
@@ -71,18 +46,14 @@ declare class PriorityQueue {
      */
     public clear(): void;
     /**
-     * 队列是否为空,空返回false,不空返回true
+     * 队列是否为空。
      *
      * @returns {boolean} 空返回false,不空返回true
      * @memberof PriorityQueue
      */
     public isEmpty(): boolean;
 }
-
-/* ~ If you want to expose types from your module as well, you can
- *~ place them in this block.
- */
-declare namespace PriorityQueueElement {
+declare namespace PriorityQueue {
     /**
      * 对象，至少含有priority属性
      *

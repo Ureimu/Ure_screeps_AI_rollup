@@ -1,3 +1,4 @@
+import { LinkTaskInf } from "task/taskClass/extends/LinkTask";
 import { checkLinkTask } from "../utils/checkLinkTask";
 
 export function sourceLink(link: StructureLink): void {

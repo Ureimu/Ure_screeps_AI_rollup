@@ -1,7 +1,9 @@
 import { getBpByRole } from "task/spawnTask/utils/getBpByRole";
+import { SpawnTaskInf } from "task/taskClass/extends/SpawnTask";
+import { TaskPool } from "task/utils/taskPool";
 import { bpg, getBpEnergy } from "utils/bodypartsGenerator";
-import taskPool from "../task/utils/taskPool";
 // 自定义的 Spawn 的拓展
+
 export class SpawnExtension extends StructureSpawn {
     public runSpawnTask(): boolean {
         if (!this.memory.lastFinishSpawnTime) {
@@ -43,6 +45,7 @@ export class SpawnExtension extends StructureSpawn {
         if (!this.runSpawnTask()) {
             return;
         }
+        const taskPool = new TaskPool<SpawnTaskInf>();
         const spawnQueue = taskPool.initQueue("spawnQueue", this.memory.taskPool);
         const taskList: SpawnTaskInf[] = [];
         let ifOK = 1;
@@ -65,7 +68,7 @@ export class SpawnExtension extends StructureSpawn {
                         Memory.creeps[inf.creepName].task.spawnInf.isRunning = false;
                         // 确认已经在生成creep时执行的任务
                         // global.creepMemory[inf.creepName]={};
-                        if (Game.getObjectById(task.sponsor as Sponsor)) {
+                        if (Game.getObjectById(task.sponsor as Id<StructureSpawn | Creep | Source>)) {
                             // Game.getObjectById(<Sponsor>task.sponsor)!.memory!.taskPool['spawnQueue'].pop()
                         }
                     }

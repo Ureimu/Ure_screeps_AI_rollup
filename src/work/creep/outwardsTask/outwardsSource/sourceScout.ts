@@ -1,3 +1,5 @@
+import { RoleCreepMemory } from "work/creep/creepMemory";
+
 function isRoleCreepMemory(target: CreepMemory): target is RoleCreepMemory<"sourceScout"> {
     return target.task.taskName === "sourceScout";
 }

@@ -1,6 +1,7 @@
 import { getPosFromStr, setPosToStr } from "construction/utils/strToRoomPosition";
 import { initConstructionMemory } from "construction/utils/initConstructionMemory";
 import findEx from "utils/findEx";
+import { formedLayout } from "construction";
 
 export function runLayout(room: Room, layoutName: string, layoutFunc: (room: Room) => void): void {
     if (!room.memory.constructionSchedule[layoutName]?.layout) {

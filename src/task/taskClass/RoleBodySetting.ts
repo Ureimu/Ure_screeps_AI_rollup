@@ -1,4 +1,32 @@
 import { getRoleBodyList } from "task/spawnTask/bodypartsSetting";
+import { bpgGene } from "utils/bodypartsGenerator";
+
+interface roleBodySetting {
+    bodysetting: bpgGene[];
+    maxBodyParts: number;
+}
+
+interface taskKindMemory {
+    [taskName: string]: RoomTaskInte;
+}
+
+interface RoomTaskInte {
+    memory: Partial<roleBodySetting>;
+}
+
+export interface roleBodySettingList {
+    [taskKindName: string]: (
+        taskKindMemory: taskKindMemory
+    ) => {
+        [taskName: string]: roleBodySetting;
+    };
+}
+
+type returnedRoleBodySettingList = {
+    [T in keyof roleBodySettingList]: {
+        [P in keyof ReturnType<roleBodySettingList[T]>]: roleBodySetting;
+    };
+};
 
 export class RoleBodySetting {
     public roomName: string;
@@ -35,7 +63,7 @@ export class RoleBodySetting {
             if (defaultTaskKindName === "roomMaintenance") {
                 Object.defineProperty(list, defaultTaskKindName, {
                     value: this.defaultRoleBodySettingList[defaultTaskKindName](
-                        Memory.rooms[this.roomName].taskSetting[defaultTaskKindName]
+                        Memory.rooms[this.roomName].taskSetting[defaultTaskKindName] as taskKindMemory
                     ),
                     writable: true,
                     enumerable: true,

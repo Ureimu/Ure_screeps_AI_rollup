@@ -1,4 +1,23 @@
-import taskPool from "../utils/taskPool";
+import { TaskPool } from "task/utils/taskPool";
+import { SpawnTaskInf } from "./extends/SpawnTask";
+
+interface RoomTaskInfo {
+    isMyRoom: boolean;
+    runNow: boolean;
+    ifPushNewSpawnTask: boolean;
+    NewSpawnTaskQueue: SpawnTaskInf[];
+    ifAllocateNewSpawnTaskToSpawn: boolean;
+    hasPushed: boolean;
+    hasPushedToSpawn: boolean;
+    runningNumber: number;
+    memory: Record<string, unknown>;
+}
+
+declare global {
+    interface RoomMemory {
+        taskSetting: { [taskKindName: string]: { [taskName: string]: RoomTaskInfo } };
+    }
+}
 
 /**
  * 房间任务对象。
@@ -84,6 +103,7 @@ export class TaskSetting {
         // this.runNow=false;
         if (this.ifPushNewSpawnTask && !dryRun) {
             const num = this.NewSpawnTaskQueue.length;
+            const taskPool = new TaskPool<SpawnTaskInf>();
             const roomSpawnQueue = taskPool.initQueue("spawnQueue", Memory.rooms[this.roomName].taskPool);
             const NewSpawnTaskQueue = taskPool.initQueueFromTaskQueue(this.NewSpawnTaskQueue);
             while (taskPool.transTask(NewSpawnTaskQueue, roomSpawnQueue));

@@ -1,6 +1,7 @@
 import { TaskSetting } from "../taskClass/TaskSetting";
 import * as profiler from "../../../utils/profiler";
 import { setPosToStr } from "construction/utils/strToRoomPosition";
+import { SpawnTaskInf } from "task/taskClass/extends/SpawnTask";
 
 const manageCreep = function (): void {
     // 为死亡的creep的memory里面的task执行的函数

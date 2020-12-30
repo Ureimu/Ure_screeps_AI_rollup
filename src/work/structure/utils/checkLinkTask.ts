@@ -1,4 +1,4 @@
-import { LinkTask } from "task/taskClass/extends/LinkTask";
+import { LinkTask, LinkTaskInf } from "task/taskClass/extends/LinkTask";
 import { checkStructureTask } from "./checkStructureTask";
 
 /**
@@ -8,9 +8,9 @@ import { checkStructureTask } from "./checkStructureTask";
  * @param {StructureLink} link
  * @param {LinkTaskInf} LinkTaskInf
  */
-export function checkLinkTask(LinkTaskInf: LinkTaskInf): void {
-    const linkTransferFrom = Game.getObjectById<StructureLink>(LinkTaskInf.taskInf.linkTransferFrom) as StructureLink;
-    const linkTransferTo = Game.getObjectById<StructureLink>(LinkTaskInf.taskInf.linkTransferTo) as StructureLink;
+export function checkLinkTask(linkTaskInf: LinkTaskInf): void {
+    const linkTransferFrom = Game.getObjectById<StructureLink>(linkTaskInf.taskInf.linkTransferFrom) as StructureLink;
+    const linkTransferTo = Game.getObjectById<StructureLink>(linkTaskInf.taskInf.linkTransferTo) as StructureLink;
     checkStructureTask(
         linkTransferFrom,
         [
@@ -18,7 +18,7 @@ export function checkLinkTask(LinkTaskInf: LinkTaskInf): void {
             () => linkTransferFrom.store.energy < 100 && linkTransferTo.store.energy > 700
         ],
         () => {
-            const taskInf: LinkTaskInf = LinkTaskInf;
+            const taskInf: LinkTaskInf = linkTaskInf;
             const task = new LinkTask(taskInf);
             task.pushTask(linkTransferFrom.room);
         }

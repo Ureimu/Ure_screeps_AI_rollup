@@ -1,19 +1,8 @@
-declare namespace NodeJS {
-    interface Global {
-        creepMemory: {
-            [name: string]: {
-                bundledPos?: RoomPosition;
-                bundledUpgradePos?: RoomPosition;
-                bundledStoragePos?: RoomPosition;
-                bundledLinkPos?: RoomPosition;
-            };
-        };
-    }
-}
+import { SpawnTaskInf } from "task/taskClass/extends/SpawnTask";
 
-type creepRoleConstant = "buildAndRepair" | "carryResource" | "sourceScout" | "oUpgradeController" | "oClaim";
+export type creepRoleConstant = "buildAndRepair" | "carryResource" | "sourceScout" | "oUpgradeController" | "oClaim";
 
-type concreteCreepRoleMemory<T extends creepRoleConstant> = T extends "buildAndRepair"
+export type concreteCreepRoleMemory<T extends creepRoleConstant> = T extends "buildAndRepair"
     ? buildAndRepair
     : T extends "carryResource"
     ? carryResource
@@ -24,17 +13,20 @@ type concreteCreepRoleMemory<T extends creepRoleConstant> = T extends "buildAndR
     : T extends "oClaim"
     ? oClaim
     : never;
-interface CreepMemory {
-    task: SpawnTaskInf & { taskInf?: BaseMemoryTaskInf };
-    dontPullMe?: boolean;
+
+declare global {
+    interface CreepMemory {
+        task: SpawnTaskInf & { taskInf?: BaseMemoryTaskInf };
+        dontPullMe?: boolean;
+    }
 }
 
-interface RoleCreepMemory<T extends creepRoleConstant> {
+export interface RoleCreepMemory<T extends creepRoleConstant> {
     task: SpawnTaskInf & { taskInf?: concreteCreepRoleMemory<T> };
     dontPullMe?: boolean;
 }
 
-interface BaseMemoryTaskInf {
+export interface BaseMemoryTaskInf {
     state: number[];
     lastSource?: string;
 }

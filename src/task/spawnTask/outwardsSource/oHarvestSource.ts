@@ -1,3 +1,4 @@
+import { SpawnTaskInf } from "task/taskClass/extends/SpawnTask";
 import { templateSpawnTask } from "../utils/templateSingleTask";
 
 export function createOHarvestSourceTask(
