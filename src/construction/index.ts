@@ -59,9 +59,12 @@ export function autoConstruction(room: Room): void {
         }
         console.log("[build] 房间等级提升，重新检查建筑数量");
     }
+    const constructionSites = room.find(FIND_CONSTRUCTION_SITES);
+    // if (constructionSites.length !== room.memory.roomControlStatus[3]) room.update();
     room.memory.roomControlStatus[0] = room.controller?.level as number;
     room.memory.roomControlStatus[1] = room.controller?.progress as number;
     room.memory.roomControlStatus[2] = room.controller?.progressTotal as number;
+    room.memory.roomControlStatus[3] = constructionSites.length;
     if ((Game.time - room.memory.startTime) % global.workRate.construction === 0)
         runLayout(room, "gridLayout", getGridLayout);
 }

@@ -1,6 +1,23 @@
 import findEx from "utils/findEx";
-import { getBpNum } from "utils/bodypartsGenerator";
 import { getPosFromStr } from "construction/utils/strToRoomPosition";
+import bodypartsGenerator from "utils/bodypartsGenerator";
+
+declare global {
+    // Types defined in a global block are available globally
+
+    namespace NodeJS {
+        interface Global {
+            creepMemory: {
+                [name: string]: {
+                    bundledPos?: RoomPosition;
+                    bundledUpgradePos?: RoomPosition;
+                    bundledStoragePos?: RoomPosition;
+                    bundledLinkPos?: RoomPosition;
+                };
+            };
+        }
+    }
+}
 
 // 自定义的 Creep 的拓展
 export class CreepExtension extends Creep {
@@ -21,7 +38,8 @@ export class CreepExtension extends Creep {
                         k.store[RESOURCE_ENERGY] >=
                         (lowerLimit[i][st2].takeAll
                             ? 1
-                            : 50 * getBpNum(this.memory.task.spawnInf.bodyparts, "carry") + lowerLimit[i][st2].num)
+                            : 50 * bodypartsGenerator.getBpNum(this.memory.task.spawnInf.bodyparts, "carry") +
+                              lowerLimit[i][st2].num)
                 );
                 // console.log(this.name+" "+st2+" "+containers.length+" "+lowerLimit[i][st2]+" "+String(50 * getBpNum(this.memory.bodyparts, "carry") + lowerLimit[i][st2]));
                 if (containers.length > 0) {
@@ -54,7 +72,10 @@ export class CreepExtension extends Creep {
         });
         const target2 = this.pos.findClosestByRange(FIND_RUINS, {
             filter: resource => {
-                return resource.store.energy >= 50 * getBpNum(this.memory.task.spawnInf.bodyparts, "carry");
+                return (
+                    resource.store.energy >=
+                    50 * bodypartsGenerator.getBpNum(this.memory.task.spawnInf.bodyparts, "carry")
+                );
             }
         });
 

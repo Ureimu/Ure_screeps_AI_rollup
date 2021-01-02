@@ -2,7 +2,7 @@
 interface Room {
     update(): void;
     update<T extends StructureConstant>(type: T): Id<T> | undefined;
-    mass_stores?: AnyStructure[];
+    mass_stores?: massStoresStructure[];
     deposit?: Deposit[];
     source?: Source[];
     mineral?: Mineral;
@@ -15,6 +15,8 @@ interface Room {
 }
 
 type ResourceConstantNum = Record<ResourceConstant, number | undefined>;
+
+type massStores = STRUCTURE_STORAGE | STRUCTURE_TERMINAL | STRUCTURE_FACTORY | STRUCTURE_CONTAINER;
 
 type multipleStructureList =
     | STRUCTURE_SPAWN
@@ -40,3 +42,4 @@ type singleStructureList =
 
 type singleStructure = ConcreteStructure<singleStructureList>;
 type multipleStructure = ConcreteStructure<multipleStructureList>;
+type massStoresStructure = ConcreteStructure<massStores>;

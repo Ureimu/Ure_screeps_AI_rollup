@@ -50,7 +50,7 @@ export function roomVisualize(room: Room): void {
                     type: "Progress",
                     layout: {
                         width: 10,
-                        value: (room.find(FIND_CONSTRUCTION_SITES).length / 100) * 100,
+                        value: (room.memory.roomControlStatus[3] / 100) * 100,
                         x: 3,
                         y: 3.215
                     }
@@ -58,7 +58,7 @@ export function roomVisualize(room: Room): void {
                 {
                     type: "Text",
                     layout: {
-                        content: `${room.find(FIND_CONSTRUCTION_SITES).length}/${100}`,
+                        content: `${room.memory.roomControlStatus[3]}/${100}`,
                         x: 5 + 3,
                         y: 3,
                         align: "center",

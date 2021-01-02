@@ -2,6 +2,7 @@ import { allocatingSpawnTask } from "task/utils/allocateAndPushTask";
 import actionMonitor from "utils/actionMonitor";
 import creepWork from "./work/creep/index";
 import "../utils/bypass/index";
+// import "../utils/buildingCache/index";
 import { errorStackVisualize } from "visual/roomVisual/GUIsetting";
 import manageCreep from "task/manager/manageCreep";
 import * as profiler from "../utils/profiler";

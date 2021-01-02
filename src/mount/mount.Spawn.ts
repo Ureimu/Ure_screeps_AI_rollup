@@ -1,7 +1,7 @@
 import { getBpByRole } from "task/spawnTask/utils/getBpByRole";
 import { SpawnTaskInf } from "task/taskClass/extends/SpawnTask";
 import { TaskPool } from "task/utils/taskPool";
-import { bpg, getBpEnergy } from "utils/bodypartsGenerator";
+import bodypartsGenerator from "utils/bodypartsGenerator";
 // 自定义的 Spawn 的拓展
 
 export class SpawnExtension extends StructureSpawn {
@@ -58,7 +58,7 @@ export class SpawnExtension extends StructureSpawn {
                     console.log("未定义spawn任务");
                 } else {
                     inf.bodyparts = getBpByRole(task.taskName, task.taskKindName, task.spawnInf.roomName);
-                    ifOK = this.spawnCreep(bpg(inf.bodyparts), inf.creepName, {
+                    ifOK = this.spawnCreep(bodypartsGenerator.bpg(inf.bodyparts), inf.creepName, {
                         memory: { task }
                     });
                     if (ifOK !== OK) {
@@ -99,7 +99,7 @@ export class SpawnExtension extends StructureSpawn {
                     errorText = "这个母巢 (spawn) 已经在孵化另一个 creep 了。";
                     break;
                 case -6:
-                    errorText = `这个母巢 (spawn) 和他的扩展包含的能量不足以孵化具有给定 body 的 creep。预期能量消耗：${getBpEnergy(
+                    errorText = `这个母巢 (spawn) 和他的扩展包含的能量不足以孵化具有给定 body 的 creep。预期能量消耗：${bodypartsGenerator.getBpEnergy(
                         task.spawnInf.bodyparts
                     )}`;
                     break;

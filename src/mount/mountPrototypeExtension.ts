@@ -5,7 +5,7 @@ import { RoomExtension } from "./mount.Room";
 import { RoomPositionExtension } from "./mount.RoomPosition";
 import { SourceExtension } from "./mount.Source";
 import { SpawnExtension } from "./mount.Spawn";
-import { StateStack } from "../utils/stateStack/stateStack";
+// import { StateStack } from "../utils/stateStack/stateStack";
 import { StructureControllerExtension } from "./mount.StructureController";
 
 // 挂载所有的额外属性和方法
@@ -40,9 +40,9 @@ export function mountPrototypeExtension(): void {
             assignPrototype(prototypes[i], plugins[i]);
         }
 
-        const stateStackPrototype = [Creep, StructureSpawn, Room, PowerCreep, Flag];
-        for (let i = 0, j = stateStackPrototype.length; i < j; i++) {
-            assignPrototype(stateStackPrototype[i], StateStack);
-        }
+        // const stateStackPrototype = [Creep, StructureSpawn, Room, PowerCreep, Flag];
+        // for (let i = 0, j = stateStackPrototype.length; i < j; i++) {
+        //     assignPrototype(stateStackPrototype[i], StateStack);
+        // }
     }
 }

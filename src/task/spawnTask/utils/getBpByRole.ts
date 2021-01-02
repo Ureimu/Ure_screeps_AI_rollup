@@ -1,5 +1,5 @@
 import { RoleBodySetting } from "task/taskClass/RoleBodySetting";
-import { getBpEnergy, getBpNum, bpgGene } from "utils/bodypartsGenerator";
+import bodypartsGenerator, { bpgGene } from "utils/bodypartsGenerator";
 
 export function getBpByRole(roleName: string, taskKindName: string, roomName: string): bpgGene[] {
     const roleList = new RoleBodySetting(Game.rooms[roomName]).roleBodySettingList;
@@ -13,19 +13,19 @@ export function getBpByRole(roleName: string, taskKindName: string, roomName: st
                     const i = Math.max(
                         _.floor(
                             (Game.rooms[roomName].energyAvailable -
-                                getBpEnergy(roleBodySetting) +
-                                getBpEnergy([roleBodySetting[0]])) /
-                                getBpEnergy([roleBodySetting[0]])
+                                bodypartsGenerator.getBpEnergy(roleBodySetting) +
+                                bodypartsGenerator.getBpEnergy([roleBodySetting[0]])) /
+                                bodypartsGenerator.getBpEnergy([roleBodySetting[0]])
                         ),
                         1
                     );
                     roleBodySetting[0].repeat = i;
-                    if (getBpNum(roleBodySetting) <= roleList[key1][key2].maxBodyParts) {
+                    if (bodypartsGenerator.getBpNum(roleBodySetting) <= roleList[key1][key2].maxBodyParts) {
                         return roleBodySetting;
                     } else {
                         roleBodySetting[0].repeat = 1;
-                        const num = getBpNum(roleBodySetting);
-                        const num0 = getBpNum([roleBodySetting[0]]);
+                        const num = bodypartsGenerator.getBpNum(roleBodySetting);
+                        const num0 = bodypartsGenerator.getBpNum([roleBodySetting[0]]);
                         const notFix = (roleList[key1][key2].maxBodyParts - num + num0) / num0;
                         const repeatNum = _.floor(notFix);
                         const j = repeatNum >= 1 ? repeatNum : 1;
