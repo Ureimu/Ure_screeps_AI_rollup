@@ -17,6 +17,11 @@ function defaultGetSpawnTaskInf(
 
 export function getRoleList(room: Room): roleSettingList {
     const level = room.controller?.level as number;
+    const roomConstruction = room.memory.construction;
+    const existStructure = (structureName: string) =>
+        roomConstruction[structureName]?.memory
+            ? Object.keys(roomConstruction[structureName]?.memory).length > 0
+            : false;
     const roleListX: roleSettingList = {
         roomMaintenance: () => {
             return {
@@ -26,7 +31,7 @@ export function getRoleList(room: Room): roleSettingList {
                     getSpawnTaskInf: createHarvestSourceTask
                 },
                 buildAndRepair: {
-                    numberSetting: level >= 5 ? 2 : 1,
+                    numberSetting: existStructure("sourceContainer") ? 2 : 0,
                     priority: 9,
                     getSpawnTaskInf: defaultGetSpawnTaskInf
                 },
@@ -36,12 +41,12 @@ export function getRoleList(room: Room): roleSettingList {
                     getSpawnTaskInf: defaultGetSpawnTaskInf
                 },
                 upgradeController: {
-                    numberSetting: 0,
+                    numberSetting: level >= 4 && existStructure(STRUCTURE_STORAGE) ? 3 : 0,
                     priority: 8,
                     getSpawnTaskInf: defaultGetSpawnTaskInf
                 },
                 carryResource: {
-                    numberSetting: 1,
+                    numberSetting: 0, // carryResource模块有不少bug
                     priority: 6,
                     getSpawnTaskInf: defaultGetSpawnTaskInf
                 },
@@ -81,15 +86,29 @@ export function getRoleList(room: Room): roleSettingList {
                     getSpawnTaskInf: createOHarvestSourceTask
                 },
                 oUpgradeController: {
-                    numberSetting: taskKindMemory?.oHarvestSource.memory.numberSetting
-                        ? taskKindMemory.oHarvestSource.memory.numberSetting * 4
-                        : 0,
+                    numberSetting:
+                        taskKindMemory?.oHarvestSource.memory.numberSetting &&
+                        level > 1 &&
+                        level <= 4 &&
+                        !existStructure(STRUCTURE_STORAGE)
+                            ? taskKindMemory.oHarvestSource.memory.numberSetting * 4
+                            : 0,
                     priority: 4,
                     getSpawnTaskInf: createSourceScoutTask
                 },
                 oClaim: {
                     numberSetting: taskKindMemory?.oHarvestSource.memory.numberSetting && level > 2 ? 1 : 0,
                     priority: 4,
+                    getSpawnTaskInf: createSourceScoutTask
+                },
+                oCarrier: {
+                    numberSetting:
+                        taskKindMemory?.oHarvestSource.memory.numberSetting &&
+                        level >= 4 &&
+                        existStructure(STRUCTURE_STORAGE)
+                            ? taskKindMemory.oHarvestSource.memory.numberSetting
+                            : 0,
+                    priority: 4.5,
                     getSpawnTaskInf: createSourceScoutTask
                 }
             };

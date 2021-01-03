@@ -33,19 +33,7 @@ export function oUpgradeController(creep: Creep): void {
 
         if (ifHarvesting) {
             if (scoutRoomName === creep.room.name) {
-                const target = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES, {
-                    filter: resource => {
-                        return resource.resourceType === RESOURCE_ENERGY && resource.amount >= 50;
-                    }
-                });
-                if (target) {
-                    creep.moveTo(target, {
-                        visualizePathStyle: {
-                            stroke: "#ffffff"
-                        }
-                    });
-                    creep.pickup(target);
-                }
+                creep.getEnergy();
             } else {
                 creep.moveTo(new RoomPosition(25, 20, scoutRoomName), {
                     visualizePathStyle: {
@@ -54,21 +42,47 @@ export function oUpgradeController(creep: Creep): void {
                 });
             }
         } else {
-            if (
-                !creep.pos.isEqualTo(
-                    global.creepMemory[creep.name]?.bundledUpgradePos || (spawnRoom.controller as StructureController)
-                )
-            ) {
-                creep.moveTo(
-                    global.creepMemory[creep.name]?.bundledUpgradePos || (spawnRoom.controller as StructureController),
+            if (spawnRoomName === creep.room.name) {
+                const targets = creep.room.find(FIND_CONSTRUCTION_SITES);
+                if (targets.length > 0) {
                     {
-                        visualizePathStyle: {
-                            stroke: "#ffffff"
+                        const closestTarget = creep.pos.findClosestByRange(targets);
+                        if (closestTarget) {
+                            if (creep.pos.isEqualTo(closestTarget.pos)) {
+                                // 避免卡住constructionSites
+                                creep.move(_.random(1, 8) as DirectionConstant); // 随机移动
+                            }
+                            if (creep.build(closestTarget) === ERR_NOT_IN_RANGE) {
+                                creep.moveTo(closestTarget, {
+                                    visualizePathStyle: {
+                                        stroke: "#ffffff"
+                                    }
+                                });
+                            }
                         }
                     }
-                );
+                } else {
+                    if (
+                        !creep.pos.isEqualTo(
+                            global.creepMemory[creep.name]?.bundledUpgradePos ||
+                                (spawnRoom.controller as StructureController)
+                        )
+                    ) {
+                        creep.moveTo(
+                            global.creepMemory[creep.name]?.bundledUpgradePos ||
+                                (spawnRoom.controller as StructureController),
+                            {
+                                visualizePathStyle: {
+                                    stroke: "#ffffff"
+                                }
+                            }
+                        );
+                    }
+                    creep.upgradeController(spawnRoom.controller as StructureController);
+                }
+            } else {
+                creep.moveTo(spawnRoom.controller as StructureController);
             }
-            creep.upgradeController(spawnRoom.controller as StructureController);
         }
     }
 }

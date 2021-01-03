@@ -131,7 +131,9 @@ export class TaskSetting {
     }
 
     public deleteTask(): void {
-        this.runningNumber -= 1;
+        // global.log(`[task]  前任务数量${this.runningNumber}`);
+        this.runningNumber = this.runningNumber - 1;
+        // global.log(`[task]  后任务数量${this.runningNumber}`);
     }
 
     public get isMyRoom(): boolean {

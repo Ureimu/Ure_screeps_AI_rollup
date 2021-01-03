@@ -19,7 +19,7 @@ if (!element) {
 </script>
     `;
         /* eslint-enable */
-        console.log(
+        global.log(
             download
                 .split("\n")
                 .map(s => s.trim())

@@ -1,4 +1,5 @@
-import { autoConstruction } from "construction";
+import { autoConstruction, updateConstruction } from "construction";
+import manageOutwardsSource from "task/manager/manageOutwardsSource";
 import manageTask from "task/manager/manageTask";
 import { initNewRoomSetting } from "updateMemory";
 import { roomVisualize } from "visual/roomVisual/GUIsetting";
@@ -36,5 +37,13 @@ export class RoomExtension extends Room {
 
     public manageTask(): void {
         manageTask(this);
+    }
+
+    public updateConstruction(): void {
+        updateConstruction(this);
+    }
+
+    public manageOutwardsSource(): void {
+        manageOutwardsSource(this);
     }
 }

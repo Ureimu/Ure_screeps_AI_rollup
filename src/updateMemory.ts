@@ -36,6 +36,9 @@ declare global {
 interface SourceMemory {
     id: Id<Source>;
     pos: string;
+    container?: Id<StructureContainer>;
+    containerConstructionSite?: Id<ConstructionSite<STRUCTURE_CONTAINER>>;
+    roads?: string[];
 }
 
 /**

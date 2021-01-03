@@ -48,13 +48,13 @@ export async function runRCLTest(tickNum: number): Promise<void> {
                 `got ${lastMemory.errors?.errorList.length} errors,please check the console output above.`
             );
             if (RCL === 5) break;
-            await upgradeController(db, controllerId, RCL);
+            // await upgradeController(db, controllerId, RCL);
         }
 
         if (memory.errors?.errorList) {
             console.log(memory.errors.errorList.toString());
         }
 
-        await updateSpawnRoomObj(db, spawnRoom);
+        // await updateSpawnRoomObj(db, spawnRoom);
     }
 }

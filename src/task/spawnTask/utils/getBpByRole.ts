@@ -29,7 +29,7 @@ export function getBpByRole(roleName: string, taskKindName: string, roomName: st
                         const notFix = (roleList[key1][key2].maxBodyParts - num + num0) / num0;
                         const repeatNum = _.floor(notFix);
                         const j = repeatNum >= 1 ? repeatNum : 1;
-                        // console.log(`(${roleList[key2].maxBodyParts} - ${num} +${num0}) /${num0} = ${notFix} = ${i} = ${repeatNum}`)
+                        // global.log(`(${roleList[key2].maxBodyParts} - ${num} +${num0}) /${num0} = ${notFix} = ${i} = ${repeatNum}`)
                         roleBodySetting[0].repeat = j;
                         return roleBodySetting;
                     }
@@ -38,6 +38,6 @@ export function getBpByRole(roleName: string, taskKindName: string, roomName: st
         }
     }
 
-    console.log("没有该任务名称，身体部件生成失败:" + roomName + roleName);
+    global.log("没有该任务名称，身体部件生成失败:" + roomName + roleName);
     return [{}];
 }

@@ -8,7 +8,6 @@ import manageCreep from "task/manager/manageCreep";
 import * as profiler from "../utils/profiler";
 // import { ErrorMapper } from "utils/ErrorMapper";
 import { mountGlobal } from "mount/mountGlobal";
-import manageOutwardsSource from "task/manager/manageOutwardsSource";
 
 mountGlobal();
 if (!Memory.time) Memory.time = Game.time;
@@ -37,7 +36,7 @@ export const loop = (): void => {
                     if (!room.memory.initialize) {
                         room.initMemory(false);
                         room.memory.initialize = true;
-                        manageOutwardsSource(room);
+                        room.manageOutwardsSource();
                     }
                     switch ((Game.time - Memory.time) % global.workRate.spawn) {
                         case 3:

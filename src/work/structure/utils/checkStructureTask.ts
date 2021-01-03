@@ -14,10 +14,6 @@ export function checkStructureTask(
     callback: () => void
 ): void {
     const structureName = findEx.lookForStructureName(structure);
-    if (!structure.room.memory.construction[structureName].memory[structure.id])
-        structure.room.memory.construction[structureName].memory[structure.id] = {
-            hasPushed: false
-        };
     if (condition[0]() && !structure.room.memory.construction[structureName].memory[structure.id].hasPushed) {
         callback();
         structure.room.memory.construction[structureName].memory[structure.id].hasPushed = true;

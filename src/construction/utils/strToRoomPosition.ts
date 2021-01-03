@@ -6,7 +6,7 @@ export function getPosFromStr(str: RoomPositionStr): RoomPosition {
         const pos = new RoomPosition(Number(matched[1]), Number(matched[2]), matched[3]);
         return pos;
     } else {
-        console.log("getPosFromStr失败！");
+        global.log("getPosFromStr失败！");
         return new RoomPosition(0, 0, "E0S0");
     }
 }

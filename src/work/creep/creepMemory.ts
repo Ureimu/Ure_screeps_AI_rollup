@@ -1,6 +1,12 @@
 import { SpawnTaskInf } from "task/taskClass/extends/SpawnTask";
 
-export type creepRoleConstant = "buildAndRepair" | "carryResource" | "sourceScout" | "oUpgradeController" | "oClaim";
+export type creepRoleConstant =
+    | "buildAndRepair"
+    | "carryResource"
+    | "sourceScout"
+    | "oUpgradeController"
+    | "oClaim"
+    | "oCarrier";
 
 export type concreteCreepRoleMemory<T extends creepRoleConstant> = T extends "buildAndRepair"
     ? buildAndRepair
@@ -12,6 +18,8 @@ export type concreteCreepRoleMemory<T extends creepRoleConstant> = T extends "bu
     ? oUpgradeController
     : T extends "oClaim"
     ? oClaim
+    : T extends "oCarrier"
+    ? oCarrier
     : never;
 
 declare global {
@@ -52,5 +60,9 @@ interface oUpgradeController extends BaseMemoryTaskInf {
 }
 
 interface oClaim extends BaseMemoryTaskInf {
+    scoutRoomName: string;
+}
+
+interface oCarrier extends BaseMemoryTaskInf {
     scoutRoomName: string;
 }

@@ -648,8 +648,8 @@ export function testMinCutSubset(colonyName: string) {
     // Rectangle Array, the Rectangles will be protected by the returned tiles
     const rectArray = [];
     const padding = 3;
-    if (colony.source) {
-        const { x, y } = colony.source[0].pos;
+    if (colony.storage) {
+        const { x, y } = colony.storage.pos;
         rectArray.push({ x1: x - 5 - padding, y1: y - 4 - padding, x2: x + 5 + padding, y2: y + 6 + padding });
     }
     if (colony.controller) {

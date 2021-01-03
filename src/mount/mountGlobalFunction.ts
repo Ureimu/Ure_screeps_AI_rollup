@@ -1,3 +1,4 @@
+import { log } from "utils/consoleLog/log";
 import * as profiler from "../../utils/profiler";
 
 export function globalFunctionRegister(): void {
@@ -11,6 +12,8 @@ export function globalFunctionRegister(): void {
         }
         return u;
     };
+
+    global.log = log;
 
     global.memoryReset = function (): void {
         RawMemory.set("");

@@ -31,4 +31,8 @@ export class SourceExtension extends Source {
             pos: setPosToStr(this.pos)
         };
     }
+
+    public getName(): string {
+        return `${this.room.name}Source[${this.pos.x},${this.pos.y}]`;
+    }
 }

@@ -21,6 +21,7 @@ const manageCreep = function (): void {
                         break;
 
                     case "outwardsSource":
+                        if (taskKindNameWithTargetRoomName.split("-")[1] !== name.split("-")[2]) break;
                         defaultManager(name, creepRoomName, taskKindNameWithTargetRoomName);
                         break;
                     default:
@@ -34,7 +35,7 @@ const manageCreep = function (): void {
 export default profiler.registerFN(manageCreep, "manageCreep");
 
 function defaultManager(name: string, creepRoomName: string, taskKindNameWithTargetRoomName: string) {
-    if (Memory.creeps[name].task.taskName in global.spawnTaskList[creepRoomName][taskKindNameWithTargetRoomName]) {
+    if (Memory.creeps[name]?.task.taskName in global.spawnTaskList[creepRoomName][taskKindNameWithTargetRoomName]) {
         if (Memory.creeps[name].task.spawnInf.isRunning === true) return;
         const task = Memory.creeps[name].task as SpawnTaskInf;
         const roleTaskInf =
@@ -50,9 +51,19 @@ function defaultManager(name: string, creepRoomName: string, taskKindNameWithTar
             global.creepMemory[name].bundledUpgradePos = undefined;
         }
         delete global.creepMemory[name];
-        if (roleTaskInf.numberSetting < roomTask.runningNumber) {
-            roomTask.deleteTask();
+        roomTask.deleteTask();
+        if (roomTask.runningNumber < 0) {
+            throw new TypeError("roomTask.runningNumber不能为负数。");
+        }
+        if (roleTaskInf.numberSetting <= roomTask.runningNumber) {
+            global.log(
+                `[task]  删除任务${name} ${taskKindNameWithTargetRoomName},${Memory.creeps[name].task.taskName} ${roleTaskInf.numberSetting}<=${roomTask.runningNumber}`
+            );
+            delete Memory.creeps[name];
         } else {
+            global.log(
+                `[task]  回推任务${taskKindNameWithTargetRoomName},${Memory.creeps[name].task.taskName} ${roleTaskInf.numberSetting}>${roomTask.runningNumber}`
+            );
             Memory.creeps[name].task.spawnInf.isRunning = true;
             roomTask.pushTaskToSpawn(task);
         }

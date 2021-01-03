@@ -1,10 +1,6 @@
 import { CarryTask, CarryTaskInf } from "task/taskClass/extends/CarryTask";
 
 export function runStorage(storage: StructureStorage): void {
-    if (!storage.room.memory.construction.storage.memory[storage.id])
-        storage.room.memory.construction.storage.memory[storage.id] = {
-            hasPushed: false
-        };
     if (storage.store.energy < 50000 && !storage.room.memory.construction.storage.memory[storage.id].hasPushed) {
         const taskInf: CarryTaskInf = {
             priority: 4,

@@ -12,6 +12,8 @@ interface Room {
     roomVisualize(): void;
     runStructure(): void;
     manageTask(): void;
+    updateConstruction(): void;
+    manageOutwardsSource(): void;
 }
 
 interface StructureSpawn {
@@ -54,7 +56,7 @@ interface Source {
      * @type {string}
      * @memberof Source
      */
-    name: string;
+    getName(): string;
 
     /**
      * 初始化source的memory.
@@ -65,10 +67,20 @@ interface Source {
 }
 
 interface Creep {
-    getEnergy(lowerLimit: { [name: string]: { num: number; takeAll?: boolean } }[]): string;
+    getEnergy(lowerLimit?: { [name: string]: { num: number; takeAll?: boolean } }[]): string;
     transportResource(target: AnyStructure, resourceType: ResourceConstant): boolean;
     getResourceFromStructure(structure: AnyStoreStructure, resourceType: ResourceConstant): void;
     getGlobalMemory(): void;
+    transportEnergy(
+        gList: {
+            [name: string]:
+                | {
+                      isStorable: boolean;
+                      upperLimit: number;
+                  }
+                | undefined;
+        }[]
+    ): void;
 }
 
 declare namespace NodeJS {
@@ -76,7 +88,6 @@ declare namespace NodeJS {
         time: number;
         testMode: boolean;
         workRate: { [name: string]: number | string; manageTask: number; construction: number; spawn: number };
-        log: any;
         clearError(): void;
         detail: () => void;
         rooms: {
@@ -112,5 +123,6 @@ declare namespace NodeJS {
         creepWorkFunctionList: {
             [name: string]: (creep: Creep) => void;
         };
+        log(message?: unknown, ...optionalParams: unknown[]): void;
     }
 }

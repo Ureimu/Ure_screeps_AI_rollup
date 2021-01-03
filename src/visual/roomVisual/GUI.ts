@@ -41,7 +41,7 @@ export function GUIfun(): GUIclass {
                 // 获取布局和子布局
                 const layout = item.layout;
                 if (layout === undefined) {
-                    console.log("[GUI]警告:未定义的组件布局," + item.type);
+                    global.log("[GUI]警告:未定义的组件布局," + item.type);
                 }
                 const child = item.child;
 
@@ -61,21 +61,21 @@ export function GUIfun(): GUIclass {
                 const component = this[item.type] as standardReturnElementsLayout;
                 let componentData;
                 if (component === undefined) {
-                    console.log("[GUI]警告:未定义的组件名称," + item.type);
+                    global.log("[GUI]警告:未定义的组件名称," + item.type);
                     continue;
                 } else {
                     componentData = component(visual, box as box<elementsLayoutGeneral>);
                 }
 
                 if (componentData === undefined || componentData.componentName !== item.type) {
-                    console.log("[GUI]警告，组件" + item.type + "没有正确的返回组件信息，这可能会造成无法预料的错误");
+                    global.log("[GUI]警告，组件" + item.type + "没有正确的返回组件信息，这可能会造成无法预料的错误");
                     componentData = {};
                 }
 
                 // 检查componentData数据
                 // 包含检查，有些类型的组件不允许绘制内部组件
                 if (componentData.allowChild === false) {
-                    console.log(
+                    global.log(
                         "[GUI]警告，检测到在不允许绘制内部组件的组件" +
                             item.type +
                             "进行了子组件绘制，这可能会造成无法预料的错误"
@@ -184,8 +184,8 @@ export function GUIfun(): GUIclass {
                 box.y += 0.5;
             }
 
-            // console.log(JSON.stringify(style));
-            // console.log(JSON.stringify(box));
+            // global.log(JSON.stringify(style));
+            // global.log(JSON.stringify(box));
             visual.text(style.content, box.x, box.y, style);
 
             // 需要正确的返回组件信息

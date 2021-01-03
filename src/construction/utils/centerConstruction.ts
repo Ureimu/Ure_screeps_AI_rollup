@@ -10,20 +10,20 @@ export function getCenterConstruction(room: Room): string[] {
         ) {
             const lastPoint = Game.spawns[room.memory.firstSpawnName].pos;
             if (lastPoint) {
-                console.log("[build] 未寻找建筑中心点，开始寻找。");
+                global.log("[build] 未寻找建筑中心点，开始寻找。");
                 const posList = getBlankDiagonalSquarePlace(lastPoint);
                 Memory.rooms[room.name].constructionSchedule.center.centerPos = posList;
                 return posList;
             } else {
-                console.log("[build] 寻找建筑中心点时发生错误：没有firstSpawnName。");
+                global.log("[build] 寻找建筑中心点时发生错误：没有firstSpawnName。");
                 return [];
             }
         } else {
-            console.log("[build] 使用已寻找到的中心点作为中心布局");
+            global.log("[build] 使用已寻找到的中心点作为中心布局");
             return Memory.rooms[room.name].constructionSchedule.center.centerPos as RoomPositionStr[];
         }
     } else {
-        console.log("[build] 寻找建筑中心点时发生错误：房间没有controller。");
+        global.log("[build] 寻找建筑中心点时发生错误：房间没有controller。");
         return [];
     }
 }
@@ -85,9 +85,9 @@ export function getBlankDiagonalSquarePlace(point: RoomPosition): string[] {
     }
 
     if (centerPos.length === 0) {
-        console.log("[build] 无法确定中心布局位置。");
+        global.log("[build] 无法确定中心布局位置。");
     } else {
-        console.log("[build] 已经确定中心布局位置。");
+        global.log("[build] 已经确定中心布局位置。");
     }
     const posStrList: RoomPositionStr[] = [];
     centerPos.forEach(pos => {

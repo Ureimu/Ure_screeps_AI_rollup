@@ -74,7 +74,7 @@ export function errorStackVisualize(err: string): void {
     const errIndex = Memory.errors.errorList.indexOf(err);
     let lastErrStr = err;
     if (Memory.errors.errorList.length > 50) {
-        console.log("[error]错误数已经超过临界值，请及时检查错误。Memory占用过高。");
+        global.log("[error]错误数已经超过临界值，请及时检查错误。Memory占用过高。");
     }
     if (errIndex === -1) {
         Memory.errors.errorCount.push(1);

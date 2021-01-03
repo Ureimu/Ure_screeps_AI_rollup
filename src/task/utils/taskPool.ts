@@ -51,7 +51,7 @@ export class TaskPool<T extends PriorityQueue.node> {
                 return taskQueue;
             }
         }
-        console.log("[error] " + "任务池中没有任务列表：" + wantedTaskQueueName);
+        global.log("[error] " + "任务池中没有任务列表：" + wantedTaskQueueName);
         return undefined;
     }
 
@@ -112,7 +112,7 @@ export class TaskPool<T extends PriorityQueue.node> {
         ) {
             return queue;
         } else {
-            console.log("[init]  创建新任务队列: " + wantedTaskQueueName);
+            global.log("[init]  创建新任务队列: " + wantedTaskQueueName);
             taskPoolMemory[wantedTaskQueueName] = [];
             return this.newQueue(towards);
         }

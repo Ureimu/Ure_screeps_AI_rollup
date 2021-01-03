@@ -421,7 +421,7 @@ export function getGridLayout(room: Room): void {
             });
             cpu = Game.cpu.getUsed() - cpu;
             if (square2Set.size === 9 && square3Set.size === 9 && coreLabPos.length === 2) {
-                console.log(`在第${m}个位置检索后，找到了lab布局，消耗cpu为${cpu.toFixed(2)}`);
+                global.log(`在第${m}个位置检索后，找到了lab布局，消耗cpu为${cpu.toFixed(2)}`);
                 // TODO进一步确定各个lab的位置
                 square2Set.forEach(posStr => {
                     labSet.add(posStr);
@@ -432,7 +432,7 @@ export function getGridLayout(room: Room): void {
                     buildingExpand.delete(posStr);
                 });
             } else {
-                console.log("未找到lab布局");
+                global.log("未找到lab布局");
             }
 
             const wallAndRampartPosSet = getMinCut(true, fullBuildingExpand, room);
@@ -462,7 +462,7 @@ export function getGridLayout(room: Room): void {
                 }
             });
             if (extensionPosSet.size < 60) {
-                console.log("extension位置不足，现在数量为" + extensionPosSet.size.toString());
+                global.log("extension位置不足，现在数量为" + extensionPosSet.size.toString());
             }
 
             // 初始化memory
@@ -696,13 +696,13 @@ export function getGridLayout(room: Room): void {
         }
         // __判断是否路周围还有building，没有则放弃(暂时不使用，因为极端情况下可能需要路来作为连通图的桥,而作者还写不来连通图的算法)
         // 判断方格数量是否足够放下所有需要占位的building
-        console.log(buildingExpand.size);
+        global.log(buildingExpand.size);
         if (88 <= buildingExpand.size) {
             ifEnough = true;
         }
     }
     const endCpu = Game.cpu.getUsed();
-    console.log(`耗费cpu:${(endCpu - startCpu).toFixed(2)}`);
+    global.log(`耗费cpu:${(endCpu - startCpu).toFixed(2)}`);
 }
 
 function isPosSetInPos(posSet: Set<string>, pos: RoomPositionStr): boolean {
@@ -776,10 +776,10 @@ function getMinCut(preferCloserBarriers = true, fullBuildingExpand: Set<string>,
     // Positions is an array where to build walls/ramparts
     const positions = getCutTiles(colonyName, rectArray, preferCloserBarriers, 2);
     // Test output
-    // console.log('Positions returned', positions.length);
+    // global.log('Positions returned', positions.length);
     cpu = Game.cpu.getUsed() - cpu;
-    // console.log('Needed', cpu, ' cpu time');
-    console.log(`生成rampart和wall位置个数：${positions.length};` + `该子任务消耗cpu: ${cpu.toFixed(2)}`);
+    // global.log('Needed', cpu, ' cpu time');
+    global.log(`生成rampart和wall位置个数：${positions.length};` + `该子任务消耗cpu: ${cpu.toFixed(2)}`);
     return new Set(coordToRoomPositionStr(positions, room));
 }
 

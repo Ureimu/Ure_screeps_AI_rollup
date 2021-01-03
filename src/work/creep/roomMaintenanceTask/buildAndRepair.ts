@@ -14,7 +14,9 @@ export function buildAndRepair(creep: Creep): void {
     );
 
     if (ifHarvesting) {
-        creep.getEnergy([{ sourceContainer: { num: 900 } }]);
+        creep.getEnergy([
+            { sourceContainer: { num: (creep.room.controller as StructureController)?.level > 1 ? 900 : 0 } }
+        ]);
     } else {
         let whatToDo = "";
         const targetsToFix = creep.room.find(FIND_STRUCTURES, {
@@ -44,6 +46,7 @@ export function buildAndRepair(creep: Creep): void {
         } else {
             whatToDo = "upgrade";
         }
+        if ((creep.room.controller as StructureController).level === 1) whatToDo = "upgrade";
         creep.say(whatToDo);
         switch (whatToDo) {
             case "repair":
@@ -58,6 +61,8 @@ export function buildAndRepair(creep: Creep): void {
                             // 避免卡住constructionSites
                             creep.move(_.random(1, 8) as DirectionConstant); // 随机移动
                         }
+                        if (Game.time % 40 === 0)
+                            global.log(`${closestTarget.progressTotal}:${closestTarget.progress}`);
                         if (creep.build(closestTarget) === ERR_NOT_IN_RANGE) {
                             creep.moveTo(closestTarget, {
                                 visualizePathStyle: {

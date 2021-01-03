@@ -55,7 +55,7 @@ export class SpawnExtension extends StructureSpawn {
                 const task = spawnQueue.pop() as SpawnTaskInf;
                 const inf = task.spawnInf;
                 if (typeof inf === "undefined") {
-                    console.log("未定义spawn任务");
+                    global.log("未定义spawn任务");
                 } else {
                     inf.bodyparts = getBpByRole(task.taskName, task.taskKindName, task.spawnInf.roomName);
                     ifOK = this.spawnCreep(bodypartsGenerator.bpg(inf.bodyparts), inf.creepName, {
@@ -112,12 +112,12 @@ export class SpawnExtension extends StructureSpawn {
                 default:
                     break;
             }
-            console.log(
+            global.log(
                 `<span style='color:#ffbfbf'>[spawn] ${this.name}执行spawn任务失败,返回错误：${errorText}</span>`
             );
         }
         if (taskList.length > 18) {
-            console.log(
+            global.log(
                 `<span style='color:#FF6666'>目前任务冗余过多(${taskList.length}个任务在该spawn"${this.name}"任务队列中)，请及时检测清理任务！</span>`
             );
         }

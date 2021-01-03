@@ -1,3 +1,4 @@
+import findEx from "utils/findEx";
 import { getGridLayout } from "./composition/gridLayout";
 import { runLayout } from "./composition/runLayOut";
 
@@ -40,11 +41,12 @@ export type RoomPositionStr = string;
 
 export interface constructionSitesInf<T extends AnyStructure> {
     constructionSitesCompleted: boolean;
-    pos: RoomPositionStr[];
     id: Id<T>[];
+    pos: RoomPositionStr[];
     structureType: T extends Structure<StructureConstant> ? StructureConstant : never;
     memory: {
         [name: string]: {
+            constructionCompleted: boolean;
             hasPushed?: boolean;
             bundledPos?: RoomPositionStr[];
             calculatedPosList?: RoomPositionStr[];
@@ -57,14 +59,27 @@ export function autoConstruction(room: Room): void {
         for (const m in room.memory.construction) {
             room.memory.construction[m].constructionSitesCompleted = false;
         }
-        console.log("[build] 房间等级提升，重新检查建筑数量");
+        global.log("[build] 房间等级提升，重新检查建筑数量");
     }
     const constructionSites = room.find(FIND_CONSTRUCTION_SITES);
-    // if (constructionSites.length !== room.memory.roomControlStatus[3]) room.update();
+    if (constructionSites.length !== room.memory.roomControlStatus[3]) room.updateConstruction();
     room.memory.roomControlStatus[0] = room.controller?.level as number;
     room.memory.roomControlStatus[1] = room.controller?.progress as number;
     room.memory.roomControlStatus[2] = room.controller?.progressTotal as number;
     room.memory.roomControlStatus[3] = constructionSites.length;
     if ((Game.time - room.memory.startTime) % global.workRate.construction === 0)
         runLayout(room, "gridLayout", getGridLayout);
+}
+
+export function updateConstruction(room: Room): void {
+    const structures = room.find(FIND_STRUCTURES);
+    for (const myStructure of structures) {
+        const structureName = findEx.lookForStructureName(myStructure);
+        if (structureName === "") continue;
+        if (!myStructure.room.memory.construction[structureName].memory[myStructure.id])
+            myStructure.room.memory.construction[structureName].memory[myStructure.id] = {
+                hasPushed: false,
+                constructionCompleted: true
+            };
+    }
 }

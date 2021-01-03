@@ -28,7 +28,7 @@ export async function updateSpawnRoomObj(db: any, spawnRoom:string): Promise<voi
             ),
         db["rooms.objects"].update({ room: spawnRoom, type: "constructedWall" }, { $set: { hits: 3000000 } }),
         db["rooms.objects"].update({ room: spawnRoom, type: "rampart" }, { $set: { hits: 3000000 } }),
-        db["rooms.objects"].update({ room: spawnRoom, type: "storage" }, { $set: { store: { energy: 950000 } } })
+        // db["rooms.objects"].update({ room: spawnRoom, type: "storage" }, { $set: { store: { energy: 950000 } } })
     ]);
 }
 

@@ -23,7 +23,7 @@ export function upgradeController(creep: Creep): void {
         creep.getEnergy([
             { controllerLink: { num: 0, takeAll: true } },
             { controllerContainer: { num: 0 } },
-            { sourceContainer: { num: 900 } }
+            { storage: { num: 5000 } }
         ]);
     } else {
         if (creep.upgradeController(creep.room.controller as StructureController) === ERR_NOT_IN_RANGE) {

@@ -1,4 +1,5 @@
 /* eslint-disable camelcase */
+import * as profiler from "./index";
 interface Room {
     update(): void;
     update<T extends StructureConstant>(type: T): Id<T> | undefined;

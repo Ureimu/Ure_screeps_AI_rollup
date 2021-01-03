@@ -15,12 +15,12 @@ export function stateCut(
     say: string[] = ["🚧 working", "🔄 harvest"]
 ): number {
     if (!creep.memory.task.taskInf) return -1;
-    // console.log(creep.memory.task.taskInf.state.length);
-    // console.log(stateIndex + 1);
+    // global.log(creep.memory.task.taskInf.state.length);
+    // global.log(stateIndex + 1);
     while (creep.memory.task.taskInf.state.length <= stateIndex) {
         creep.memory.task.taskInf.state.push(0);
     }
-    // console.log(creep.memory.task.taskInf.state.toString());
+    // global.log(creep.memory.task.taskInf.state.toString());
     const stateNum = condition[Number(creep.memory.task.taskInf.state[stateIndex])]();
     if (creep.memory.task.taskInf.state[stateIndex] !== stateNum) {
         creep.memory.task.taskInf.state[stateIndex] = stateNum;

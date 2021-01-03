@@ -11,6 +11,7 @@ import { sourceScout } from "./outwardsTask/outwardsSource/sourceScout";
 import { oHarvestSource } from "./outwardsTask/outwardsSource/oHarvestSource";
 import { oUpgradeController } from "./outwardsTask/outwardsSource/oUpgradeController";
 import { oClaim } from "./outwardsTask/outwardsSource/oClaim";
+import { oCarrier } from "./outwardsTask/outwardsSource/oCarrier";
 
 const creepWork = {
     TaskReg(): {
@@ -30,7 +31,8 @@ const creepWork = {
             sourceScout,
             oHarvestSource,
             oUpgradeController,
-            oClaim
+            oClaim,
+            oCarrier
         };
         profiler.registerObject(workFunctionList, "creepWork.role");
         return workFunctionList;

@@ -1,10 +1,6 @@
 import { CarryTask, CarryTaskInf } from "task/taskClass/extends/CarryTask";
 
 export function runTower(tower: StructureTower): void {
-    if (!tower.room.memory.construction.tower.memory[tower.id])
-        tower.room.memory.construction.tower.memory[tower.id] = {
-            hasPushed: false
-        };
     if (tower.store.energy < 600 && !tower.room.memory.construction.tower.memory[tower.id].hasPushed) {
         const taskInf: CarryTaskInf = {
             priority: 6,

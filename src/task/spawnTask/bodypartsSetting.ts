@@ -6,7 +6,7 @@ export function getRoleBodyList(room: Room): roleBodySettingList {
         roomMaintenance: () => {
             return {
                 harvestSource: {
-                    bodysetting: [{ move: 1, work: 2 }, { carry: level >= 4 ? 4 : 0 }],
+                    bodysetting: [{ move: 1, work: 2 }, { carry: level >= 4 ? 4 : 1 }],
                     maxBodyParts: 50
                 },
                 buildAndRepair: {
@@ -50,16 +50,20 @@ export function getRoleBodyList(room: Room): roleBodySettingList {
                     maxBodyParts: 1
                 },
                 oHarvestSource: {
-                    bodysetting: [{ move: 1, work: 2 }],
-                    maxBodyParts: 50
+                    bodysetting: [{ move: 1, work: 2 }, { carry: 1 }],
+                    maxBodyParts: 15
                 },
                 oUpgradeController: {
                     bodysetting: [{ move: 2, work: 1, carry: 1 }],
-                    maxBodyParts: 25
+                    maxBodyParts: 24
                 },
                 oClaim: {
                     bodysetting: [{ claim: 1, move: 1 }],
                     maxBodyParts: 4
+                },
+                oCarrier: {
+                    bodysetting: [{ move: 1, carry: 2 }],
+                    maxBodyParts: 30
                 }
             };
         }

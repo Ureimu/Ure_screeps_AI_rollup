@@ -1,7 +1,7 @@
 import { getRoleList } from "task/spawnTask/indexRoleSetting";
 import { SpawnTaskInf } from "./extends/SpawnTask";
 
-interface taskKindMemory {
+export interface taskKindMemory {
     [taskName: string]: RoomTaskInte;
 }
 

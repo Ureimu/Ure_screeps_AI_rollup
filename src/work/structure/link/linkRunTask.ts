@@ -15,7 +15,7 @@ export function linkRunTask(room: Room): void {
             const task = linkTaskQueue.pop() as LinkTaskInf;
             const inf = task.taskInf;
             if (typeof inf === "undefined") {
-                console.log("未定义link任务");
+                global.log("未定义link任务");
             } else {
                 const linkTransferFrom = Game.getObjectById<StructureLink>(inf.linkTransferFrom);
                 const linkTransferTo = Game.getObjectById<StructureLink>(inf.linkTransferTo);
@@ -25,7 +25,7 @@ export function linkRunTask(room: Room): void {
                     } else {
                         ifOK = 1;
                     }
-                    console.log(`${inf.linkTransferFrom}-->${inf.linkTransferTo}`);
+                    global.log(`${inf.linkTransferFrom}-->${inf.linkTransferTo}`);
                 }
                 if (ifOK !== OK) {
                     taskList.push(task);
@@ -82,10 +82,10 @@ export function linkRunTask(room: Room): void {
             default:
                 break;
         }
-        console.log(`<span style='color:#FFCCCC'>[link]  ${room.name}执行link任务失败,返回错误：${errorText}</span>`);
+        global.log(`<span style='color:#FFCCCC'>[link]  ${room.name}执行link任务失败,返回错误：${errorText}</span>`);
     }
     if (linkTaskQueue.size() > 18) {
-        console.log(
+        global.log(
             `<span style='color:#FF6666'>[link]  目前任务冗余过多(${linkTaskQueue.size()}个任务在该"${
                 room.name
             }"的link任务队列中)，请及时检测清理任务！</span>`
