@@ -67,7 +67,7 @@ const findEx = {
     },
 
     lookForStructurePos(room: Room, structureName: string): RoomPosition[] | undefined {
-        if (!!room.memory.construction[structureName] && !!room.memory.construction[structureName].pos[0]) {
+        if (room.memory.construction[structureName]?.pos?.[0]) {
             const posList = [];
             for (const posStr of room.memory.construction[structureName].pos) {
                 const pos = getPosFromStr(posStr);
@@ -79,6 +79,7 @@ const findEx = {
         }
     },
 
+    // 建议使用structure.name来获取名称。
     lookForStructureName(structure?: AnyStructure | null): string {
         if (!structure) {
             return "";

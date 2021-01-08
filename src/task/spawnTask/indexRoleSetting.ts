@@ -22,6 +22,9 @@ export function getRoleList(room: Room): roleSettingList {
         roomConstruction[structureName]?.memory
             ? Object.keys(roomConstruction[structureName]?.memory).length > 0
             : false;
+    const existContainer = (roomName: string) => {
+        return Object.values(Memory.rooms[roomName].sources).some(memory => typeof memory.container !== "undefined");
+    };
     const roleListX: roleSettingList = {
         roomMaintenance: () => {
             return {
@@ -36,12 +39,12 @@ export function getRoleList(room: Room): roleSettingList {
                     getSpawnTaskInf: defaultGetSpawnTaskInf
                 },
                 carrySource: {
-                    numberSetting: 2,
-                    priority: 12,
+                    numberSetting: existStructure("sourceContainer") ? 2 : 0,
+                    priority: level > 1 ? 12 : 9.5,
                     getSpawnTaskInf: defaultGetSpawnTaskInf
                 },
                 upgradeController: {
-                    numberSetting: level >= 4 && existStructure(STRUCTURE_STORAGE) ? 3 : 0,
+                    numberSetting: level >= 4 && level <= 7 && existStructure(STRUCTURE_STORAGE) ? 3 : 0,
                     priority: 8,
                     getSpawnTaskInf: defaultGetSpawnTaskInf
                 },
@@ -71,7 +74,7 @@ export function getRoleList(room: Room): roleSettingList {
                 }
             };
         },
-        outwardsSource: taskKindMemory => {
+        outwardsSource: (taskKindMemory, taskKindName) => {
             return {
                 sourceScout: {
                     numberSetting: 1,
@@ -88,17 +91,18 @@ export function getRoleList(room: Room): roleSettingList {
                 oUpgradeController: {
                     numberSetting:
                         taskKindMemory?.oHarvestSource.memory.numberSetting &&
+                        existContainer(taskKindName.split("-")[1]) &&
                         level > 1 &&
                         level <= 4 &&
                         !existStructure(STRUCTURE_STORAGE)
-                            ? taskKindMemory.oHarvestSource.memory.numberSetting * 4
+                            ? taskKindMemory.oHarvestSource.memory.numberSetting * 6
                             : 0,
                     priority: 4,
-                    getSpawnTaskInf: createSourceScoutTask
+                    getSpawnTaskInf: createOHarvestSourceTask
                 },
                 oClaim: {
                     numberSetting: taskKindMemory?.oHarvestSource.memory.numberSetting && level > 2 ? 1 : 0,
-                    priority: 4,
+                    priority: 4.1,
                     getSpawnTaskInf: createSourceScoutTask
                 },
                 oCarrier: {
@@ -109,6 +113,20 @@ export function getRoleList(room: Room): roleSettingList {
                             ? taskKindMemory.oHarvestSource.memory.numberSetting
                             : 0,
                     priority: 4.5,
+                    getSpawnTaskInf: createSourceScoutTask
+                },
+                oInvaderCoreAttacker: {
+                    numberSetting: taskKindMemory?.oInvaderCoreAttacker.memory.numberSetting
+                        ? taskKindMemory.oInvaderCoreAttacker.memory.numberSetting
+                        : 0,
+                    priority: 6,
+                    getSpawnTaskInf: createSourceScoutTask
+                },
+                oInvaderAttacker: {
+                    numberSetting: taskKindMemory?.oInvaderAttacker.memory.numberSetting
+                        ? taskKindMemory.oInvaderAttacker.memory.numberSetting
+                        : 0,
+                    priority: 6.5,
                     getSpawnTaskInf: createSourceScoutTask
                 }
             };

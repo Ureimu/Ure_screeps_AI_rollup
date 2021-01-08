@@ -6,7 +6,9 @@ export type creepRoleConstant =
     | "sourceScout"
     | "oUpgradeController"
     | "oClaim"
-    | "oCarrier";
+    | "oCarrier"
+    | "oInvaderCoreAttacker"
+    | "oInvaderAttacker";
 
 export type concreteCreepRoleMemory<T extends creepRoleConstant> = T extends "buildAndRepair"
     ? buildAndRepair
@@ -20,6 +22,10 @@ export type concreteCreepRoleMemory<T extends creepRoleConstant> = T extends "bu
     ? oClaim
     : T extends "oCarrier"
     ? oCarrier
+    : T extends "oInvaderCoreAttacker"
+    ? oInvaderCoreAttacker
+    : T extends "oInvaderAttacker"
+    ? oInvaderAttacker
     : never;
 
 declare global {
@@ -64,5 +70,12 @@ interface oClaim extends BaseMemoryTaskInf {
 }
 
 interface oCarrier extends BaseMemoryTaskInf {
+    scoutRoomName: string;
+}
+interface oInvaderCoreAttacker extends BaseMemoryTaskInf {
+    scoutRoomName: string;
+}
+
+interface oInvaderAttacker extends BaseMemoryTaskInf {
     scoutRoomName: string;
 }

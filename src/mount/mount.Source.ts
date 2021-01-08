@@ -26,7 +26,7 @@ export class SourceExtension extends Source {
      *
      */
     public initsMemory(): void {
-        Memory.sources[`${this.room.name}Source[${this.pos.x},${this.pos.y}]`] = {
+        this.room.memory.sources[this.getName()] = {
             id: this.id,
             pos: setPosToStr(this.pos)
         };

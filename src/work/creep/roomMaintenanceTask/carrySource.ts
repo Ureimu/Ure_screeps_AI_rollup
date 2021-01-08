@@ -32,12 +32,12 @@ export function carrySource(creep: Creep): void {
     if (ifHarvesting) {
         if (getWork) {
             creep.getEnergy([
-                { centerLink: { num: 0 } },
+                // { centerLink: { num: 0 } },
                 { sourceContainer: { num: (creep.room.controller as StructureController)?.level > 1 ? 0 : 400 } }
             ]);
         } else {
             creep.getEnergy([
-                { centerLink: { num: 0 } },
+                // { centerLink: { num: 0 } },
                 { storage: { num: 0 } },
                 { sourceContainer: { num: (creep.room.controller as StructureController)?.level > 1 ? 0 : 400 } }
             ]);
@@ -60,10 +60,10 @@ export function carrySource(creep: Creep): void {
         } else {
             const gList = [
                 { centerLink: { isStorable: true, upperLimit: 800 } },
+                { tower: { isStorable: true, upperLimit: 400 } },
                 { storage: { isStorable: true, upperLimit: 35000 } },
                 { controllerContainer: { isStorable: true, upperLimit: 1500 } }
                 // { spawnSourceContainer: { isStorable: true, upperLimit: 1500 } },
-                // { tower: { isStorable: true, upperLimit: 400 } }
             ];
             creep.transportEnergy(gList);
         }

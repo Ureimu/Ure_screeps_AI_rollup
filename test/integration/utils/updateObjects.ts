@@ -32,13 +32,16 @@ export async function updateSpawnRoomObj(db: any, spawnRoom:string): Promise<voi
     ]);
 }
 
-export async function upgradeController(db: any, controllerId:string, RCL:number): Promise<void> {
+export async function upgradeController(db: any, controllerId:string, RCL:number, speedLevel:number): Promise<void> {
     const C = helper.server.constants;
     await Promise.all([
         db["rooms.objects"].update(
             { _id: controllerId },
-            { $set: { level: RCL, progress: C.CONTROLLER_LEVELS[RCL] - 100 - ((RCL - 8) ** 3 + 243) * 200 } }
+            { $set: { level: RCL, progress: C.CONTROLLER_LEVELS[RCL] - 100 - ((RCL - 8) ** 3 + 243) * 200*(1/speedLevel) } }
         )
     ]);
 }
 
+export async function getObjStatus(db: any, opts: Record<string, unknown>): Promise<any> {
+    return await db["rooms.objects"].find(opts);
+}

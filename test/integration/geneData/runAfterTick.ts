@@ -13,8 +13,9 @@ export async function getAnalyzeDataAfterTick(
     analyseData: analyseData
 ): Promise<void> {
     const { db, env } = helper.server.common.storage;
+    const memory: Memory = JSON.parse(await helper.user.memory);
     const rawEventLog = await env.get(env.keys.ROOM_EVENT_LOG);
-    await getAnalyzeData(db, idData, gameTime, controllerData);
+    await getAnalyzeData(db, idData, gameTime, controllerData, memory);
     const analysed = analyseEventLog(rawEventLog, gameTime, controllerData);
     analyseData.push(...analysed);
 }

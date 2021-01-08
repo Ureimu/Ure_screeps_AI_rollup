@@ -10,16 +10,16 @@ export function createOHarvestSourceTask(
 ): SpawnTaskInf[] {
     let k = 0;
     const taskList: SpawnTaskInf[] = [];
-    const targetRoomName = taskKindName.slice(taskKindName.indexOf("-") + 1);
-    for (const sourceName in Memory.sources) {
-        const sourceRoomName = sourceName.slice(0, sourceName.indexOf("Source"));
-        if (sourceRoomName === targetRoomName) {
-            k += 10;
-            const t = templateSpawnTask(room.name, taskName, taskKindName, i + k, priority, targetRoomName);
-            const source = Game.getObjectById<Source>(Memory.sources[sourceName].id) as Source;
-            t.sponsor(source);
-            taskList.push(t.task);
-        }
+    const targetRoomName = taskKindName.split("-")?.[1];
+    for (const sourceName in Memory.rooms[targetRoomName].sources) {
+        k += 10;
+        const t = templateSpawnTask(room.name, taskName, taskKindName, i + k, priority, targetRoomName);
+        const source = Game.getObjectById<Source>(Memory.rooms[targetRoomName].sources[sourceName].id) as Source;
+        t.sponsor(source);
+        t.addTaskInf({
+            scoutRoomName: targetRoomName
+        });
+        taskList.push(t.task);
     }
     return taskList;
 }

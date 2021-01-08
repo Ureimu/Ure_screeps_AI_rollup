@@ -7,6 +7,7 @@ function isRoleCreepMemory(target: CreepMemory): target is RoleCreepMemory<"oUpg
 
 export function oUpgradeController(creep: Creep): void {
     if (isRoleCreepMemory(creep.memory)) {
+        const sourceId: Id<Source> = creep.memory.task.sponsor as Id<Source>;
         const scoutRoomName = creep.memory.task.taskInf?.scoutRoomName as string;
         const scoutRoom = Game.rooms[scoutRoomName];
         const spawnRoomName = creep.memory.task.spawnInf.roomName;
@@ -33,8 +34,8 @@ export function oUpgradeController(creep: Creep): void {
 
         if (ifHarvesting) {
             if (scoutRoomName === creep.room.name) {
-                creep.getEnergy();
-            } else {
+                creep.getEnergy(undefined, sourceId);
+            } else if (scoutRoomName) {
                 creep.moveTo(new RoomPosition(25, 20, scoutRoomName), {
                     visualizePathStyle: {
                         stroke: "#ffffff"

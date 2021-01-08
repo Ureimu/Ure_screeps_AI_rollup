@@ -8,7 +8,10 @@ import { IntegrationTestHelper } from "../helper";
 import moduleSetting from "../utils/moduleSetting";
 const { TerrainMatrix } = require("screeps-server-mockup");
 
-export async function initWorld(helper: IntegrationTestHelper, spawnRoom: string): Promise<string> {
+export async function initWorld(
+    helper: IntegrationTestHelper,
+    { spawnRoom, RCL, subscribeConsole }: { spawnRoom: string; RCL: number; subscribeConsole: boolean }
+): Promise<string> {
     const { db } = helper.server.common.storage;
     const C = helper.server.constants;
     const terrain: MockedTerrainMatrix = new TerrainMatrix();
@@ -49,14 +52,16 @@ export async function initWorld(helper: IntegrationTestHelper, spawnRoom: string
 
     const modules = moduleSetting.modules;
     helper.user = await helper.server.world.addBot({ username: "Ureium", room: spawnRoom, x: 21, y: 26, modules });
-    helper.user.on("console", (logs, results, userid, username) => {
-        _.each(logs, line => console.log(`[console|${username}]`, line));
-    });
+    if (subscribeConsole) {
+        helper.user.on("console", (logs, results, userid, username) => {
+            _.each(logs, line => console.log(`[console|${username}]`, line));
+        });
+    }
     await helper.user.console(`Game.profiler.reset();Game.profiler.background()`);
     await Promise.all([
         db["rooms.objects"].update(
             { _id: controller._id },
-            { $set: { level: 1, progress: C.CONTROLLER_LEVELS[1] - 100 - ((1 - 8) ** 3 + 243) * 50 } }
+            { $set: { level: RCL, progress: C.CONTROLLER_LEVELS[1] - 100 - ((1 - 8) ** 3 + 243) * 50 } }
         )
     ]);
     return controller._id;

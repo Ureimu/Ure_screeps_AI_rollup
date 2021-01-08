@@ -34,11 +34,12 @@ function isCreep(target: AnyStructure | Creep): target is Creep {
 }
 
 function getName(target: AnyStructure | Creep, roomName: string): string {
+    if (!target) return "";
     let name = "";
     if (isCreep(target)) {
         name = target.name;
     } else {
-        if ((name = findEx.lookForStructureName(target)) === "") {
+        if ((name = target.buildingName()) === "") {
             name = roomName + "-" + target?.structureType; // 可能上一个tick对象还存在，这个tick对象就不存在了，考虑缓存上一个tick的对象。
         } else {
             name = roomName + "-" + name;

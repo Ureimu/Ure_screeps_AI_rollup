@@ -9,7 +9,6 @@ import { taskPool } from "task/utils/taskPool";
 
 declare global {
     interface Memory {
-        sources: { [name: string]: SourceMemory };
         taskPools: taskPool<BaseTaskInf>;
         errors: {
             errorList: string[];
@@ -20,8 +19,10 @@ declare global {
     }
 
     interface RoomMemory {
+        sources: { [name: string]: SourceMemory };
         taskPool: taskPool<BaseTaskInf & LinkTaskInf & CarryTaskInf & SpawnTaskInf>;
         initialize?: boolean;
+        sourceInitialize?: boolean;
         taskKindList: string[];
     }
 
@@ -37,7 +38,7 @@ interface SourceMemory {
     id: Id<Source>;
     pos: string;
     container?: Id<StructureContainer>;
-    containerConstructionSite?: Id<ConstructionSite<STRUCTURE_CONTAINER>>;
+    containerConstructionSite?: string; // Id<ConstructionSite<STRUCTURE_CONTAINER>>;
     roads?: string[];
 }
 
@@ -46,13 +47,13 @@ interface SourceMemory {
  *
  */
 function getNewSource(room: Room): void {
-    if (!Memory.sources) {
-        Memory.sources = {};
+    if (!room.memory.sources) {
+        room.memory.sources = {};
     }
     const sources = room.find(FIND_SOURCES);
     for (const source of sources) {
         const name = `${source.room.name}Source[${source.pos.x},${source.pos.y}]`;
-        if (Memory.sources[name] === undefined) {
+        if (room.memory.sources[name] === undefined) {
             source.initsMemory();
         }
     }
@@ -63,6 +64,7 @@ function initRoomMemory(room: Room): void {
     if (controller.my) {
         if (room.memory.taskPool === undefined) {
             room.memory = {
+                sources: {},
                 taskPool: {
                     spawnQueue: [],
                     carryQueue: []
@@ -90,7 +92,7 @@ export function initNewRoomSetting(room: Room, ifFarming: boolean): void {
         getNewSource(room);
         return;
     }
-    getNewSource(room);
     initRoomMemory(room);
+    getNewSource(room);
     runSpawnTask(room);
 }

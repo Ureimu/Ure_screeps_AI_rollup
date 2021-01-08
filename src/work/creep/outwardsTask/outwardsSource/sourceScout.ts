@@ -7,6 +7,7 @@ function isRoleCreepMemory(target: CreepMemory): target is RoleCreepMemory<"sour
 export function sourceScout(creep: Creep): void {
     if (isRoleCreepMemory(creep.memory)) {
         const scoutRoomName = creep.memory.task.taskInf?.scoutRoomName;
+        const spawnRoomName = creep.memory.task.spawnInf.roomName;
         if (scoutRoomName) {
             if (creep.room.name !== scoutRoomName) {
                 creep.moveTo(new RoomPosition(25, 25, scoutRoomName));
@@ -17,13 +18,52 @@ export function sourceScout(creep: Creep): void {
                 }
                 creep.moveTo(global.creepMemory[creep.name].bundledPos || new RoomPosition(25, 25, scoutRoomName));
 
-                if (
-                    !Memory.rooms[creep.memory.task.spawnInf.roomName].taskSetting[`outwardsSource-${scoutRoomName}`]
-                        .oHarvestSource.memory.numberSetting
-                )
-                    Memory.rooms[creep.memory.task.spawnInf.roomName].taskSetting[
-                        `outwardsSource-${scoutRoomName}`
+                const sourceTaskName = `outwardsSource-${scoutRoomName}`;
+                if (!Memory.rooms[spawnRoomName].taskSetting[sourceTaskName].oHarvestSource.memory.numberSetting)
+                    Memory.rooms[spawnRoomName].taskSetting[
+                        sourceTaskName
                     ].oHarvestSource.memory.numberSetting = creep.room.find(FIND_SOURCES).length;
+                if (Game.time % 10 === 0) {
+                    const invaderCore = creep.room.find(FIND_HOSTILE_STRUCTURES, {
+                        filter: object => {
+                            return object.structureType === STRUCTURE_INVADER_CORE;
+                        }
+                    })?.[0];
+                    if (
+                        invaderCore &&
+                        !Memory.rooms[spawnRoomName].taskSetting[sourceTaskName].oInvaderCoreAttacker.memory
+                            .numberSetting
+                    )
+                        Memory.rooms[spawnRoomName].taskSetting[
+                            sourceTaskName
+                        ].oInvaderCoreAttacker.memory.numberSetting = 1;
+
+                    if (
+                        !invaderCore &&
+                        Memory.rooms[spawnRoomName].taskSetting[sourceTaskName].oInvaderCoreAttacker.memory
+                            .numberSetting
+                    )
+                        Memory.rooms[spawnRoomName].taskSetting[
+                            sourceTaskName
+                        ].oInvaderCoreAttacker.memory.numberSetting = 0;
+
+                    const invader = creep.room.find(FIND_HOSTILE_CREEPS)?.[0];
+                    if (
+                        invader &&
+                        !Memory.rooms[spawnRoomName].taskSetting[sourceTaskName].oInvaderAttacker.memory.numberSetting
+                    )
+                        Memory.rooms[spawnRoomName].taskSetting[
+                            sourceTaskName
+                        ].oInvaderAttacker.memory.numberSetting = 1;
+
+                    if (
+                        !invader &&
+                        Memory.rooms[spawnRoomName].taskSetting[sourceTaskName].oInvaderAttacker.memory.numberSetting
+                    )
+                        Memory.rooms[spawnRoomName].taskSetting[
+                            sourceTaskName
+                        ].oInvaderAttacker.memory.numberSetting = 0;
+                }
             }
         }
     }

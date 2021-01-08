@@ -36,9 +36,9 @@ export function sledge(creep: Creep): void {
                         return i.structureType === STRUCTURE_WALL;
                     }
                 });
-                if (!!hostileSpawns && !!hostileSpawns[0]) {
+                if (hostileSpawns?.[0]) {
                     if (creep.dismantle(hostileSpawns[0]) === ERR_NOT_IN_RANGE) {
-                        if (!!wall && creep.dismantle(wall) === ERR_NOT_IN_RANGE) {
+                        if (wall && creep.dismantle(wall) === ERR_NOT_IN_RANGE) {
                             if (creep.moveTo(hostileSpawns[0]) === ERR_NO_PATH) {
                                 creep.moveTo(wall);
                             }

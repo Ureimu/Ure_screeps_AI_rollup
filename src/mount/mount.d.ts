@@ -66,8 +66,13 @@ interface Source {
     initsMemory(): void;
 }
 
+interface Structure {
+    // buildingName()(): string;
+    buildingName(): string;
+}
+
 interface Creep {
-    getEnergy(lowerLimit?: { [name: string]: { num: number; takeAll?: boolean } }[]): string;
+    getEnergy(lowerLimit?: { [name: string]: { num: number; takeAll?: boolean } }[], id?: string): string;
     transportResource(target: AnyStructure, resourceType: ResourceConstant): boolean;
     getResourceFromStructure(structure: AnyStoreStructure, resourceType: ResourceConstant): void;
     getGlobalMemory(): void;
@@ -123,6 +128,6 @@ declare namespace NodeJS {
         creepWorkFunctionList: {
             [name: string]: (creep: Creep) => void;
         };
-        log(message?: unknown, ...optionalParams: unknown[]): void;
+        constructionMemory: { [id: string]: { name: string } };
     }
 }

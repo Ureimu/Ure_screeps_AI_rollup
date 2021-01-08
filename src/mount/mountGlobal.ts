@@ -7,6 +7,7 @@ export function mountGlobal(): void {
     if (!global.time) global.time = 0;
     global.time++;
     if (global.time === 1) {
+        global.constructionMemory = {};
         mountPrototypeExtension();
         // mountCreepEnergyMonitor();
         globalConstantRegister();

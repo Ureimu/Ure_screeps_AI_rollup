@@ -48,9 +48,9 @@ export const loop = (): void => {
                     room.roomVisualize();
                     room.runStructure();
                 } else {
-                    if (!room.memory.initialize) {
+                    if (!room.memory.sourceInitialize) {
                         room.initMemory(true);
-                        room.memory.initialize = true;
+                        room.memory.sourceInitialize = true;
                     }
                 }
             });

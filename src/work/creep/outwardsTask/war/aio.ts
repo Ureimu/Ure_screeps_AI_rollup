@@ -17,7 +17,7 @@ export function aio(creep: Creep): void {
         case 1:
             {
                 {
-                    if (!!creep.room.controller && !!creep.room.controller?.safeMode) {
+                    if (creep.room.controller?.safeMode) {
                         const wall1 = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                             filter: i => {
                                 return i.structureType === STRUCTURE_WALL;
@@ -36,7 +36,7 @@ export function aio(creep: Creep): void {
                         return i.structureType === STRUCTURE_WALL;
                     }
                 });
-                if (!!hostileCreeps && !!hostileCreeps[0]) {
+                if (hostileCreeps?.[0]) {
                     if (creep.rangedAttack(hostileCreeps[0]) === ERR_NOT_IN_RANGE) {
                         if (wall) {
                             if (creep.moveTo(hostileCreeps[0]) === ERR_NO_PATH) {

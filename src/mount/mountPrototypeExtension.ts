@@ -5,6 +5,7 @@ import { RoomExtension } from "./mount.Room";
 import { RoomPositionExtension } from "./mount.RoomPosition";
 import { SourceExtension } from "./mount.Source";
 import { SpawnExtension } from "./mount.Spawn";
+import { StructureWithExtension } from "./mount.Structure";
 // import { StateStack } from "../utils/stateStack/stateStack";
 import { StructureControllerExtension } from "./mount.StructureController";
 
@@ -32,9 +33,10 @@ export function mountPrototypeExtension(): void {
             SourceExtension,
             SpawnExtension,
             RoomExtension,
-            StructureControllerExtension
+            StructureControllerExtension,
+            StructureWithExtension
         ];
-        const prototypes = [RoomPosition, Creep, Source, StructureSpawn, Room, StructureController];
+        const prototypes = [RoomPosition, Creep, Source, StructureSpawn, Room, StructureController, Structure];
 
         for (let i = 0, j = plugins.length; i < j; i++) {
             assignPrototype(prototypes[i], plugins[i]);

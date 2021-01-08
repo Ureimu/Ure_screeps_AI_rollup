@@ -22,19 +22,24 @@ declare global {
 // 自定义的 Creep 的拓展
 export class CreepExtension extends Creep {
     // 其他更多自定义拓展
-    public getEnergy(lowerLimit: { [name: string]: { num: number; takeAll?: boolean } }[] = [{}]): string {
+    public getEnergy(lowerLimit: { [name: string]: { num: number; takeAll?: boolean } }[] = [{}], id?: string): string {
         if (!this.memory.task.taskInf) return "";
         let anyStoreStructureWithEnergy: AnyStoreStructure | null = null;
         let anyStoreStructureWithEnergyName = "";
         if (!this.room.memory.roomControlStatus) {
             const containerList = [];
-            for (const sourceName in Memory.sources) {
+            for (const sourceName in this.room.memory.sources) {
                 const roomName = sourceName.slice(0, sourceName.indexOf("Source"));
                 if (roomName === this.room.name) {
-                    if (Memory.sources[sourceName].container) {
+                    if (
+                        (this.room.memory.sources[sourceName].container &&
+                            this.room.memory.sources[sourceName].id === id) ||
+                        typeof id === "undefined"
+                    ) {
                         const container = Game.getObjectById(
-                            Memory.sources[sourceName].container as Id<StructureContainer>
-                        ) as StructureContainer;
+                            this.room.memory.sources[sourceName].container as Id<StructureContainer>
+                        );
+                        if (!container) return "";
                         if (
                             container.store[RESOURCE_ENERGY] >=
                             50 * bodypartsGenerator.getBpNum(this.memory.task.spawnInf.bodyparts, "carry")
@@ -46,9 +51,9 @@ export class CreepExtension extends Creep {
             }
 
             const containersEnergy = this.pos.findClosestByRange(containerList);
-            const containersName = findEx.lookForStructureName(containersEnergy);
+            const containersName = containersEnergy?.buildingName();
             anyStoreStructureWithEnergy = containersEnergy;
-            anyStoreStructureWithEnergyName = containersName;
+            anyStoreStructureWithEnergyName = containersName ? containersName : "";
         } else {
             const structureList: { [name: string]: AnyStoreStructure[] }[] = findEx.getStructureFromArray(
                 this.room,
@@ -79,9 +84,9 @@ export class CreepExtension extends Creep {
             }
 
             const containersEnergy = this.pos.findClosestByRange(containersL);
-            const containersName = findEx.lookForStructureName(containersEnergy);
+            const containersName = containersEnergy?.buildingName();
             anyStoreStructureWithEnergy = containersEnergy;
-            anyStoreStructureWithEnergyName = containersName;
+            anyStoreStructureWithEnergyName = containersName ? containersName : "";
         }
         // global.log(this.name+" "+containersEnergy?.structureType+containersName);
 
@@ -100,6 +105,14 @@ export class CreepExtension extends Creep {
             }
         });
         const target2 = this.pos.findClosestByRange(FIND_RUINS, {
+            filter: resource => {
+                return (
+                    resource.store.energy >=
+                    50 * bodypartsGenerator.getBpNum(this.memory.task.spawnInf.bodyparts, "carry")
+                );
+            }
+        });
+        const target3 = this.pos.findClosestByRange(FIND_TOMBSTONES, {
             filter: resource => {
                 return (
                     resource.store.energy >=
@@ -128,6 +141,15 @@ export class CreepExtension extends Creep {
                 this.memory.task.taskInf.lastSource = anyStoreStructureWithEnergyName;
             }
             return anyStoreStructureWithEnergyName;
+        } else if (target3) {
+            this.moveTo(target3, {
+                visualizePathStyle: {
+                    stroke: "#ffffff"
+                }
+            });
+            this.withdraw(target3, "energy");
+            this.memory.task.taskInf.lastSource = "tombstones";
+            return "ruins";
         } else if (target2) {
             this.moveTo(target2, {
                 visualizePathStyle: {
@@ -204,8 +226,8 @@ export class CreepExtension extends Creep {
 
     public transportResource(target: AnyStructure, resourceType: ResourceConstant, resourceNumber?: number): boolean {
         if (!this.memory.task.taskInf) return false;
-        if (this.memory.task.taskInf.lastSource === findEx.lookForStructureName(target)) return false;
         if (!target) return false;
+        if (this.memory.task.taskInf.lastSource === target.buildingName()) return false;
         if (this.transfer(target, resourceType, resourceNumber) === ERR_NOT_IN_RANGE) {
             this.moveTo(target, {
                 visualizePathStyle: {

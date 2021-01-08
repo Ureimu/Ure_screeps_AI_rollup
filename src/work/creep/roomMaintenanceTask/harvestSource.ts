@@ -9,15 +9,17 @@ export function harvestSource(creep: Creep): void {
     const arrived = ifMove();
     const sourceName = source.getName();
     if (arrived) {
-        if (!Memory.sources[sourceName].containerConstructionSite) {
+        if (!creep.room.memory.sources[sourceName].containerConstructionSite) {
             for (const site of creep.room.find(FIND_CONSTRUCTION_SITES)) {
                 if (site.structureType === STRUCTURE_CONTAINER && creep.pos.inRangeTo(site, 2)) {
-                    Memory.sources[sourceName].containerConstructionSite = site.id as Id<ConstructionSite<"container">>;
+                    creep.room.memory.sources[sourceName].containerConstructionSite = site.id as Id<
+                        ConstructionSite<"container">
+                    >;
                 }
             }
-        } else if (!Memory.sources[sourceName].container) {
+        } else if (!creep.room.memory.sources[sourceName].container) {
             const site = Game.getObjectById(
-                Memory.sources[sourceName].containerConstructionSite as Id<ConstructionSite<"container">>
+                creep.room.memory.sources[sourceName].containerConstructionSite as Id<ConstructionSite<"container">>
             ) as ConstructionSite<"container">;
             if (site) {
                 const ifHarvesting = stateCut(
@@ -37,7 +39,7 @@ export function harvestSource(creep: Creep): void {
             } else {
                 for (const structure of creep.room.find(FIND_STRUCTURES)) {
                     if (structure.structureType === STRUCTURE_CONTAINER && creep.pos.inRangeTo(structure, 2)) {
-                        Memory.sources[sourceName].container = structure.id;
+                        creep.room.memory.sources[sourceName].container = structure.id;
                     }
                 }
             }

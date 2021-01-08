@@ -11,7 +11,8 @@ interface RoomTaskInte {
 
 export interface roleSettingList {
     [taskKindName: string]: (
-        taskKindMemory: taskKindMemory
+        taskKindMemory: taskKindMemory,
+        taskKindName: string
     ) => {
         [taskName: string]: roleSetting;
     };
@@ -70,7 +71,8 @@ export class RoleSetting {
             if (defaultTaskKindName === "roomMaintenance") {
                 Object.defineProperty(list, defaultTaskKindName, {
                     value: this.defaultRoleSettingList[defaultTaskKindName](
-                        Memory.rooms[this.roomName].taskSetting[defaultTaskKindName]
+                        Memory.rooms[this.roomName].taskSetting[defaultTaskKindName],
+                        defaultTaskKindName
                     ),
                     writable: true,
                     enumerable: true,
@@ -78,14 +80,12 @@ export class RoleSetting {
                 });
             } else {
                 for (const taskKindNameWithTargetRoomName of this.taskKindList) {
-                    const taskKindName = taskKindNameWithTargetRoomName.slice(
-                        0,
-                        taskKindNameWithTargetRoomName.indexOf("-")
-                    );
+                    const taskKindName = taskKindNameWithTargetRoomName.split("-")[0];
                     if (taskKindName === defaultTaskKindName) {
                         Object.defineProperty(list, taskKindNameWithTargetRoomName, {
                             value: this.defaultRoleSettingList[defaultTaskKindName](
-                                Memory.rooms[this.roomName].taskSetting[taskKindNameWithTargetRoomName]
+                                Memory.rooms[this.roomName].taskSetting[taskKindNameWithTargetRoomName],
+                                taskKindNameWithTargetRoomName
                             ),
                             writable: true,
                             enumerable: true,

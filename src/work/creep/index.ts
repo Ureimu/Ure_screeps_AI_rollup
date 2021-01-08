@@ -12,6 +12,9 @@ import { oHarvestSource } from "./outwardsTask/outwardsSource/oHarvestSource";
 import { oUpgradeController } from "./outwardsTask/outwardsSource/oUpgradeController";
 import { oClaim } from "./outwardsTask/outwardsSource/oClaim";
 import { oCarrier } from "./outwardsTask/outwardsSource/oCarrier";
+import { oInvaderCoreAttacker } from "./outwardsTask/outwardsSource/oInvaderCoreAttacker";
+import { errorStackVisualize } from "visual/roomVisual/GUIsetting";
+import { oInvaderAttacker } from "./outwardsTask/outwardsSource/oInvaderAttacker";
 
 const creepWork = {
     TaskReg(): {
@@ -32,7 +35,9 @@ const creepWork = {
             oHarvestSource,
             oUpgradeController,
             oClaim,
-            oCarrier
+            oCarrier,
+            oInvaderCoreAttacker,
+            oInvaderAttacker
         };
         profiler.registerObject(workFunctionList, "creepWork.role");
         return workFunctionList;
@@ -41,7 +46,11 @@ const creepWork = {
     run(creep: Creep): void {
         if (creep.spawning) return;
         if (!global.creepWorkFunctionList) global.creepWorkFunctionList = this.TaskReg();
-        global.creepWorkFunctionList[creep.memory.task.taskName](creep);
+        try {
+            global.creepWorkFunctionList[creep.memory.task.taskName](creep);
+        } catch (err) {
+            errorStackVisualize((err as { stack: string }).stack);
+        }
     }
 };
 profiler.registerObject(creepWork, "creepWork");

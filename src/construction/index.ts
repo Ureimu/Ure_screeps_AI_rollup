@@ -1,4 +1,3 @@
-import findEx from "utils/findEx";
 import { getGridLayout } from "./composition/gridLayout";
 import { runLayout } from "./composition/runLayOut";
 
@@ -67,14 +66,14 @@ export function autoConstruction(room: Room): void {
     room.memory.roomControlStatus[1] = room.controller?.progress as number;
     room.memory.roomControlStatus[2] = room.controller?.progressTotal as number;
     room.memory.roomControlStatus[3] = constructionSites.length;
-    if ((Game.time - room.memory.startTime) % global.workRate.construction === 0)
+    if ((Game.time - room.memory.startTime) % global.workRate.construction === global.workRate.construction - 1)
         runLayout(room, "gridLayout", getGridLayout);
 }
 
 export function updateConstruction(room: Room): void {
     const structures = room.find(FIND_STRUCTURES);
     for (const myStructure of structures) {
-        const structureName = findEx.lookForStructureName(myStructure);
+        const structureName = myStructure.buildingName();
         if (structureName === "") continue;
         if (!myStructure.room.memory.construction[structureName].memory[myStructure.id])
             myStructure.room.memory.construction[structureName].memory[myStructure.id] = {
