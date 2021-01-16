@@ -1,6 +1,6 @@
-import { TaskSetting } from "../taskClass/TaskSetting";
-import * as profiler from "../../../utils/profiler";
-import { setPosToStr } from "construction/utils/strToRoomPosition";
+import { TaskSetting } from "../task/taskClass/TaskSetting";
+import * as profiler from "../../utils/profiler";
+import { RoomPositionToStr } from "construction/utils/strToRoomPosition";
 import { SpawnTaskInf } from "task/taskClass/extends/SpawnTask";
 
 const manageCreep = function (): void {
@@ -11,8 +11,8 @@ const manageCreep = function (): void {
         if (!(name in Game.creeps)) {
             for (const taskKindNameWithTargetRoomName in global.spawnTaskList[creepRoomName]) {
                 const index = taskKindNameWithTargetRoomName.indexOf("-");
-                const taskKindName = taskKindNameWithTargetRoomName.slice(0, index === -1 ? undefined : index);
-                switch (taskKindName) {
+                const taskGroupName = taskKindNameWithTargetRoomName.slice(0, index === -1 ? undefined : index);
+                switch (taskGroupName) {
                     case "roomMaintenance":
                         defaultManager(name, creepRoomName, taskKindNameWithTargetRoomName);
                         break;
@@ -35,6 +35,7 @@ const manageCreep = function (): void {
 export default profiler.registerFN(manageCreep, "manageCreep");
 
 function defaultManager(name: string, creepRoomName: string, taskKindNameWithTargetRoomName: string) {
+    const rts = new RoomPositionToStr();
     if (Memory.creeps[name]?.task.taskName in global.spawnTaskList[creepRoomName][taskKindNameWithTargetRoomName]) {
         if (Memory.creeps[name].task.spawnInf.isRunning === true) return;
         const task = Memory.creeps[name].task as SpawnTaskInf;
@@ -46,7 +47,7 @@ function defaultManager(name: string, creepRoomName: string, taskKindNameWithTar
         }
         if (typeof global.creepMemory[name]?.bundledUpgradePos !== "undefined") {
             global.rooms[creepRoomName].controller?.blankSpace.push(
-                setPosToStr(global.creepMemory[name].bundledUpgradePos as RoomPosition)
+                rts.setPosToStr(global.creepMemory[name].bundledUpgradePos as RoomPosition)
             );
             global.creepMemory[name].bundledUpgradePos = undefined;
         }

@@ -15,7 +15,7 @@ interface RoomTaskInfo {
 
 declare global {
     interface RoomMemory {
-        taskSetting: { [taskKindName: string]: { [taskName: string]: RoomTaskInfo } };
+        taskSetting: { [taskGroupName: string]: { [taskName: string]: RoomTaskInfo } };
     }
 }
 
@@ -34,10 +34,10 @@ export class TaskSetting {
     public roomTaskName: string;
     public roomTaskKindName: string;
 
-    public constructor(roomName: string, taskKindName: string, roomTaskName: string, pushAtBeginning = false) {
+    public constructor(roomName: string, taskGroupName: string, roomTaskName: string, pushAtBeginning = false) {
         this.roomName = roomName;
         this.roomTaskName = roomTaskName;
-        this.roomTaskKindName = taskKindName;
+        this.roomTaskKindName = taskGroupName;
         if (typeof Memory.rooms[this.roomName].taskSetting[this.roomTaskKindName] == "undefined") {
             Memory.rooms[this.roomName].taskSetting[this.roomTaskKindName] = {};
         }

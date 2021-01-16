@@ -70,7 +70,7 @@ export function getRoleBodyList(room: Room): roleBodySettingList {
                     maxBodyParts: 16
                 },
                 oInvaderAttacker: {
-                    bodysetting: [{ move: 5, attack: 4, ranged_attack: 1, heal: 1 }],
+                    bodysetting: [{ move: 6, attack: 4, ranged_attack: 1, heal: 1 }],
                     maxBodyParts: 22
                 }
             };

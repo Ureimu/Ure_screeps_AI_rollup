@@ -1,6 +1,6 @@
 import { autoConstruction, updateConstruction } from "construction";
-import manageOutwardsSource from "task/manager/manageOutwardsSource";
-import manageTask from "task/manager/manageTask";
+import manageOutwardsSource from "manager/manageOutwardsSource";
+import manageTask from "manager/manageTask";
 import { initNewRoomSetting } from "updateMemory";
 import { roomVisualize } from "visual/roomVisual/GUIsetting";
 import { runStructure } from "work/structure";

@@ -90,6 +90,7 @@ interface Creep {
 
 declare namespace NodeJS {
     interface Global {
+        runLayout: (roomName: string) => void;
         time: number;
         testMode: boolean;
         workRate: { [name: string]: number | string; manageTask: number; construction: number; spawn: number };

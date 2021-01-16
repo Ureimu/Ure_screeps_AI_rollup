@@ -1,19 +1,9 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable @typescript-eslint/prefer-namespace-keyword */
-import {
-    genePosStr,
-    getDiagPosStr,
-    ParseCoord,
-    getPosStrInRange,
-    getPosFromStr,
-    getQuadPosStr,
-    getRangeToPosStr,
-    reverseSet,
-    setPosToStr
-} from "construction/utils/strToRoomPosition";
 import { initConstructionScheduleMemory } from "construction/utils/initConstructionMemory";
 import { getCutTiles } from "../../../utils/mincut/minCut";
 import { RoomPositionStr } from "construction";
+import { RoomPositionToStr } from "construction/utils/strToRoomPosition";
 
 /** 网格建筑布局。
  * 该函数为静态函数，即只要输入相同，则输出必定相同，所以一个房间只需要执行一次。
@@ -24,7 +14,7 @@ import { RoomPositionStr } from "construction";
         global.stateLoop[stateCut]();
     }
  */
-const keepTime = 20; // 预览的持续时间
+const keepTime = 1; // 预览的持续时间
 const xUp = 0.25;
 const buildNumberLimit = CONTROLLER_STRUCTURES;
 buildNumberLimit.constructedWall = {
@@ -51,43 +41,45 @@ buildNumberLimit.rampart = {
 };
 
 export function getGridLayout(room: Room): void {
+    const rts = new RoomPositionToStr(room.name);
     const startCpu = Game.cpu.getUsed();
     // 初始化memory
     initConstructionScheduleMemory(room, "gridLayout");
     const roadExpandStrList: RoomPositionStr[] = [];
     // 先确定中心，这里设置为了本房间第一个spawn。
     Game.spawns[room.memory.firstSpawnName].pos.getDiagSquare().forEach(pos => {
-        roadExpandStrList.push(setPosToStr(pos));
+        roadExpandStrList.push(rts.setPosToStr(pos));
     });
     const roadExpand = new Set(roadExpandStrList);
-    const buildingExpand = new Set([setPosToStr(Game.spawns[room.memory.firstSpawnName].pos)]);
+    const buildingExpand = new Set([rts.setPosToStr(Game.spawns[room.memory.firstSpawnName].pos)]);
     let ifContinue = true;
     let ifEnough = false;
+    let num = 0;
     while (ifContinue) {
         // 判断数量是否足够
         if (!ifEnough) {
             // 进行一次扩张，如果没有墙和沼泽阻碍扩张，则会增加4n-4个空位(n>2)
             let ExpandList: RoomPosition[] = [];
             roadExpand.forEach((posStr: RoomPositionStr) => {
-                getPosFromStr(posStr)
+                rts.getPosFromStr(posStr)
                     .getQuadSquare()
                     .forEach((posE: RoomPosition) => {
                         ExpandList.push(posE);
                     });
             });
             ExpandList.forEach(pos => {
-                roadExpand.add(setPosToStr(pos));
+                roadExpand.add(rts.setPosToStr(pos));
             });
             ExpandList = [];
             buildingExpand.forEach((posStr: RoomPositionStr) => {
-                getPosFromStr(posStr)
+                rts.getPosFromStr(posStr)
                     .getQuadSquare()
                     .forEach((posE: RoomPosition) => {
                         ExpandList.push(posE);
                     });
             });
             ExpandList.forEach(pos => {
-                buildingExpand.add(setPosToStr(pos));
+                buildingExpand.add(rts.setPosToStr(pos));
             });
         } else {
             // 保留一份完整的buildSet和roadSet
@@ -116,12 +108,12 @@ export function getGridLayout(room: Room): void {
 
                             // 在这里遍历所有建筑，并将cost设置为最高
                             buildingExpand.forEach(posStr => {
-                                const coord = ParseCoord(posStr);
+                                const coord = rts.ParseCoord(posStr);
                                 costs.set(coord.x, coord.y, 0xff);
                             });
                             // 在这里遍历所有路，并将cost设置为1
                             roadExpand.forEach(posStr => {
-                                const coord = ParseCoord(posStr);
+                                const coord = rts.ParseCoord(posStr);
                                 costs.set(coord.x, coord.y, 1);
                             });
 
@@ -129,7 +121,7 @@ export function getGridLayout(room: Room): void {
                         }
                     });
                     ret.path.forEach(pos1 => {
-                        outwardsRoadPosSet.add(setPosToStr(pos1));
+                        outwardsRoadPosSet.add(rts.setPosToStr(pos1));
                     });
                 }
             }
@@ -175,12 +167,12 @@ export function getGridLayout(room: Room): void {
 
                         // 在这里遍历所有建筑，并将cost设置为最高
                         buildingExpand.forEach(posStr => {
-                            const coord = ParseCoord(posStr);
+                            const coord = rts.ParseCoord(posStr);
                             costs.set(coord.x, coord.y, 0xff);
                         });
                         // 在这里遍历所有路，并将cost设置为1
                         roadExpand.forEach(posStr => {
-                            const coord = ParseCoord(posStr);
+                            const coord = rts.ParseCoord(posStr);
                             costs.set(coord.x, coord.y, 1);
                         });
 
@@ -192,34 +184,34 @@ export function getGridLayout(room: Room): void {
                     if (goal.name === "source") {
                         const pos = ret.path.pop() as RoomPosition;
                         ret.path.forEach(pos1 => {
-                            sourceAndControllerRoadPosSet.add(setPosToStr(pos1));
+                            sourceAndControllerRoadPosSet.add(rts.setPosToStr(pos1));
                         });
-                        sourceContainerPosSet.add(setPosToStr(pos));
+                        sourceContainerPosSet.add(rts.setPosToStr(pos));
                         const posAround = pos.getSquare();
                         for (const posAroundPos of posAround) {
                             const terrain: Terrain[] = posAroundPos.lookFor(LOOK_TERRAIN);
                             if (
                                 terrain[0] !== "wall" &&
-                                !isPosSetInPos(sourceAndControllerRoadPosSet, setPosToStr(posAroundPos))
+                                !isPosSetInPos(sourceAndControllerRoadPosSet, rts.setPosToStr(posAroundPos))
                             ) {
-                                sourceLinkPosSet.add(setPosToStr(posAroundPos));
+                                sourceLinkPosSet.add(rts.setPosToStr(posAroundPos));
                                 break;
                             }
                         }
                     } else if (goal.name === "controller") {
                         const pos = ret.path.pop() as RoomPosition;
                         ret.path.forEach(pos1 => {
-                            sourceAndControllerRoadPosSet.add(setPosToStr(pos1));
+                            sourceAndControllerRoadPosSet.add(rts.setPosToStr(pos1));
                         });
-                        controllerContainerPosSet.add(setPosToStr(pos));
+                        controllerContainerPosSet.add(rts.setPosToStr(pos));
                         const posAround = pos.getSquare();
                         for (const posAroundPos of posAround) {
                             const terrain: Terrain[] = posAroundPos.lookFor(LOOK_TERRAIN);
                             if (
                                 terrain[0] !== "wall" &&
-                                !isPosSetInPos(sourceAndControllerRoadPosSet, setPosToStr(posAroundPos))
+                                !isPosSetInPos(sourceAndControllerRoadPosSet, rts.setPosToStr(posAroundPos))
                             ) {
-                                controllerLinkPosSet.add(setPosToStr(posAroundPos));
+                                controllerLinkPosSet.add(rts.setPosToStr(posAroundPos));
                                 break;
                             }
                         }
@@ -262,12 +254,12 @@ export function getGridLayout(room: Room): void {
 
                         // 在这里遍历所有建筑，并将cost设置为最高
                         buildingExpand.forEach(posStr => {
-                            const coord = ParseCoord(posStr);
+                            const coord = rts.ParseCoord(posStr);
                             costs.set(coord.x, coord.y, 0xff);
                         });
                         // 在这里遍历所有路，并将cost设置为1
                         roadExpand.forEach(posStr => {
-                            const coord = ParseCoord(posStr);
+                            const coord = rts.ParseCoord(posStr);
                             costs.set(coord.x, coord.y, 1);
                         });
 
@@ -275,7 +267,7 @@ export function getGridLayout(room: Room): void {
                     }
                 });
                 if (ret.path.length > 0) {
-                    mineralContainerPosSet.add(setPosToStr(ret.path.pop() as RoomPosition));
+                    mineralContainerPosSet.add(rts.setPosToStr(ret.path.pop() as RoomPosition));
                     mineralContainerPosSet.forEach(posStr => {
                         if (roadExpand.has(posStr)) {
                             roadExpand.delete(posStr);
@@ -283,7 +275,7 @@ export function getGridLayout(room: Room): void {
                     });
                 }
                 ret.path.forEach(pos => {
-                    mineralRoadPosSet.add(setPosToStr(pos));
+                    mineralRoadPosSet.add(rts.setPosToStr(pos));
                 });
                 mineralRoadPosSet.forEach(posStr => {
                     if (roadExpand.has(posStr)) {
@@ -295,12 +287,12 @@ export function getGridLayout(room: Room): void {
             // 判断是否有中央布局的位置（四个构成斜正方形的building空位,会自动由内向外判断，尽量取离spawn最近的），如果没有则告知并提醒用户手动规划，有则转移给centerConstruction的memory.
             let center = "";
             let buildingExpandWithoutSpawn = buildingExpand;
-            buildingExpandWithoutSpawn.delete(setPosToStr(Game.spawns[room.memory.firstSpawnName].pos)); // 避免把spawn作为中心布局点
-            buildingExpandWithoutSpawn = reverseSet(buildingExpandWithoutSpawn); // 一开始的集合元素遍历顺序是由外向内，这里把集合里的元素倒过来，变成由内向外。
+            buildingExpandWithoutSpawn.delete(rts.setPosToStr(Game.spawns[room.memory.firstSpawnName].pos)); // 避免把spawn作为中心布局点
+            buildingExpandWithoutSpawn = rts.reverseSet(buildingExpandWithoutSpawn); // 一开始的集合元素遍历顺序是由外向内，这里把集合里的元素倒过来，变成由内向外。
             buildingExpandWithoutSpawn.forEach(posStr0 => {
-                getDiagPosStr(posStr0).forEach(posStr1 => {
+                rts.getDiagPosStr(posStr0).forEach(posStr1 => {
                     let i5 = 0;
-                    getDiagPosStr(posStr1).forEach(posStr2 => {
+                    rts.getDiagPosStr(posStr1).forEach(posStr2 => {
                         if (buildingExpandWithoutSpawn.has(posStr2)) {
                             i5++;
                         }
@@ -310,7 +302,7 @@ export function getGridLayout(room: Room): void {
                     }
                 });
             });
-            getDiagPosStr(center).forEach(posStr => {
+            rts.getDiagPosStr(center).forEach(posStr => {
                 buildingExpand.delete(posStr); // 从原集合中去除这四个位置
                 buildingExpandWithoutSpawn.delete(posStr); // 从原集合中去除这四个位置
             });
@@ -324,11 +316,11 @@ export function getGridLayout(room: Room): void {
                 break;
             }
             let buildingExpandPowerSpawn = buildingExpandWithoutSpawn;
-            buildingExpandPowerSpawn = reverseSet(buildingExpandPowerSpawn);
+            buildingExpandPowerSpawn = rts.reverseSet(buildingExpandPowerSpawn);
             const powerSpawnSet = new Set<string>();
             const nukerSet = new Set<string>();
             const spawnSet = new Set<string>();
-            spawnSet.add(setPosToStr(Game.spawns[room.memory.firstSpawnName].pos));
+            spawnSet.add(rts.setPosToStr(Game.spawns[room.memory.firstSpawnName].pos));
             for (const posStr of buildingExpandPowerSpawn) {
                 powerSpawnSet.add(posStr);
                 buildingExpandPowerSpawn.delete(posStr);
@@ -357,7 +349,7 @@ export function getGridLayout(room: Room): void {
             buildingExpandWithoutSpawnAndCenter.forEach(posStr => {
                 let i2 = 0;
                 towerSet.forEach(towerPosStr => {
-                    if (getRangeToPosStr(posStr, towerPosStr) >= 3) {
+                    if (rts.getRangeToPosStr(posStr, towerPosStr) >= 3) {
                         i2++;
                     }
                 });
@@ -370,7 +362,7 @@ export function getGridLayout(room: Room): void {
 
             // 判断lab的位置（斜着4x5，占12个building空位,20格road空位）
             let buildingExpandWithoutAbove = buildingExpandWithoutSpawnAndCenter;
-            buildingExpandWithoutAbove = reverseSet(buildingExpandWithoutAbove);
+            buildingExpandWithoutAbove = rts.reverseSet(buildingExpandWithoutAbove);
             let m = 0;
             const labSet = new Set<string>();
             const square2Set = new Set<string>();
@@ -382,8 +374,8 @@ export function getGridLayout(room: Room): void {
                 if (ifRun) {
                     m++;
                     let i1 = 0;
-                    getDiagPosStr(posStr0).forEach(posStr1 => {
-                        getDiagPosStr(posStr1).forEach(posStr2 => {
+                    rts.getDiagPosStr(posStr0).forEach(posStr1 => {
+                        rts.getDiagPosStr(posStr1).forEach(posStr2 => {
                             square2Set.add(posStr2);
                         });
                     });
@@ -393,11 +385,11 @@ export function getGridLayout(room: Room): void {
                         }
                     });
                     if (i1 === 9) {
-                        getQuadPosStr(posStr0).forEach(posStr1 => {
+                        rts.getQuadPosStr(posStr0).forEach(posStr1 => {
                             if (ifRun) {
                                 let j = 0;
-                                getDiagPosStr(posStr1).forEach(posStr2 => {
-                                    getDiagPosStr(posStr2).forEach(posStr3 => {
+                                rts.getDiagPosStr(posStr1).forEach(posStr2 => {
+                                    rts.getDiagPosStr(posStr2).forEach(posStr3 => {
                                         square3Set.add(posStr3);
                                     });
                                 });
@@ -435,7 +427,7 @@ export function getGridLayout(room: Room): void {
                 global.log("未找到lab布局");
             }
 
-            const wallAndRampartPosSet = getMinCut(true, fullBuildingExpand, room);
+            const wallAndRampartPosSet = getMinCut(true, fullBuildingExpand, room, rts);
             const wallPosSet = new Set<string>();
             const rampartPosSet = new Set<string>();
 
@@ -521,7 +513,7 @@ export function getGridLayout(room: Room): void {
                         levelToBuild: 5
                     },
                     centerLink: {
-                        posStrList: [Array.from(getDiagPosStr(center).keys())[0]],
+                        posStrList: [Array.from(rts.getDiagPosStr(center).keys())[0]],
                         levelToBuild: 5
                     }
                 },
@@ -544,17 +536,17 @@ export function getGridLayout(room: Room): void {
                 },
                 storage: {
                     storage: {
-                        posStrList: [Array.from(getDiagPosStr(center).keys())[1]]
+                        posStrList: [Array.from(rts.getDiagPosStr(center).keys())[1]]
                     }
                 },
                 terminal: {
                     terminal: {
-                        posStrList: [Array.from(getDiagPosStr(center).keys())[2]]
+                        posStrList: [Array.from(rts.getDiagPosStr(center).keys())[2]]
                     }
                 },
                 factory: {
                     factory: {
-                        posStrList: [Array.from(getDiagPosStr(center).keys())[3]]
+                        posStrList: [Array.from(rts.getDiagPosStr(center).keys())[3]]
                     }
                 },
                 lab: {
@@ -579,7 +571,7 @@ export function getGridLayout(room: Room): void {
                 },
                 extractor: {
                     extractor: {
-                        posStrList: [setPosToStr(room.find(FIND_MINERALS)[0].pos)]
+                        posStrList: [rts.setPosToStr(room.find(FIND_MINERALS)[0].pos)]
                     }
                 }
             };
@@ -588,7 +580,7 @@ export function getGridLayout(room: Room): void {
             const setList = [
                 extensionPosSet,
                 anyRoadSet,
-                getDiagPosStr(center),
+                rts.getDiagPosStr(center),
                 towerSet,
                 labSet,
                 powerSpawnSet,
@@ -620,7 +612,7 @@ export function getGridLayout(room: Room): void {
             ]; // 文字颜色
 
             for (let i = 0, j = setList.length; i < j; i++) {
-                pushLayout(setList[i], i, layout, xUp, text, color);
+                pushLayout(setList[i], i, layout, xUp, text, color, rts);
             }
             const visual0 = global.GUI.draw(new RoomVisual(room.name), layout);
             if (!global.state) global.state = {};
@@ -647,56 +639,61 @@ export function getGridLayout(room: Room): void {
         // _判断实际可用空位数量
         // __判断是否可以放下road，不可以则弹出集合
         for (const roadExpandPosStr of roadExpand) {
-            const roadExpandPos = getPosFromStr(roadExpandPosStr);
+            const roadExpandPos = rts.getPosFromStr(roadExpandPosStr);
             const terrain: Terrain[] = roadExpandPos.lookFor(LOOK_TERRAIN);
             if (terrain[0] !== "plain") {
                 // 不考虑在沼泽和墙上放置路。
-                roadExpand.delete(setPosToStr(roadExpandPos));
+                roadExpand.delete(rts.setPosToStr(roadExpandPos));
             }
         }
         // __判断是否可以放下building，不可以则弹出集合
         for (const buildingExpandPosStr of buildingExpand) {
-            const buildingExpandPos = getPosFromStr(buildingExpandPosStr);
+            const buildingExpandPos = rts.getPosFromStr(buildingExpandPosStr);
             const terrain: Terrain[] = buildingExpandPos.lookFor(LOOK_TERRAIN);
             if (terrain[0] === "wall") {
                 // 不考虑在墙上放置建筑。
-                buildingExpand.delete(setPosToStr(buildingExpandPos));
+                buildingExpand.delete(rts.setPosToStr(buildingExpandPos));
             }
         }
         // __判断是否在controller4格范围内或者source2格范围内或者mineral的1格范围内，是则弹出集合
         // ___取得范围内的位置字符串集合，并进行删除。
-        getPosStrInRange(setPosToStr((room.controller as StructureController).pos), 4).forEach(posStr => {
+        rts.getPosStrInRange(rts.setPosToStr((room.controller as StructureController).pos), 4).forEach(posStr => {
             roadExpand.delete(posStr);
             buildingExpand.delete(posStr);
         });
         for (const source of room.find(FIND_SOURCES)) {
-            getPosStrInRange(setPosToStr(source.pos), 2).forEach(posStr => {
+            rts.getPosStrInRange(rts.setPosToStr(source.pos), 2).forEach(posStr => {
                 roadExpand.delete(posStr);
                 buildingExpand.delete(posStr);
             });
         }
-        getPosStrInRange(setPosToStr(room.find(FIND_MINERALS)[0].pos), 1).forEach(posStr => {
+        rts.getPosStrInRange(rts.setPosToStr(room.find(FIND_MINERALS)[0].pos), 1).forEach(posStr => {
             roadExpand.delete(posStr);
             buildingExpand.delete(posStr);
         });
         // __判断是否building周围还有路，没有则弹出集合
         for (const buildingExpandPosStr of buildingExpand) {
-            const buildingExpandPos = getPosFromStr(buildingExpandPosStr);
+            const buildingExpandPos = rts.getPosFromStr(buildingExpandPosStr);
             const buildingExpandPosAround = buildingExpandPos.getSquare();
             let j = 0;
             for (const buildingExpandPosAroundPos of buildingExpandPosAround) {
                 const terrain: Terrain[] = buildingExpandPosAroundPos.lookFor(LOOK_TERRAIN);
-                if (terrain[0] === "wall" || !isPosSetInPos(roadExpand, setPosToStr(buildingExpandPosAroundPos))) {
+                if (terrain[0] === "wall" || !isPosSetInPos(roadExpand, rts.setPosToStr(buildingExpandPosAroundPos))) {
                     j++;
                 }
             }
             if (j === 8) {
-                buildingExpand.delete(setPosToStr(buildingExpandPos));
+                buildingExpand.delete(rts.setPosToStr(buildingExpandPos));
             }
         }
         // __判断是否路周围还有building，没有则放弃(暂时不使用，因为极端情况下可能需要路来作为连通图的桥,而作者还写不来连通图的算法)
         // 判断方格数量是否足够放下所有需要占位的building
         global.log(buildingExpand.size);
+        if (buildingExpand.size === num) {
+            console.log("无法在此位置寻找到合适布局。");
+            return;
+        }
+        num = buildingExpand.size;
         if (88 <= buildingExpand.size) {
             ifEnough = true;
         }
@@ -719,10 +716,10 @@ interface Coord {
     y: number;
 }
 
-function coordToRoomPositionStr(coordList: Coord[], room: Room): string[] {
+function coordToRoomPositionStr(coordList: Coord[], room: Room, rts: RoomPositionToStr): string[] {
     const roomPositionStrList = [];
     for (const coord of coordList) {
-        roomPositionStrList.push(genePosStr(coord.x, coord.y, room.name));
+        roomPositionStrList.push(rts.genePosStr(coord.x, coord.y, room.name));
     }
     return roomPositionStrList;
 }
@@ -733,10 +730,11 @@ function pushLayout(
     layout: map<"Text">[] = [],
     x: number,
     text: string[],
-    color: string[]
+    color: string[],
+    rts: RoomPositionToStr
 ): void {
     exp.forEach(posStr => {
-        const coord = ParseCoord(posStr);
+        const coord = rts.ParseCoord(posStr);
         layout.push({
             type: "Text",
             layout: {
@@ -750,7 +748,12 @@ function pushLayout(
 }
 
 // 生成rampart和wall的摆放位置（使用overMind的minCut）
-function getMinCut(preferCloserBarriers = true, fullBuildingExpand: Set<string>, room: Room): Set<string> {
+function getMinCut(
+    preferCloserBarriers = true,
+    fullBuildingExpand: Set<string>,
+    room: Room,
+    rts: RoomPositionToStr
+): Set<string> {
     const colony = room;
     const colonyName = room.name;
     let cpu = Game.cpu.getUsed();
@@ -759,7 +762,7 @@ function getMinCut(preferCloserBarriers = true, fullBuildingExpand: Set<string>,
     const padding = 3;
     for (const building of fullBuildingExpand) {
         if (building) {
-            const { x, y } = ParseCoord(building);
+            const { x, y } = rts.ParseCoord(building);
             const [x1, y1] = [Math.max(x - padding, 0), Math.max(y - padding, 0)];
             const [x2, y2] = [Math.min(x + padding, 49), Math.min(y + padding, 49)];
             rectArray.push({ x1, y1, x2, y2 });
@@ -780,7 +783,7 @@ function getMinCut(preferCloserBarriers = true, fullBuildingExpand: Set<string>,
     cpu = Game.cpu.getUsed() - cpu;
     // global.log('Needed', cpu, ' cpu time');
     global.log(`生成rampart和wall位置个数：${positions.length};` + `该子任务消耗cpu: ${cpu.toFixed(2)}`);
-    return new Set(coordToRoomPositionStr(positions, room));
+    return new Set(coordToRoomPositionStr(positions, room, rts));
 }
 
 function mergeSet<T>(a: Set<T>, b: Set<T>): Set<T> {

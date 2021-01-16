@@ -1,5 +1,5 @@
 import { constructionSitesInf } from "construction";
-import { getPosFromStr } from "construction/utils/strToRoomPosition";
+import { RoomPositionToStr } from "construction/utils/strToRoomPosition";
 import * as profiler from "../../utils/profiler";
 
 type structureInfoList = {
@@ -67,10 +67,11 @@ const findEx = {
     },
 
     lookForStructurePos(room: Room, structureName: string): RoomPosition[] | undefined {
+        const rts = new RoomPositionToStr(room.name);
         if (room.memory.construction[structureName]?.pos?.[0]) {
             const posList = [];
             for (const posStr of room.memory.construction[structureName].pos) {
-                const pos = getPosFromStr(posStr);
+                const pos = rts.getPosFromStr(posStr);
                 posList.push(pos);
             }
             return posList;
@@ -81,6 +82,7 @@ const findEx = {
 
     // 建议使用structure.name来获取名称。
     lookForStructureName(structure?: AnyStructure | null): string {
+        const rts = new RoomPositionToStr(structure?.room.name);
         if (!structure) {
             return "";
         }
@@ -88,7 +90,7 @@ const findEx = {
             const m: { [name: string]: constructionSitesInf<AnyStructure> } = structure.room.memory.construction;
             if (m[con].structureType === structure.structureType) {
                 for (const nStr of m[con].pos) {
-                    const n = getPosFromStr(nStr);
+                    const n = rts.getPosFromStr(nStr);
                     if (this.isPosEqual(n, structure.pos)) {
                         if (m[con].id.findIndex(value => value === structure.id) === -1) {
                             structure.room.memory.construction[con].id.push(structure.id);

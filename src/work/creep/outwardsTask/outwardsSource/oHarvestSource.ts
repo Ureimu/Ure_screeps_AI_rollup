@@ -49,14 +49,14 @@ export function oHarvestSource(creep: Creep): void {
                     creep,
                     [
                         () => {
-                            if (container.hits < 50000) {
+                            if (container.hits <= 150000) {
                                 return 1;
                             } else {
                                 return 0;
                             }
                         },
                         () => {
-                            if (container.hits > 150000) {
+                            if (container.hits >= 250000) {
                                 return 0;
                             } else {
                                 return 1;

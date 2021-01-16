@@ -1,5 +1,5 @@
 import findEx from "utils/findEx";
-import { getPosFromStr } from "construction/utils/strToRoomPosition";
+import { RoomPositionToStr } from "construction/utils/strToRoomPosition";
 import bodypartsGenerator from "utils/bodypartsGenerator";
 
 declare global {
@@ -262,6 +262,7 @@ export class CreepExtension extends Creep {
     }
 
     private setBundledPos() {
+        const rts = new RoomPositionToStr();
         switch (this.memory.task.taskName) {
             case "oHarvestSource":
             case "harvestSource": {
@@ -288,7 +289,7 @@ export class CreepExtension extends Creep {
             case "buildAndRepair":
             case "oUpgradeController": {
                 if ((global.rooms[this.room.name].controller?.blankSpace.length as number) > 0) {
-                    global.creepMemory[this.name].bundledUpgradePos = getPosFromStr(
+                    global.creepMemory[this.name].bundledUpgradePos = rts.getPosFromStr(
                         (global.rooms[this.room.name].controller?.blankSpace as string[]).pop() as string
                     );
                 }

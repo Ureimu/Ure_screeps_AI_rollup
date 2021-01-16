@@ -57,7 +57,7 @@ export class SpawnExtension extends StructureSpawn {
                 if (typeof inf === "undefined") {
                     global.log("未定义spawn任务");
                 } else {
-                    inf.bodyparts = getBpByRole(task.taskName, task.taskKindName, task.spawnInf.roomName);
+                    inf.bodyparts = getBpByRole(task.taskName, task.taskGroupName, task.spawnInf.roomName);
                     ifOK = this.spawnCreep(bodypartsGenerator.bpg(inf.bodyparts), inf.creepName, {
                         memory: { task }
                     });

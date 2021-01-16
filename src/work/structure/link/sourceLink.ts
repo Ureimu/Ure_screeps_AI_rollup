@@ -15,7 +15,7 @@ export function sourceLink(link: StructureLink): void {
             state: []
         },
         taskName: "",
-        taskKindName: ""
+        taskGroupName: ""
     };
     checkLinkTask(taskInf);
 }

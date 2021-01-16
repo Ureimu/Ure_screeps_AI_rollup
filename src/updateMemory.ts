@@ -1,6 +1,6 @@
 // 每次占领新房间时会执行的模块。
 
-import { runSpawnTask } from "task";
+import { runSpawnTask } from "task/spawnTask";
 import { BaseTaskInf } from "task/taskClass/BaseTask";
 import { CarryTaskInf } from "task/taskClass/extends/CarryTask";
 import { LinkTaskInf } from "task/taskClass/extends/LinkTask";
@@ -23,7 +23,7 @@ declare global {
         taskPool: taskPool<BaseTaskInf & LinkTaskInf & CarryTaskInf & SpawnTaskInf>;
         initialize?: boolean;
         sourceInitialize?: boolean;
-        taskKindList: string[];
+        taskGroupList: string[];
     }
 
     interface SpawnMemory {
@@ -75,7 +75,7 @@ function initRoomMemory(room: Room): void {
                 startTime: Game.time,
                 roomControlStatus: [1],
                 firstSpawnName: room.find(FIND_MY_SPAWNS)[0].name,
-                taskKindList: ["roomMaintenance"],
+                taskGroupList: ["roomMaintenance"],
                 stats: {
                     upgradeSpeed: "",
                     creepBodySize: 0,
@@ -88,6 +88,7 @@ function initRoomMemory(room: Room): void {
 }
 
 export function initNewRoomSetting(room: Room, ifFarming: boolean): void {
+    if (!Memory.rooms) Memory.rooms = {};
     if (ifFarming) {
         getNewSource(room);
         return;

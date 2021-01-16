@@ -1,4 +1,4 @@
-import { getPosFromStr, setPosToStr } from "./strToRoomPosition";
+import { RoomPositionToStr } from "./strToRoomPosition";
 import { initConstructionScheduleMemory } from "./initConstructionMemory";
 import { RoomPositionStr } from "construction";
 
@@ -29,31 +29,32 @@ export function getCenterConstruction(room: Room): string[] {
 }
 
 export function getBlankDiagonalSquarePlace(point: RoomPosition): string[] {
+    const rts = new RoomPositionToStr();
     const lastPoint = point;
     // 计算扩张一格后的正方形的所有位置
     const squareExpandStrList: RoomPositionStr[] = [];
     const squareExpandPosList: RoomPosition[] = [];
     lastPoint.getSquare().forEach(pos => {
-        squareExpandStrList.push(setPosToStr(pos));
+        squareExpandStrList.push(rts.setPosToStr(pos));
     });
     const squareExpand = new Set(squareExpandStrList);
     let ExpandList: RoomPosition[] = [];
     // 扩张3次，最终正方形的边长为9
     for (let i = 0; i < 3; i++) {
         squareExpand.forEach((posStr: RoomPositionStr) => {
-            getPosFromStr(posStr)
+            rts.getPosFromStr(posStr)
                 .getSquare()
                 .forEach((posE: RoomPosition) => {
                     ExpandList.push(posE);
                 });
         });
         ExpandList.forEach(pos => {
-            squareExpand.add(setPosToStr(pos));
+            squareExpand.add(rts.setPosToStr(pos));
         });
         ExpandList = [];
     }
     squareExpand.forEach((posStr: RoomPositionStr) => {
-        squareExpandPosList.push(getPosFromStr(posStr));
+        squareExpandPosList.push(rts.getPosFromStr(posStr));
     });
     // 计算中心位置
     const axis = [
@@ -91,7 +92,7 @@ export function getBlankDiagonalSquarePlace(point: RoomPosition): string[] {
     }
     const posStrList: RoomPositionStr[] = [];
     centerPos.forEach(pos => {
-        posStrList.push(setPosToStr(pos));
+        posStrList.push(rts.setPosToStr(pos));
     });
     return posStrList;
 }

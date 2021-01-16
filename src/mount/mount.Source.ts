@@ -1,4 +1,4 @@
-import { setPosToStr } from "construction/utils/strToRoomPosition";
+import { RoomPositionToStr } from "construction/utils/strToRoomPosition";
 
 // 自定义的 Source 的拓展
 export class SourceExtension extends Source {
@@ -26,9 +26,10 @@ export class SourceExtension extends Source {
      *
      */
     public initsMemory(): void {
+        const rts = new RoomPositionToStr();
         this.room.memory.sources[this.getName()] = {
             id: this.id,
-            pos: setPosToStr(this.pos)
+            pos: rts.setPosToStr(this.pos)
         };
     }
 

@@ -81,6 +81,7 @@
     "screeps-profiler": "^2.0.1",
     "screeps-server-mockup": "^1.5.1",
     "source-map": "~0.6.1",
-    "ts-toolbelt": "^6.15.5"
+    "ts-toolbelt": "^6.15.5",
+    "ure-screeps-external": "0.0.1"
   }
 }

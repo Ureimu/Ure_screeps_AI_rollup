@@ -1,11 +1,11 @@
 import { RoleBodySetting } from "task/taskClass/RoleBodySetting";
 import bodypartsGenerator, { bpgGene } from "utils/bodypartsGenerator";
 
-export function getBpByRole(roleName: string, taskKindName: string, roomName: string): bpgGene[] {
+export function getBpByRole(roleName: string, taskGroupName: string, roomName: string): bpgGene[] {
     const roleList = new RoleBodySetting(Game.rooms[roomName]).roleBodySettingList;
 
     for (const key1 in roleList) {
-        if (key1 === taskKindName) {
+        if (key1 === taskGroupName) {
             for (const key2 in roleList[key1]) {
                 if (key2 === roleName) {
                     const roleBodySetting = roleList[key1][key2].bodysetting;

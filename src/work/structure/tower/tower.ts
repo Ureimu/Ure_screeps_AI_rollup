@@ -13,7 +13,7 @@ export function runTower(tower: StructureTower): void {
                 state: []
             },
             taskName: "",
-            taskKindName: ""
+            taskGroupName: ""
         };
         const task = new CarryTask(taskInf);
         task.pushTask(tower.room);

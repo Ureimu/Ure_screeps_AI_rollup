@@ -10,9 +10,9 @@ interface RoomTaskInte {
 }
 
 export interface roleSettingList {
-    [taskKindName: string]: (
+    [taskGroupName: string]: (
         taskKindMemory: taskKindMemory,
-        taskKindName: string
+        taskGroupName: string
     ) => {
         [taskName: string]: roleSetting;
     };
@@ -30,7 +30,7 @@ interface roleSetting {
     getSpawnTaskInf: (
         room: Room,
         taskName: string,
-        taskKindName: string,
+        taskGroupName: string,
         num: number,
         priority: number
     ) => SpawnTaskInf[];
@@ -43,26 +43,26 @@ export class RoleSetting {
     public constructor(room: Room) {
         this.roomName = room.name;
         this.defaultRoleSettingList = getRoleList(room);
-        if (!this.taskKindList) {
-            this.taskKindList = ["roomMaintenance"];
+        if (!this.taskGroupList) {
+            this.taskGroupList = ["roomMaintenance"];
         }
     }
 
-    public newOutwardsTask(taskKindName: string, targetRoomName: string): void {
-        this.taskKindList.push(`${taskKindName}-${targetRoomName}`);
+    public newOutwardsTask(taskGroupName: string, targetRoomName: string): void {
+        this.taskGroupList.push(`${taskGroupName}-${targetRoomName}`);
     }
 
-    public deleteOutwardsTask(taskKindName: string, targetRoomName: string): void {
-        this.taskKindList.forEach((value, index) => {
-            if (value === `${taskKindName}-${targetRoomName}`) this.taskKindList.splice(index, 1);
+    public deleteOutwardsTask(taskGroupName: string, targetRoomName: string): void {
+        this.taskGroupList.forEach((value, index) => {
+            if (value === `${taskGroupName}-${targetRoomName}`) this.taskGroupList.splice(index, 1);
         });
     }
 
-    private get taskKindList(): string[] {
-        return Memory.rooms[this.roomName].taskKindList;
+    private get taskGroupList(): string[] {
+        return Memory.rooms[this.roomName].taskGroupList;
     }
-    private set taskKindList(taskKindList: string[]) {
-        Memory.rooms[this.roomName].taskKindList = taskKindList;
+    private set taskGroupList(taskGroupList: string[]) {
+        Memory.rooms[this.roomName].taskGroupList = taskGroupList;
     }
 
     public get roleSettingList(): returnedRoleSettingList {
@@ -79,9 +79,9 @@ export class RoleSetting {
                     configurable: true
                 });
             } else {
-                for (const taskKindNameWithTargetRoomName of this.taskKindList) {
-                    const taskKindName = taskKindNameWithTargetRoomName.split("-")[0];
-                    if (taskKindName === defaultTaskKindName) {
+                for (const taskKindNameWithTargetRoomName of this.taskGroupList) {
+                    const taskGroupName = taskKindNameWithTargetRoomName.split("-")[0];
+                    if (taskGroupName === defaultTaskKindName) {
                         Object.defineProperty(list, taskKindNameWithTargetRoomName, {
                             value: this.defaultRoleSettingList[defaultTaskKindName](
                                 Memory.rooms[this.roomName].taskSetting[taskKindNameWithTargetRoomName],

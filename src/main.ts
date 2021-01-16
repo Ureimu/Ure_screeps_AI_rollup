@@ -4,7 +4,7 @@ import creepWork from "./work/creep/index";
 import "../utils/bypass/index";
 // import "../utils/buildingCache/index";
 import { errorStackVisualize } from "visual/roomVisual/GUIsetting";
-import manageCreep from "task/manager/manageCreep";
+import manageCreep from "./manager/manageCreep";
 import * as profiler from "../utils/profiler";
 // import { ErrorMapper } from "utils/ErrorMapper";
 import { mountGlobal } from "mount/mountGlobal";
@@ -19,7 +19,7 @@ export const loop = (): void => {
     // export const loop = (): void => {
     profiler.wrap(function () {
         try {
-            actionMonitor.getEnergyAction();
+            // actionMonitor.getEnergyAction();
 
             for (const stateCut in global.stateLoop) {
                 global.stateLoop[stateCut]();
@@ -32,7 +32,7 @@ export const loop = (): void => {
             }
 
             _.forEach(Game.rooms, room => {
-                if (room.controller?.my) {
+                if (room.controller?.my && room.find(FIND_MY_SPAWNS).length !== 0) {
                     if (!room.memory.initialize) {
                         room.initMemory(false);
                         room.memory.initialize = true;
@@ -43,6 +43,7 @@ export const loop = (): void => {
                             room.manageTask();
                             break;
                     }
+                    if (Game.time % 400 === 0) room.manageOutwardsSource();
                     room.autoSafeMode();
                     room.autoPlanConstruction();
                     room.roomVisualize();

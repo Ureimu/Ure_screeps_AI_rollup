@@ -1,9 +1,10 @@
-import { getPosFromStr, setPosToStr } from "construction/utils/strToRoomPosition";
+import { RoomPositionToStr } from "construction/utils/strToRoomPosition";
 import { initConstructionMemory } from "construction/utils/initConstructionMemory";
-import findEx from "utils/findEx";
 import { formedLayout } from "construction";
+import findEx from "utils/findEx";
 
 export function runLayout(room: Room, layoutName: string, layoutFunc: (room: Room) => void): void {
+    if (!room.memory.firstSpawnName) return;
     if (!room.memory.constructionSchedule[layoutName]?.layout) {
         layoutFunc(room);
     }
@@ -49,12 +50,13 @@ function putConstructionSites(
     buildNumberLimit: number,
     totalSitesNum: number
 ): number {
+    const rts = new RoomPositionToStr(room.name);
     if (room.memory.construction[name]?.constructionSitesCompleted === true) return 0;
     if (buildNumberLimit === 0) return 0;
     const listC = [];
     const posList: RoomPosition[] = [];
     posStrList.forEach(posStr => {
-        posList.push(getPosFromStr(posStr));
+        posList.push(rts.getPosFromStr(posStr));
     });
     initConstructionMemory(room, name, structureType);
     for (let i = 0; i < posList.length; i++) {
@@ -78,7 +80,7 @@ function putConstructionSites(
         for (const structure of structures) {
             if (findEx.isPosEqual(structure.pos, posList[i])) {
                 for (const x of room.memory.construction[name].pos) {
-                    const pos = getPosFromStr(x);
+                    const pos = rts.getPosFromStr(x);
                     if (pos.isEqualTo(posList[i])) {
                         countX[1] = 1;
                         break;
@@ -87,7 +89,7 @@ function putConstructionSites(
                 if (countX[1] === 1) {
                     break;
                 }
-                room.memory.construction[name].pos.push(setPosToStr(posList[i]));
+                room.memory.construction[name].pos.push(rts.setPosToStr(posList[i]));
                 countX[0] = 1;
                 break;
             }
@@ -96,7 +98,7 @@ function putConstructionSites(
             listC[i] = room.createConstructionSite(posList[i], structureType);
             if (listC[i] === OK) {
                 totalSitesNum++;
-                room.memory.construction[name].pos.push(setPosToStr(posList[i]));
+                room.memory.construction[name].pos.push(rts.setPosToStr(posList[i]));
                 if (totalSitesNum >= 100) {
                     return totalSitesNum;
                 }

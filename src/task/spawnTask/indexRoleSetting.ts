@@ -8,11 +8,11 @@ import { templateSpawnTaskList } from "./utils/templateTask";
 function defaultGetSpawnTaskInf(
     room: Room,
     taskName: string,
-    taskKindName: string,
+    taskGroupName: string,
     num: number,
     priority: number
 ): SpawnTaskInf[] {
-    return templateSpawnTaskList(room.name, taskName, taskKindName, num, priority);
+    return templateSpawnTaskList(room.name, taskName, taskGroupName, num, priority);
 }
 
 export function getRoleList(room: Room): roleSettingList {
@@ -74,7 +74,7 @@ export function getRoleList(room: Room): roleSettingList {
                 }
             };
         },
-        outwardsSource: (taskKindMemory, taskKindName) => {
+        outwardsSource: (taskKindMemory, taskGroupName) => {
             return {
                 sourceScout: {
                     numberSetting: 1,
@@ -91,7 +91,7 @@ export function getRoleList(room: Room): roleSettingList {
                 oUpgradeController: {
                     numberSetting:
                         taskKindMemory?.oHarvestSource.memory.numberSetting &&
-                        existContainer(taskKindName.split("-")[1]) &&
+                        existContainer(taskGroupName.split("-")[1]) &&
                         level > 1 &&
                         level <= 4 &&
                         !existStructure(STRUCTURE_STORAGE)
@@ -110,7 +110,7 @@ export function getRoleList(room: Room): roleSettingList {
                         taskKindMemory?.oHarvestSource.memory.numberSetting &&
                         level >= 4 &&
                         existStructure(STRUCTURE_STORAGE)
-                            ? taskKindMemory.oHarvestSource.memory.numberSetting
+                            ? taskKindMemory.oHarvestSource.memory.numberSetting * 2
                             : 0,
                     priority: 4.5,
                     getSpawnTaskInf: createSourceScoutTask

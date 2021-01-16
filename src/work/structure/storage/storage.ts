@@ -13,7 +13,7 @@ export function runStorage(storage: StructureStorage): void {
                 state: []
             },
             taskName: "",
-            taskKindName: ""
+            taskGroupName: ""
         };
         const task = new CarryTask(taskInf);
         task.pushTask(storage.room);

@@ -1,24 +1,31 @@
-import { getPosFromStr } from "construction/utils/strToRoomPosition";
+import { RoomPositionToStr } from "construction/utils/strToRoomPosition";
 import bodypartsGenerator from "utils/bodypartsGenerator";
 import findEx from "utils/findEx";
 
 export function centerCarry(creep: Creep): void {
     if (!creep.memory.dontPullMe) creep.memory.dontPullMe = true;
     if (!global.creepMemory[creep.name]) global.creepMemory[creep.name] = {};
+    const rts = new RoomPositionToStr(creep.room.name);
     if (!global.creepMemory[creep.name].bundledPos) {
-        const center = getPosFromStr(
+        const center = rts.getPosFromStr(
             (creep.room.memory.constructionSchedule.gridLayout.creepWorkPos?.centerPos as string[])[0]
         );
         global.creepMemory[creep.name].bundledPos = center;
     }
     if (!global.creepMemory[creep.name].bundledLinkPos) {
-        global.creepMemory[creep.name].bundledLinkPos = getPosFromStr(creep.room.memory.construction.centerLink.pos[0]);
+        global.creepMemory[creep.name].bundledLinkPos = rts.getPosFromStr(
+            creep.room.memory.construction.centerLink.pos[0]
+        );
     }
     if (!global.creepMemory[creep.name].bundledStoragePos) {
-        global.creepMemory[creep.name].bundledStoragePos = getPosFromStr(creep.room.memory.construction.storage.pos[0]);
+        global.creepMemory[creep.name].bundledStoragePos = rts.getPosFromStr(
+            creep.room.memory.construction.storage.pos[0]
+        );
     }
     if (!global.creepMemory[creep.name].bundledLinkPos) {
-        global.creepMemory[creep.name].bundledLinkPos = getPosFromStr(creep.room.memory.construction.centerLink.pos[0]);
+        global.creepMemory[creep.name].bundledLinkPos = rts.getPosFromStr(
+            creep.room.memory.construction.centerLink.pos[0]
+        );
     } else {
         ifMove(creep);
         const storage: StructureStorage = findEx.lookForStructureByPos(
@@ -31,13 +38,13 @@ export function centerCarry(creep: Creep): void {
         ) as StructureLink;
         let whatToDo = "harvest";
         const carryMax = bodypartsGenerator.getBpNum(creep.memory.task.spawnInf.bodyparts, "carry") * 50;
-        if (link.store.energy > 0) whatToDo = "carryEnergyToLink";
+        if (link.store.energy === 0 && storage.store.energy > 100000) whatToDo = "carryEnergyToLink";
         switch (whatToDo) {
             case "carryEnergyToLink":
                 if (creep.store.energy === carryMax) {
-                    creep.transfer(storage, "energy");
+                    creep.transfer(link, "energy");
                 } else {
-                    creep.withdraw(link, "energy");
+                    creep.withdraw(storage, "energy");
                 }
                 break;
             case "harvest":

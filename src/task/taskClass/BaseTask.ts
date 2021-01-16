@@ -31,7 +31,7 @@ export interface BaseTaskInf {
 
     taskName: string;
 
-    taskKindName: string;
+    taskGroupName: string;
 }
 export class BaseTask {
     public task: BaseTaskInf;
@@ -40,7 +40,7 @@ export class BaseTask {
             priority,
             isRunning,
             taskName: "",
-            taskKindName: ""
+            taskGroupName: ""
         };
     }
 
@@ -53,7 +53,7 @@ export class BaseTask {
         this.task.taskName = taskName;
     }
 
-    public taskKindName(taskKindName: string): void {
-        this.task.taskKindName = taskKindName;
+    public taskGroupName(taskGroupName: string): void {
+        this.task.taskGroupName = taskGroupName;
     }
 }
