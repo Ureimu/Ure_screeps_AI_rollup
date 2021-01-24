@@ -1,26 +1,30 @@
 import { RoleSetting } from "./RoleSetting";
 import { TaskSetting } from "./TaskSetting";
 
-interface TaskGroupInfo {
+export interface TaskKindInfo {
     [key: string]: { targetRoomList: string[] };
+}
+
+export interface TaskGroupInfo {
+    [key: string]: { targetRoom?: string; taskKind: string; startTime: number };
 }
 
 export class TaskGroupSetting {
     public roomName: string;
     public room: Room;
-    public taskGroupList: string[];
+    public taskGroup: TaskGroupInfo;
     public constructor(room: Room) {
         this.roomName = room.name;
         this.room = room;
-        this.taskGroupList = Memory.rooms[this.roomName].taskGroupList;
+        this.taskGroup = Memory.rooms[this.roomName].taskGroup;
     }
 
-    public getTaskGroupInfo(): TaskGroupInfo {
-        const info: TaskGroupInfo = {};
-        for (const taskGroupName of this.taskGroupList) {
-            const taskName = taskGroupName.split("-")[0];
+    public getTaskGroupInfo(): TaskKindInfo {
+        const info: TaskKindInfo = {};
+        for (const taskGroupName in this.taskGroup) {
+            const taskName = this.taskGroup[taskGroupName].taskKind;
             if (!info[taskName]) info[taskName] = { targetRoomList: [] };
-            const targetRoomName = taskGroupName.split("-").length > 1 ? taskGroupName.split("-")[1] : undefined;
+            const targetRoomName = this.taskGroup[taskGroupName].targetRoom;
             if (targetRoomName) {
                 info[taskName].targetRoomList.push(targetRoomName);
             }

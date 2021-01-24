@@ -1,4 +1,4 @@
-import { getCreepNum, getBpSum } from "./roomInf/creeps";
+import { getCreepNum, getBpSum, getBpSumInSpawnQueue } from "./roomInf/creeps";
 import { getUpgradeSpeed } from "./roomInf/upgradeSpeed";
 import { printMulText } from "./utils";
 
@@ -8,8 +8,12 @@ export function roomVisualize(room: Room): void {
         upgradeSpeed: upgradeSpeed[0],
         creepNum: getCreepNum(room.name),
         creepBodySize: getBpSum(room.name),
-        ticksToUpgrade: upgradeSpeed[1]
+        ticksToUpgrade: upgradeSpeed[1],
+        creepBodySizeInSpawnQueue: {}
     };
+    for (const spawn of room.find(FIND_MY_SPAWNS)) {
+        room.memory.stats.creepBodySizeInSpawnQueue[spawn.name] = getBpSumInSpawnQueue(spawn);
+    }
     global.GUI.draw(new RoomVisual(room.name), [
         {
             type: "Div",

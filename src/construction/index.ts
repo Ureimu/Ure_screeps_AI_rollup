@@ -10,21 +10,24 @@ declare global {
             [name: string]: constructionSitesInf<AnyStructure>;
         };
         constructionSchedule: {
-            [name: string]: {
-                constructionCompleted: boolean;
-                layout?: formedLayout;
-                [name: string]: any;
-                centerPos?: any;
-                creepWorkPos?: {
-                    [name: string]: string[] | undefined;
-                    harvestSource?: string[];
-                    upgradeController?: string[];
-                    centerPos?: string[];
-                };
-            };
+            [name: string]: constructionScheduleElement;
         };
         firstSpawnName: string;
     }
+}
+
+export interface constructionScheduleElement {
+    constructionCompleted: boolean;
+    layout?: formedLayout;
+    [name: string]: any;
+    centerPos?: any;
+    firstSpawnPos?: string;
+    creepWorkPos?: {
+        [name: string]: string[] | undefined;
+        harvestSource?: string[];
+        upgradeController?: string[];
+        centerPos?: string[];
+    };
 }
 
 export type formedLayout = {

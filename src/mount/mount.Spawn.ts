@@ -58,6 +58,7 @@ export class SpawnExtension extends StructureSpawn {
                     global.log("未定义spawn任务");
                 } else {
                     inf.bodyparts = getBpByRole(task.taskName, task.taskGroupName, task.spawnInf.roomName);
+                    if (inf.bodyparts.length === 0) continue; // 没有body说明任务已经废弃。
                     ifOK = this.spawnCreep(bodypartsGenerator.bpg(inf.bodyparts), inf.creepName, {
                         memory: { task }
                     });

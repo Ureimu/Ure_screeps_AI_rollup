@@ -1,5 +1,6 @@
 import { getRoleBodyList } from "task/spawnTask/bodypartsSetting";
 import { bpgGene } from "utils/bodypartsGenerator";
+import { TaskGroupInfo } from "./TaskGroupSetting";
 
 interface roleBodySetting {
     bodysetting: bpgGene[];
@@ -35,26 +36,25 @@ export class RoleBodySetting {
     public constructor(room: Room) {
         this.roomName = room.name;
         this.defaultRoleBodySettingList = getRoleBodyList(room);
-        if (!this.taskGroupList) {
-            this.taskGroupList = ["roomMaintenance"];
-        }
     }
 
     public newOutwardsTask(taskGroupName: string, targetRoomName: string): void {
-        this.taskGroupList.push(`${taskGroupName}-${targetRoomName}`);
+        this.taskGroup[`${taskGroupName}-${targetRoomName}`] = {
+            taskKind: taskGroupName,
+            targetRoom: targetRoomName,
+            startTime: Game.time
+        };
     }
 
     public deleteOutwardsTask(taskGroupName: string, targetRoomName: string): void {
-        this.taskGroupList.forEach((value, index) => {
-            if (value === `${taskGroupName}-${targetRoomName}`) this.taskGroupList.splice(index, 1);
-        });
+        delete this.taskGroup[`${taskGroupName}-${targetRoomName}`];
     }
 
-    private get taskGroupList(): string[] {
-        return Memory.rooms[this.roomName].taskGroupList;
+    private get taskGroup(): TaskGroupInfo {
+        return Memory.rooms[this.roomName].taskGroup;
     }
-    private set taskGroupList(taskGroupList: string[]) {
-        Memory.rooms[this.roomName].taskGroupList = taskGroupList;
+    private set taskGroup(taskGroup: TaskGroupInfo) {
+        Memory.rooms[this.roomName].taskGroup = taskGroup;
     }
 
     public get roleBodySettingList(): returnedRoleBodySettingList {
@@ -70,15 +70,12 @@ export class RoleBodySetting {
                     configurable: true
                 });
             } else {
-                for (const taskKindNameWithTargetRoomName of this.taskGroupList) {
-                    const taskGroupName = taskKindNameWithTargetRoomName.slice(
-                        0,
-                        taskKindNameWithTargetRoomName.indexOf("-")
-                    );
-                    if (taskGroupName === defaultTaskKindName) {
-                        Object.defineProperty(list, taskKindNameWithTargetRoomName, {
+                for (const taskGroupName in this.taskGroup) {
+                    const taskKindName = this.taskGroup[taskGroupName].taskKind;
+                    if (taskKindName === defaultTaskKindName) {
+                        Object.defineProperty(list, taskGroupName, {
                             value: this.defaultRoleBodySettingList[defaultTaskKindName](
-                                Memory.rooms[this.roomName].taskSetting[taskKindNameWithTargetRoomName]
+                                Memory.rooms[this.roomName].taskSetting[taskGroupName]
                             ),
                             writable: true,
                             enumerable: true,

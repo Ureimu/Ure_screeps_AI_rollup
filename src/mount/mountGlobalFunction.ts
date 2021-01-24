@@ -1,4 +1,4 @@
-import { getGridLayout } from "construction/composition/gridLayout";
+import { getGridLayout, ifEnoughSpace } from "construction/composition/gridLayout";
 import { runLayout } from "construction/composition/runLayOut";
 import { log } from "utils/consoleLog/log";
 import * as profiler from "../../utils/profiler";
@@ -65,8 +65,10 @@ export function globalFunctionRegister(): void {
         throw new Error("TestError");
     };
 
+    global.getLayout = ifEnoughSpace;
+
     global.runLayout = (roomName: string) => {
-        runLayout(Game.rooms[roomName], "gridLayout", getGridLayout);
+        getGridLayout(Game.rooms[roomName]);
     };
 
     profiler.registerObject(global.stateLoop, "stateLoop");

@@ -8,6 +8,7 @@ import manageCreep from "./manager/manageCreep";
 import * as profiler from "../utils/profiler";
 // import { ErrorMapper } from "utils/ErrorMapper";
 import { mountGlobal } from "mount/mountGlobal";
+import manageNewClaimedRoom from "manager/manageNewClaimedRoom";
 
 mountGlobal();
 if (!Memory.time) Memory.time = Game.time;
@@ -53,6 +54,7 @@ export const loop = (): void => {
                         room.initMemory(true);
                         room.memory.sourceInitialize = true;
                     }
+                    manageNewClaimedRoom(room);
                 }
             });
 

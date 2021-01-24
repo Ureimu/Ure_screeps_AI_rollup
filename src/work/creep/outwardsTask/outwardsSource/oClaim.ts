@@ -22,12 +22,14 @@ export function oClaim(creep: Creep): void {
                     if (code0 !== OK) global.log(`${creep.name} ${code0} , reserveController`);
                 }
             } else {
-                const code0 = creep.claimController(roomToClaim.controller);
-                if (code0 === ERR_NOT_IN_RANGE) {
-                    const code = creep.moveTo(roomToClaim.controller);
-                    if (code !== OK) global.log(`${code} , moveToController`);
-                } else {
-                    if (code0 !== OK) global.log(`${creep.name} ${code0} , claimController`);
+                if (!roomToClaim.controller.my) {
+                    const code0 = creep.claimController(roomToClaim.controller);
+                    if (code0 === ERR_NOT_IN_RANGE) {
+                        const code = creep.moveTo(roomToClaim.controller);
+                        if (code !== OK) global.log(`${code} , moveToController`);
+                    } else {
+                        if (code0 !== OK) global.log(`${creep.name} ${code0} , claimController`);
+                    }
                 }
             }
         }

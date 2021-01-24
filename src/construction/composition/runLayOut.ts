@@ -27,6 +27,10 @@ export function runLayout(room: Room, layoutName: string, layoutFunc: (room: Roo
                       ]
                     : 0;
             const posStrList = construction[buildingMemName].posStrList;
+            if (!posStrList) {
+                global.log(`[build] ${buildingMemName} posStrList不存在,跳过`);
+                continue;
+            }
             totalSitesNum += putConstructionSites(
                 room,
                 posStrList,
@@ -56,6 +60,10 @@ function putConstructionSites(
     const listC = [];
     const posList: RoomPosition[] = [];
     posStrList.forEach(posStr => {
+        if (!posStr) {
+            global.log(`[build] ${structureType} posStr不存在,跳过`);
+            return;
+        }
         posList.push(rts.getPosFromStr(posStr));
     });
     initConstructionMemory(room, name, structureType);

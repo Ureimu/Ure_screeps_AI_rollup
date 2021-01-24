@@ -5,6 +5,7 @@ import { BaseTaskInf } from "task/taskClass/BaseTask";
 import { CarryTaskInf } from "task/taskClass/extends/CarryTask";
 import { LinkTaskInf } from "task/taskClass/extends/LinkTask";
 import { SpawnTaskInf } from "task/taskClass/extends/SpawnTask";
+import { TaskGroupInfo } from "task/taskClass/TaskGroupSetting";
 import { taskPool } from "task/utils/taskPool";
 
 declare global {
@@ -23,7 +24,7 @@ declare global {
         taskPool: taskPool<BaseTaskInf & LinkTaskInf & CarryTaskInf & SpawnTaskInf>;
         initialize?: boolean;
         sourceInitialize?: boolean;
-        taskGroupList: string[];
+        taskGroup: TaskGroupInfo;
     }
 
     interface SpawnMemory {
@@ -75,12 +76,13 @@ function initRoomMemory(room: Room): void {
                 startTime: Game.time,
                 roomControlStatus: [1],
                 firstSpawnName: room.find(FIND_MY_SPAWNS)[0].name,
-                taskGroupList: ["roomMaintenance"],
+                taskGroup: { roomMaintenance: { taskKind: "roomMaintenance", startTime: Game.time } },
                 stats: {
                     upgradeSpeed: "",
                     creepBodySize: 0,
                     creepNum: 0,
-                    ticksToUpgrade: ""
+                    ticksToUpgrade: "",
+                    creepBodySizeInSpawnQueue: {}
                 }
             };
         }

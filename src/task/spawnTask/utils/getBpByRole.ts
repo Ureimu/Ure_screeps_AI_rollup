@@ -38,6 +38,6 @@ export function getBpByRole(roleName: string, taskGroupName: string, roomName: s
         }
     }
 
-    global.log("没有该任务名称，身体部件生成失败:" + roomName + roleName);
-    return [{}];
+    global.log(`没有该任务名称，身体部件生成失败:${roomName} ${roleName}`);
+    return [];
 }

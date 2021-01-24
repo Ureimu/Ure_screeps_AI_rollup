@@ -24,10 +24,10 @@ export default {
         format: "cjs",
         sourcemap: true
     },
-    external: [ 'priority_queue' ],
+    external: ['priority_queue'],
     plugins: [
         nodeResolve({
-            customResolveOptions: {moduleDirectory: "utils"}
+            customResolveOptions: { moduleDirectory: "utils" }
         }),
         clear({ targets: ["dist"] }),
         resolve(),

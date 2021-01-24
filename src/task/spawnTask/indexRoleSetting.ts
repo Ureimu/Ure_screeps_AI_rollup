@@ -22,6 +22,18 @@ export function getRoleList(room: Room): roleSettingList {
         roomConstruction[structureName]?.memory
             ? Object.keys(roomConstruction[structureName]?.memory).length > 0
             : false;
+    function getStructureList<T extends StructureConstant>(structureName: string) {
+        const structureList = [];
+        for (const structureId in roomConstruction[structureName]?.memory) {
+            structureList.push(
+                Game.getObjectById<ConcreteStructure<T>>(
+                    structureId as Id<ConcreteStructure<T>>
+                ) as ConcreteStructure<T>
+            );
+        }
+        return structureList;
+    }
+
     const existContainer = (roomName: string) => {
         return Object.values(Memory.rooms[roomName].sources).some(memory => typeof memory.container !== "undefined");
     };
@@ -44,7 +56,12 @@ export function getRoleList(room: Room): roleSettingList {
                     getSpawnTaskInf: defaultGetSpawnTaskInf
                 },
                 upgradeController: {
-                    numberSetting: level >= 4 && level <= 7 && existStructure(STRUCTURE_STORAGE) ? 3 : 0,
+                    numberSetting:
+                        level >= 4 && level <= 7 && existStructure(STRUCTURE_STORAGE)
+                            ? getStructureList<STRUCTURE_STORAGE>(STRUCTURE_STORAGE)[0].store.energy > 30000
+                                ? 3
+                                : 1
+                            : 0,
                     priority: 8,
                     getSpawnTaskInf: defaultGetSpawnTaskInf
                 },
@@ -102,7 +119,7 @@ export function getRoleList(room: Room): roleSettingList {
                 },
                 oClaim: {
                     numberSetting: taskKindMemory?.oHarvestSource.memory.numberSetting && level > 2 ? 1 : 0,
-                    priority: 4.1,
+                    priority: 4.6,
                     getSpawnTaskInf: createSourceScoutTask
                 },
                 oCarrier: {
