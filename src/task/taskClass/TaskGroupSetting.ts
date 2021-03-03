@@ -45,6 +45,6 @@ export class TaskGroupSetting {
     public deleteSpawnTaskGroup(taskGroupName: string, targetRoomName: string): void {
         const roleSetting = new RoleSetting(this.room);
         roleSetting.deleteOutwardsTask(taskGroupName, targetRoomName);
-        delete Memory.rooms[this.roomName].taskSetting[taskGroupName];
+        delete Memory.rooms[this.roomName].taskSetting[`${taskGroupName}-${targetRoomName}`];
     }
 }

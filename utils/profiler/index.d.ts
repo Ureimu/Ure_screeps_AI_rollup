@@ -1,3 +1,6 @@
+// Type definitions for screeps-profiler by screepers
+// Project: screeps-profiler
+// Definitions by: Ureimu <https://github.com/Ureimu>
 /**
  * 该模块的消耗大概在0.08cpu左右。
  *
@@ -35,16 +38,12 @@ export function callgrind(): string;
  * 注册object里的函数到调试模块。
  *
  * @export profiler
- * @param {Record<string, unknown>} object
+ * @template T
+ * @param {T} object
  * @param {string} label
  * @returns {({
- *               [name in string]: {
- *                   (...args: any[]): any;
- *                   profilerWrapped: boolean;
- *                   toString(): string;
- *               };
- *           }
- *         | undefined)}
+ *     [P in keyof T]: T[P] & { profilerWrapped: boolean; toString(): string };
+ * })}
  */
 export function registerObject<T extends { [name in string]: (...args: any[]) => any }>(
     object: T,
@@ -55,14 +54,11 @@ export function registerObject<T extends { [name in string]: (...args: any[]) =>
 /**
  * 注册函数到调试模块。
  *
- * @export
- * @param {(...args: any[]) => any} fn
+ * @export profiler
+ * @template T
+ * @param {T} fn
  * @param {string} functionName
- * @returns {{
- *     (...args: any[]): any;
- *     profilerWrapped: boolean;
- *     toString(): string;
- * }}
+ * @returns {(T & { profilerWrapped: boolean; toString(): string })}
  */
 export function registerFN<T extends (...args: any[]) => any>(
     fn: T,
@@ -71,17 +67,13 @@ export function registerFN<T extends (...args: any[]) => any>(
 /**
  * 注册类到调试模块。
  *
- * @export
- * @param {Record<string, (...args: any[]) => any>} object
+ * @export profiler
+ * @template T
+ * @param {T} object
  * @param {string} label
  * @returns {({
- *           [name in string]: {
- *               (...args: any[]): any;
- *               profilerWrapped: boolean;
- *               toString(): string;
- *           };
- *       }
- *     | undefined)}
+ *     [P in keyof T]: T[P] & { profilerWrapped: boolean; toString(): string };
+ * })}
  */
 export function registerClass<T extends { [name in string]: (...args: any[]) => any }>(
     object: T,

@@ -47,14 +47,16 @@ export class ErrorMapper {
                 if (pos.line != null) {
                     if (pos.name) {
                         console.log(pos.name);
-                        outStack += `\n    at ${pos.name} (${pos.source}:${pos.line}:${pos.column})`;
+                        outStack += `\n    at ${pos.name} (${pos.source.split("../")[1]}:${pos.line}:${pos.column})`;
                     } else {
                         if (match[1]) {
                             // no original source file name known - use file name from given trace
-                            outStack += `\n    at ${match[1]} (${pos.source}:${pos.line}:${pos.column})`;
+                            outStack += `\n    at ${match[1]} (${pos.source.split("../")[1]}:${pos.line}:${
+                                pos.column
+                            })`;
                         } else {
                             // no original source file name known or in given trace - omit name
-                            outStack += `\n    at ${pos.source}:${pos.line}:${pos.column}`;
+                            outStack += `\n    at ${pos.source.split("../")[1]}:${pos.line}:${pos.column}`;
                         }
                     }
                 } else {
@@ -76,6 +78,7 @@ export class ErrorMapper {
             try {
                 loop();
             } catch (e) {
+                console.log("got exception, requested by ErrorMapper");
                 if (e instanceof Error) {
                     if ("sim" in Game.rooms) {
                         const message = `Source maps don't work in the simulator - displaying original error`;
@@ -85,6 +88,7 @@ export class ErrorMapper {
                     }
                 } else {
                     // can't handle it
+                    console.log("can't handle it. By ErrorMapper");
                     throw e;
                 }
             }

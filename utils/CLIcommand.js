@@ -17,7 +17,7 @@ storage.db["rooms.objects"].update({ room: "W8N7", type: "rampart" }, { $set: { 
 
 storage.db["rooms.objects"].update({ room: "W8N7", type: "constructedWall" }, { $set: { hits: 3000000 } })
 
-storage.db["rooms.objects"].update({ _id: "cdbf0773313f0a9" },{ $set: { level: 4, progress: 1 } })
+storage.db["rooms.objects"].update({ _id: "cdbf0773313f0a9" },{ $set: { level: 7, progress: 1 } })
 
 storage.db["rooms.objects"].find({ type: "constructionSite" }).then((resp) =>resp.map(cs =>storage.db["rooms.objects"].findOne({ _id: cs._id }).then((csDetail) =>storage.db["rooms.objects"].update({ _id: cs._id },{ $set: { progress: csDetail.progressTotal - 1 } }))))
 
@@ -26,7 +26,7 @@ storage.db["rooms.objects"].find({ type: "spawn" }).then((resp) =>resp.map(cs =>
 .then((resp) =>resp.map(cs =>storage.db["rooms.objects"].findOne({ _id: cs._id }).then((csDetail) =>storage.db["rooms.objects"].update({ _id: cs._id },{ $set: { store: { energy: 500 } } }))))
 
 
-system.setTickDuration(10000)
+system.setTickDuration(1500)
 
 system.setTickDuration(10)
 

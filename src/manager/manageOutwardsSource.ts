@@ -1,6 +1,8 @@
 import { TaskGroupSetting } from "task/taskClass/TaskGroupSetting";
 import * as profiler from "../../utils/profiler";
 
+const MaxSourceRoomNumber = 4;
+
 /**
  * 判断给定的房间是否可以进入，并且在可以进入的时候将该房间名放入返回的列表。
  *
@@ -45,7 +47,7 @@ const manageOutwardsSource = function (room: Room): void {
     // 开新外矿
     for (const roomName of availableRoomNameSet) {
         const targetRoomList = taskGroupInfo.outwardsSource?.targetRoomList;
-        if (targetRoomList?.some(name => name === roomName)) continue;
+        if (targetRoomList?.length > MaxSourceRoomNumber || targetRoomList?.some(name => name === roomName)) continue;
         const isControllerRoom = /(^[WE]\d*[1-9]+[NS]\d*[1-3|7-9]+$)|(^[WE]\d*[1-3|7-9]+[NS]\d*[1-9]+$)/.test(roomName);
         if (isControllerRoom && !Game.rooms[roomName]?.controller?.owner) {
             global.log(`[farm]  ${roomName} outwardsSource starting`);
@@ -63,6 +65,10 @@ const manageOutwardsSource = function (room: Room): void {
             }
             if (availableRoomNameList.every(name => name !== roomName)) {
                 global.log(`[farm]  ${roomName} outwardsSource stopped,reason:房间已经无法进入`);
+                taskGroup.deleteSpawnTaskGroup("outwardsSource", roomName);
+            }
+            if (availableRoomNameList?.length > MaxSourceRoomNumber) {
+                global.log(`[farm]  ${roomName} outwardsSource stopped,reason:房间数量超过设定限制`);
                 taskGroup.deleteSpawnTaskGroup("outwardsSource", roomName);
             }
         }

@@ -3,7 +3,7 @@
 import clear from "rollup-plugin-clear";
 import commonjs from "@rollup/plugin-commonjs";
 import typescript from "rollup-plugin-typescript2";
-// import screeps from 'rollup-plugin-screeps';
+import screeps from 'rollup-plugin-screeps';
 import copy from "rollup-plugin-cpy";
 import resolve from '@rollup/plugin-node-resolve';
 
@@ -15,8 +15,6 @@ if (!dest) {
     throw new Error("Invalid upload destination");
 }
 
-import nodeResolve from '@rollup/plugin-node-resolve';
-
 export default {
     input: "src/main.ts",
     output: {
@@ -26,14 +24,11 @@ export default {
     },
     external: ['priority_queue'],
     plugins: [
-        nodeResolve({
-            customResolveOptions: { moduleDirectory: "utils" }
-        }),
         clear({ targets: ["dist"] }),
-        resolve(),
+        resolve({ rootDir: "src" }),
         commonjs(),
         typescript({ tsconfig: "./tsconfig.json" }),
-        // screeps({config: cfg, dryRun: cfg == null}),
+        screeps({config: cfg, dryRun: cfg == null}),//不要删除或注释掉这一行，会引起sourcemap报错。
         copy({
             files: ["utils/PriorityQueue/priority_queue.wasm", "dist/main.js"], // 在新增了二进制文件后记得在这里添上
             // C:/Users/a1090/AppData/Local/Screeps/scripts/47_103_128_236___21025/default

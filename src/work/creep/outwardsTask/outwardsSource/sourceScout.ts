@@ -19,50 +19,29 @@ export function sourceScout(creep: Creep): void {
                 creep.moveTo(global.creepMemory[creep.name].bundledPos || new RoomPosition(25, 25, scoutRoomName));
 
                 const sourceTaskName = `outwardsSource-${scoutRoomName}`;
-                if (!Memory.rooms[spawnRoomName].taskSetting[sourceTaskName].oHarvestSource.memory.numberSetting)
-                    Memory.rooms[spawnRoomName].taskSetting[
-                        sourceTaskName
-                    ].oHarvestSource.memory.numberSetting = creep.room.find(FIND_SOURCES).length;
-                if (Game.time % 10 === 0) {
-                    const invaderCore = creep.room.find(FIND_HOSTILE_STRUCTURES, {
-                        filter: object => {
-                            return object.structureType === STRUCTURE_INVADER_CORE;
-                        }
-                    })?.[0];
-                    if (
-                        invaderCore &&
-                        !Memory.rooms[spawnRoomName].taskSetting[sourceTaskName].oInvaderCoreAttacker.memory
-                            .numberSetting
-                    )
-                        Memory.rooms[spawnRoomName].taskSetting[
-                            sourceTaskName
-                        ].oInvaderCoreAttacker.memory.numberSetting = 1;
+                const taskSetting = Memory.rooms[spawnRoomName].taskSetting[sourceTaskName];
+                if (taskSetting) {
+                    if (!taskSetting?.oHarvestSource.memory.numberSetting)
+                        taskSetting.oHarvestSource.memory.numberSetting = creep.room.find(FIND_SOURCES).length;
+                    if (Game.time % 10 === 0) {
+                        const invaderCore = creep.room.find(FIND_HOSTILE_STRUCTURES, {
+                            filter: object => {
+                                return object.structureType === STRUCTURE_INVADER_CORE;
+                            }
+                        })?.[0];
+                        if (invaderCore && !taskSetting.oInvaderCoreAttacker.memory.numberSetting)
+                            taskSetting.oInvaderCoreAttacker.memory.numberSetting = 1;
 
-                    if (
-                        !invaderCore &&
-                        Memory.rooms[spawnRoomName].taskSetting[sourceTaskName].oInvaderCoreAttacker.memory
-                            .numberSetting
-                    )
-                        Memory.rooms[spawnRoomName].taskSetting[
-                            sourceTaskName
-                        ].oInvaderCoreAttacker.memory.numberSetting = 0;
+                        if (!invaderCore && taskSetting.oInvaderCoreAttacker.memory.numberSetting)
+                            taskSetting.oInvaderCoreAttacker.memory.numberSetting = 0;
 
-                    const invader = creep.room.find(FIND_HOSTILE_CREEPS)?.[0];
-                    if (
-                        invader &&
-                        !Memory.rooms[spawnRoomName].taskSetting[sourceTaskName].oInvaderAttacker.memory.numberSetting
-                    )
-                        Memory.rooms[spawnRoomName].taskSetting[
-                            sourceTaskName
-                        ].oInvaderAttacker.memory.numberSetting = 1;
+                        const invader = creep.room.find(FIND_HOSTILE_CREEPS)?.[0];
+                        if (invader && !taskSetting.oInvaderAttacker.memory.numberSetting)
+                            taskSetting.oInvaderAttacker.memory.numberSetting = 1;
 
-                    if (
-                        !invader &&
-                        Memory.rooms[spawnRoomName].taskSetting[sourceTaskName].oInvaderAttacker.memory.numberSetting
-                    )
-                        Memory.rooms[spawnRoomName].taskSetting[
-                            sourceTaskName
-                        ].oInvaderAttacker.memory.numberSetting = 0;
+                        if (!invader && taskSetting.oInvaderAttacker.memory.numberSetting)
+                            taskSetting.oInvaderAttacker.memory.numberSetting = 0;
+                    }
                 }
             }
         }

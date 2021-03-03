@@ -6,16 +6,17 @@ import "../utils/bypass/index";
 import { errorStackVisualize } from "visual/roomVisual/GUIsetting";
 import manageCreep from "./manager/manageCreep";
 import * as profiler from "../utils/profiler";
-// import { ErrorMapper } from "utils/ErrorMapper";
+import { ErrorMapper } from "utils/ErrorMapper";
 import { mountGlobal } from "mount/mountGlobal";
 import manageNewClaimedRoom from "manager/manageNewClaimedRoom";
 
+const testMode = true;
 mountGlobal();
 if (!Memory.time) Memory.time = Game.time;
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
-// export const loop = ErrorMapper.wrapLoop(() => {
-export const loop = (): void => {
+export const loop = ErrorMapper.wrapLoop(() => {
+    // export const loop = (): void => {
     // if (global.time % 100 === 0) throw new Error("100");
     // export const loop = (): void => {
     profiler.wrap(function () {
@@ -83,8 +84,14 @@ export const loop = (): void => {
 
             // actionCounter.save(1500);
         } catch (err) {
-            errorStackVisualize((err as { stack: string }).stack);
+            const errorMessage = (err as { stack: string }).stack;
+            if (testMode) {
+                throw err;
+            } else {
+                errorStackVisualize(errorMessage);
+                Game.notify(errorMessage);
+            }
         }
     });
-};
-// });
+    // };
+});
